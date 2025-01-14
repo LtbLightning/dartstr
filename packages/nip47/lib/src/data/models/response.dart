@@ -9,6 +9,7 @@ import 'package:nip47/src/data/models/transaction.dart';
 import 'package:nip47/src/enums/bitcoin_network.dart';
 import 'package:nip47/src/enums/error_code.dart';
 import 'package:nip47/src/enums/event_kind.dart';
+import 'package:nip47/src/enums/notification_type.dart';
 import 'package:nip47/src/enums/transaction_type.dart';
 
 sealed class Response extends Equatable {
@@ -30,6 +31,7 @@ sealed class Response extends Equatable {
     int? blockHeight,
     String? blockHash,
     required List<Method> methods,
+    List<NotificationType>? notifications,
   }) = GetInfoResponse;
 
   factory Response.getBalanceResponse({
@@ -147,6 +149,7 @@ class GetInfoResponse extends Response {
   final int? blockHeight;
   final String? blockHash;
   final List<Method> methods;
+  final List<NotificationType>? notifications;
 
   GetInfoResponse({
     this.alias,
@@ -156,6 +159,7 @@ class GetInfoResponse extends Response {
     this.blockHeight,
     this.blockHash,
     required this.methods,
+    this.notifications,
   }) : super(
           resultType: Method.getInfo.plaintext,
           result: {
@@ -166,6 +170,9 @@ class GetInfoResponse extends Response {
             'block_height': blockHeight,
             'block_hash': blockHash,
             'methods': methods.map((method) => method.plaintext).toList(),
+            'notifications': notifications
+                ?.map((notification) => notification.notificationType)
+                .toList(),
           },
         );
 
@@ -179,6 +186,7 @@ class GetInfoResponse extends Response {
         blockHeight,
         blockHash,
         methods,
+        notifications,
       ];
 }
 

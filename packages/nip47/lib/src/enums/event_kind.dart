@@ -1,7 +1,8 @@
 enum EventKind {
   info(13194),
   request(23194),
-  response(23195);
+  response(23195),
+  notification(23196);
 
   final int value;
 

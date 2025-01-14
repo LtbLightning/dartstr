@@ -7,6 +7,7 @@ import 'package:nip47/src/constants.dart';
 import 'package:nip47/src/data/models/connection.dart';
 import 'package:nip47/src/data/models/filters.dart';
 import 'package:nip47/src/data/models/info_event.dart';
+import 'package:nip47/src/data/models/notification.dart';
 import 'package:nip47/src/data/models/request.dart';
 import 'package:nip47/src/data/models/request_subscription.dart';
 import 'package:nip47/src/data/models/response.dart';
@@ -15,6 +16,7 @@ import 'package:nip47/src/enums/bitcoin_network.dart';
 import 'package:nip47/src/enums/error_code.dart';
 import 'package:nip47/src/enums/event_kind.dart';
 import 'package:nip47/src/data/models/method.dart';
+import 'package:nip47/src/enums/notification_type.dart';
 
 abstract class WalletService {
   List<Connection> get connections;
@@ -98,6 +100,14 @@ abstract class WalletService {
     Request request, {
     required ErrorCode error,
   });
+  Future<void> notifyPaymentReceived({
+    required PaymentReceivedNotification notification,
+    required String connectionPubkey,
+  });
+  Future<void> notifyPaymentSent({
+    required PaymentSentNotification notification,
+    required String connectionPubkey,
+  });
   Future<void> dispose();
 }
 
@@ -125,6 +135,7 @@ class WalletServiceImpl implements WalletService {
   Future<Connection> addConnection({
     required String relayUrl,
     required List<Method> permittedMethods,
+    List<NotificationType>? notifications,
   }) async {
     await _ensureRequestSubscription(relayUrl);
 
@@ -132,7 +143,10 @@ class WalletServiceImpl implements WalletService {
     final connectionKeyPair = nip01.KeyPair.generate();
 
     // Push permitted methods to relay with get info event
-    final info = InfoEvent(permittedMethods: permittedMethods);
+    final info = InfoEvent(
+      permittedMethods: permittedMethods,
+      supportedNotifications: notifications,
+    );
 
     final signedEvent = info.toSignedEvent(
       creatorKeyPair: _walletKeyPair,
@@ -228,6 +242,7 @@ class WalletServiceImpl implements WalletService {
     int? blockHeight,
     String? blockHash,
     required List<Method> methods,
+    List<NotificationType>? notifications,
   }) async {
     // Todo: Add parameter validation
     final response = Response.getInfoResponse(
@@ -238,6 +253,7 @@ class WalletServiceImpl implements WalletService {
       blockHeight: blockHeight,
       blockHash: blockHash,
       methods: methods,
+      notifications: notifications,
     );
 
     await _sendResponseForRequest(request: request, response: response);
@@ -395,6 +411,28 @@ class WalletServiceImpl implements WalletService {
     );
 
     await _sendResponseForRequest(request: request, response: response);
+  }
+
+  @override
+  Future<void> notifyPaymentReceived({
+    required PaymentReceivedNotification notification,
+    required String connectionPubkey,
+  }) async {
+    await _sendNotification(
+      notification: notification,
+      connectionPubkey: connectionPubkey,
+    );
+  }
+
+  @override
+  Future<void> notifyPaymentSent({
+    required PaymentSentNotification notification,
+    required String connectionPubkey,
+  }) async {
+    await _sendNotification(
+      notification: notification,
+      connectionPubkey: connectionPubkey,
+    );
   }
 
   @override
@@ -560,6 +598,30 @@ class WalletServiceImpl implements WalletService {
         'Failed to publish response: $signedResponseEvent for request: $request',
       );
       throw Exception('Failed to publish response');
+    }
+  }
+
+  Future<void> _sendNotification({
+    required Notification notification,
+    required String connectionPubkey,
+  }) async {
+    final signedNotificationEvent = notification.toSignedEvent(
+      creatorKeyPair: _walletKeyPair,
+      connectionPubkey: connectionPubkey,
+    );
+
+    final relayUrl = _connections[connectionPubkey]?.relayUrl;
+    if (relayUrl == null) {
+      log('No relay found for connection: $connectionPubkey');
+      throw Exception('No relay found for connection');
+    }
+
+    final isPublished = await _nip01Repository
+        .publishEvent(signedNotificationEvent, relayUrls: [relayUrl]);
+
+    if (!isPublished) {
+      log('Failed to publish notification: $signedNotificationEvent for connection: $connectionPubkey');
+      throw Exception('Failed to publish notification');
     }
   }
 }
