@@ -1,5 +1,5 @@
 name: nip46
-description: A starting point for Dart libraries or applications.
+description: A Dart library for Nostr NIP-46 Remote Signing.
 version: 1.0.0
 repository: https://github.com/kumulynja/dartstr/tree/main/packages/nip46
 
