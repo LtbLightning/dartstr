@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip47` - `v0.2.0+1`](#nip47---v0201)
+
+---
+
+#### `nip47` - `v0.2.0+1`
+
+ - **FIX**: add missing parameters for notifications support.
+
+
+## 2025-01-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip47` - `v0.2.0`](#nip47---v020)
 
 ---

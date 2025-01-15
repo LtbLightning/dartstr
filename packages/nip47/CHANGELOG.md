@@ -1,3 +1,7 @@
+## 0.2.0+1
+
+ - **FIX**: add missing parameters for notifications support.
+
 ## 0.2.0
 
  - Add 23196 kind notification event support
