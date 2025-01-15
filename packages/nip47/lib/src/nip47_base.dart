@@ -24,6 +24,8 @@ abstract class WalletService {
   Future<Connection> addConnection({
     required String relayUrl,
     required List<Method> permittedMethods,
+    List<NotificationType>? supportedNotifications,
+    String? lud16,
   });
   Future<void> restoreConnections(List<Connection> connections);
   Future<void> removeConnection(String pubkey);
@@ -40,6 +42,7 @@ abstract class WalletService {
     int blockHeight,
     String blockHash,
     required List<Method> methods,
+    List<NotificationType> notifications,
   });
   Future<void> getBalanceRequestHandled(
     GetBalanceRequest request, {
@@ -101,12 +104,32 @@ abstract class WalletService {
     required ErrorCode error,
   });
   Future<void> notifyPaymentReceived({
-    required PaymentReceivedNotification notification,
     required String connectionPubkey,
+    required String invoice,
+    String? description,
+    String? descriptionHash,
+    required String preimage,
+    required String paymentHash,
+    required int amountSat,
+    required int feesPaidSat,
+    required int createdAt,
+    int? expiresAt,
+    required int settledAt,
+    Map<String, dynamic>? metadata,
   });
   Future<void> notifyPaymentSent({
-    required PaymentSentNotification notification,
     required String connectionPubkey,
+    required String invoice,
+    String? description,
+    String? descriptionHash,
+    required String preimage,
+    required String paymentHash,
+    required int amountSat,
+    required int feesPaidSat,
+    required int createdAt,
+    int? expiresAt,
+    required int settledAt,
+    Map<String, dynamic>? metadata,
   });
   Future<void> dispose();
 }
@@ -135,7 +158,8 @@ class WalletServiceImpl implements WalletService {
   Future<Connection> addConnection({
     required String relayUrl,
     required List<Method> permittedMethods,
-    List<NotificationType>? notifications,
+    List<NotificationType>? supportedNotifications,
+    String? lud16,
   }) async {
     await _ensureRequestSubscription(relayUrl);
 
@@ -145,7 +169,7 @@ class WalletServiceImpl implements WalletService {
     // Push permitted methods to relay with get info event
     final info = InfoEvent(
       permittedMethods: permittedMethods,
-      supportedNotifications: notifications,
+      supportedNotifications: supportedNotifications,
     );
 
     final signedEvent = info.toSignedEvent(
@@ -168,7 +192,7 @@ class WalletServiceImpl implements WalletService {
       pubkey: connectionKeyPair.publicKey,
       permittedMethods: permittedMethods,
       relayUrl: relayUrl,
-      uri: _buildConnectionUri(connectionKeyPair.privateKey, relayUrl),
+      uri: _buildConnectionUri(connectionKeyPair.privateKey, relayUrl, lud16),
     );
     // Save the connection in memory (user of the package should persist it securely)
     _connections[connectionKeyPair.publicKey] = connection;
@@ -415,9 +439,33 @@ class WalletServiceImpl implements WalletService {
 
   @override
   Future<void> notifyPaymentReceived({
-    required PaymentReceivedNotification notification,
     required String connectionPubkey,
+    required String invoice,
+    String? description,
+    String? descriptionHash,
+    required String preimage,
+    required String paymentHash,
+    required int amountSat,
+    required int feesPaidSat,
+    required int createdAt,
+    int? expiresAt,
+    required int settledAt,
+    Map<String, dynamic>? metadata,
   }) async {
+    final notification = PaymentReceivedNotification(
+      invoice: invoice,
+      description: description,
+      descriptionHash: descriptionHash,
+      preimage: preimage,
+      paymentHash: paymentHash,
+      amountSat: amountSat,
+      feesPaidSat: feesPaidSat,
+      createdAt: createdAt,
+      expiresAt: expiresAt,
+      settledAt: settledAt,
+      metadata: metadata,
+    );
+
     await _sendNotification(
       notification: notification,
       connectionPubkey: connectionPubkey,
@@ -426,9 +474,33 @@ class WalletServiceImpl implements WalletService {
 
   @override
   Future<void> notifyPaymentSent({
-    required PaymentSentNotification notification,
     required String connectionPubkey,
+    required String invoice,
+    String? description,
+    String? descriptionHash,
+    required String preimage,
+    required String paymentHash,
+    required int amountSat,
+    required int feesPaidSat,
+    required int createdAt,
+    int? expiresAt,
+    required int settledAt,
+    Map<String, dynamic>? metadata,
   }) async {
+    final notification = PaymentSentNotification(
+      invoice: invoice,
+      description: description,
+      descriptionHash: descriptionHash,
+      preimage: preimage,
+      paymentHash: paymentHash,
+      amountSat: amountSat,
+      feesPaidSat: feesPaidSat,
+      createdAt: createdAt,
+      expiresAt: expiresAt,
+      settledAt: settledAt,
+      metadata: metadata,
+    );
+
     await _sendNotification(
       notification: notification,
       connectionPubkey: connectionPubkey,
@@ -443,11 +515,12 @@ class WalletServiceImpl implements WalletService {
     }
   }
 
-  String _buildConnectionUri(String secret, String relayUrl) {
+  String _buildConnectionUri(String secret, String relayUrl, String? lud16) {
     return '${Constants.uriProtocol}://'
         '${_walletKeyPair.publicKey}?'
         'secret=$secret&'
-        'relay=$relayUrl';
+        'relay=$relayUrl'
+        '${lud16 != null ? '&lud16=$lud16' : ''}';
   }
 
   Future<void> _ensureRequestSubscription(String relayUrl) async {
