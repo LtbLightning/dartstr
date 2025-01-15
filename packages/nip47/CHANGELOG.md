@@ -1,3 +1,7 @@
+## 0.2.1
+
+ - **FEAT**: export notification type enum.
+
 ## 0.2.0+1
 
 - **FIX**: add missing parameters for notifications support.

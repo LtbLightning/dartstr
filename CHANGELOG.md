@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip47` - `v0.2.1`](#nip47---v021)
+
+---
+
+#### `nip47` - `v0.2.1`
+
+ - **FEAT**: export notification type enum.
+
+
+## 2025-01-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip47` - `v0.2.0+1`](#nip47---v0201)
 
 ---
