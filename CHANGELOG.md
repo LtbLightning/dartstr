@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip47` - `v0.2.0`](#nip47---v020)
+
+---
+
+#### `nip47` - `v0.2.0`
+
+ - Add 23196 kind notification event support
+
+
 ## 2024-12-26
 
 ### Changes

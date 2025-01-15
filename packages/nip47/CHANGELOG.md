@@ -1,3 +1,7 @@
+## 0.2.0
+
+ - Add 23196 kind notification event support
+
 ## 0.1.2+4
 
  - Update a dependency to the latest release.
