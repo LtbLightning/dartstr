@@ -18,5 +18,6 @@ export 'src/enums/error_code.dart';
 export 'src/enums/event_kind.dart';
 export 'src/data/models/method.dart';
 export 'src/enums/transaction_type.dart';
+export 'src/enums/notification_type.dart';
 
 export 'src/constants.dart';
