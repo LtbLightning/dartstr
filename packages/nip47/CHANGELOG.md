@@ -1,46 +1,47 @@
 ## 0.2.0+1
 
- - **FIX**: add missing parameters for notifications support.
+- **FIX**: add missing parameters for notifications support.
+- **FIX**: add missing lud16 parameter to add to a connection.
 
 ## 0.2.0
 
- - Add 23196 kind notification event support
+- Add 23196 kind notification event support
 
 ## 0.1.2+4
 
- - Update a dependency to the latest release.
+- Update a dependency to the latest release.
 
 ## 0.1.2+3
 
- - Update a dependency to the latest release.
+- Update a dependency to the latest release.
 
 ## 0.1.2+2
 
- - **FIX**: nwc params with underscore + correct amount conversions.
+- **FIX**: nwc params with underscore + correct amount conversions.
 
 ## 0.1.2+1
 
- - **FIX**: connecting, disconnecting and reconnecting logic with lock.
+- **FIX**: connecting, disconnecting and reconnecting logic with lock.
 
 ## 0.1.2
 
- - **FEAT**: expose method to handle custom request responses.
+- **FEAT**: expose method to handle custom request responses.
 
 ## 0.1.1+4
 
- - **FIX**: make getInfoRequestHandled params option in WalletService class.
+- **FIX**: make getInfoRequestHandled params option in WalletService class.
 
 ## 0.1.1+3
 
- - **FIX**: make getInfoRequestHandled params optional.
+- **FIX**: make getInfoRequestHandled params optional.
 
 ## 0.1.1+2
 
- - **FIX**: make get info response params optional.
+- **FIX**: make get info response params optional.
 
 ## 0.1.1+1
 
- - **FIX**: wallet service repository parameter camel case.
+- **FIX**: wallet service repository parameter camel case.
 
 ## 0.1.1
 
