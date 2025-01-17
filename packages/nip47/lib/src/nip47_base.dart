@@ -23,8 +23,8 @@ abstract class WalletService {
   Stream<Request> get requests;
   Future<Connection> addConnection({
     required String relayUrl,
-    required List<Method> permittedMethods,
-    List<NotificationType>? supportedNotifications,
+    required List<Method> methods,
+    List<NotificationType>? notifications,
     String? lud16,
   });
   Future<void> restoreConnections(List<Connection> connections);
@@ -157,8 +157,8 @@ class WalletServiceImpl implements WalletService {
   @override
   Future<Connection> addConnection({
     required String relayUrl,
-    required List<Method> permittedMethods,
-    List<NotificationType>? supportedNotifications,
+    required List<Method> methods,
+    List<NotificationType>? notifications,
     String? lud16,
   }) async {
     await _ensureRequestSubscription(relayUrl);
@@ -168,8 +168,8 @@ class WalletServiceImpl implements WalletService {
 
     // Push permitted methods to relay with get info event
     final info = InfoEvent(
-      permittedMethods: permittedMethods,
-      supportedNotifications: supportedNotifications,
+      methods: methods,
+      notifications: notifications,
     );
 
     final signedEvent = info.toSignedEvent(
@@ -190,7 +190,7 @@ class WalletServiceImpl implements WalletService {
     //  its wallet.
     final connection = Connection(
       pubkey: connectionKeyPair.publicKey,
-      permittedMethods: permittedMethods,
+      methods: methods,
       relayUrl: relayUrl,
       uri: _buildConnectionUri(connectionKeyPair.privateKey, relayUrl, lud16),
     );
@@ -635,7 +635,7 @@ class WalletServiceImpl implements WalletService {
     }
 
     // 3. Check if the requested method is permitted for the known connection
-    if (!connection.permittedMethods.contains(request.method)) {
+    if (!connection.methods.contains(request.method)) {
       // Restricted error response
       return Response.errorResponse(
         method: request.method,

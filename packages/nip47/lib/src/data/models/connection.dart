@@ -1,17 +1,19 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:nip47/src/data/models/method.dart';
+import 'package:nip47/nip47.dart';
 
 @immutable
 class Connection extends Equatable {
   final String pubkey;
-  final List<Method> permittedMethods;
+  final List<Method> methods;
+  final List<NotificationType>? notifications;
   final String relayUrl;
   final String? uri;
 
   const Connection({
     required this.pubkey,
-    required this.permittedMethods,
+    required this.methods,
+    this.notifications,
     required this.relayUrl,
     this.uri,
   });
@@ -19,8 +21,13 @@ class Connection extends Equatable {
   factory Connection.fromMap(Map<String, dynamic> map) {
     return Connection(
       pubkey: map['pubkey'] as String,
-      permittedMethods: (map['permittedMethods'] as List)
+      methods: (map['methods'] as List)
           .map((e) => Method.fromPlaintext(e as String))
+          .toList(),
+      notifications: (map['notifications'] as List?)
+          ?.map(
+            (e) => NotificationType.fromValue(e as String),
+          )
           .toList(),
       relayUrl: map['relayUrl'] as String,
       uri: map['uri'] as String?,
@@ -30,7 +37,8 @@ class Connection extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'pubkey': pubkey,
-      'permittedMethods': permittedMethods.map((e) => e.plaintext).toList(),
+      'methods': methods.map((e) => e.plaintext).toList(),
+      'notifications': notifications?.map((e) => e.notificationType).toList(),
       'relayUrl': relayUrl,
       'uri': uri,
     };
@@ -39,7 +47,8 @@ class Connection extends Equatable {
   @override
   List<Object?> get props => [
         pubkey,
-        permittedMethods,
+        methods,
+        notifications,
         relayUrl,
         uri,
       ];

@@ -7,24 +7,24 @@ import 'package:nip47/src/enums/notification_type.dart';
 
 @immutable
 class InfoEvent extends Equatable {
-  final List<Method> permittedMethods;
-  final List<NotificationType>? supportedNotifications;
+  final List<Method> methods;
+  final List<NotificationType>? notifications;
 
   const InfoEvent({
-    required this.permittedMethods,
-    this.supportedNotifications,
+    required this.methods,
+    this.notifications,
   });
 
   factory InfoEvent.fromEvent(nip01.Event event) {
     final contentElements = event.content.split(' ');
     bool supportsNotifications = contentElements.contains('notifications');
-    final permittedMethods = contentElements
+    final methods = contentElements
         .where((element) => element != 'notifications')
         .map((plaintext) {
       return Method.fromPlaintext(plaintext);
     }).toList();
 
-    final supportedNotifications = supportsNotifications
+    final notifications = supportsNotifications
         ? event.tags
             .firstWhere((tag) => tag.first == 'notifications')[1]
             .split(' ')
@@ -34,8 +34,8 @@ class InfoEvent extends Equatable {
         : null;
 
     return InfoEvent(
-      permittedMethods: permittedMethods,
-      supportedNotifications: supportedNotifications,
+      methods: methods,
+      notifications: notifications,
     );
   }
 
@@ -46,19 +46,18 @@ class InfoEvent extends Equatable {
   }) {
     // NIP-47 spec: The content should be a plaintext string with the supported commands, space-separated.
     // If the node supports notifications, the string should also contain 'notifications'.
-    final content =
-        '${permittedMethods.map((method) => method.plaintext).join(' ')}'
-        '${supportedNotifications != null && supportedNotifications!.isNotEmpty ? ' notifications' : ''}';
+    final content = '${methods.map((method) => method.plaintext).join(' ')}'
+        '${notifications != null && notifications!.isNotEmpty ? ' notifications' : ''}';
 
     final replaceableEventTag = [
       'a',
       '${EventKind.info.value}:$connectionPubkey:',
       relayUrl
     ];
-    final notificationsTag = supportedNotifications != null
+    final notificationsTag = notifications != null
         ? [
             'notifications',
-            supportedNotifications!.map((notificationType) {
+            notifications!.map((notificationType) {
               return notificationType.notificationType;
             }).join(' ')
           ]
@@ -82,5 +81,5 @@ class InfoEvent extends Equatable {
   }
 
   @override
-  List<Object?> get props => [permittedMethods];
+  List<Object?> get props => [methods];
 }

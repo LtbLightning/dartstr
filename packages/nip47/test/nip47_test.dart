@@ -101,7 +101,7 @@ void main() {
 
       final connection = await nwcWallet.addConnection(
         relayUrl: relayUrl,
-        permittedMethods: [
+        methods: [
           Method.getInfo,
           Method.getBalance,
           Method.makeInvoice,
@@ -131,10 +131,10 @@ void main() {
       final infoEvent = InfoEvent.fromEvent(infoEvents.first);
 
       print(
-        'Petmitted methods in info event: ${infoEvent.permittedMethods.map((m) => m.plaintext).toList()}',
+        'Petmitted methods in info event: ${infoEvent.methods.map((m) => m.plaintext).toList()}',
       );
 
-      expect(infoEvent.permittedMethods, [
+      expect(infoEvent.methods, [
         Method.getInfo,
         Method.getBalance,
         Method.makeInvoice,

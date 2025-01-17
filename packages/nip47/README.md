@@ -240,7 +240,7 @@ import 'package:nip47/nip47.dart';
 
 final connection = await nwcWalletService.addConnection(
     relayUrl: relayUrl,
-    permittedMethods: [
+    methods: [
         Method.getInfo,
         Method.getBalance,
         Method.makeInvoice,

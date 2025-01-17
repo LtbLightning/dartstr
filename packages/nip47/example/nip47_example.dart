@@ -27,7 +27,7 @@ Future<void> main() async {
   // Add a new connection
   final connection = await nwcWalletService.addConnection(
     relayUrl: relayUrl,
-    permittedMethods: [
+    methods: [
       Method.getInfo,
       Method.getBalance,
       Method.makeInvoice,
