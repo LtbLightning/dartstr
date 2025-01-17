@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip47` - `v0.2.1+3`](#nip47---v0213)
+
+---
+
+#### `nip47` - `v0.2.1+3`
+
+ - **FIX**: notifications were not set in connection instance when adding a connection.
+
+
+## 2025-01-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip47` - `v0.2.1+2`](#nip47---v0212)
 
 ---

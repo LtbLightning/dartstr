@@ -1,3 +1,7 @@
+## 0.2.1+3
+
+ - **FIX**: notifications were not set in connection instance when adding a connection.
+
 ## 0.2.1+2
 
  - **FIX**: optional params in getInfoRequestHandled.
