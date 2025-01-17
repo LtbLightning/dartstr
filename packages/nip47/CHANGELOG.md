@@ -1,3 +1,7 @@
+## 0.2.1+2
+
+ - **FIX**: optional params in getInfoRequestHandled.
+
 ## 0.2.1+1
 
  - **REFACTOR**: improve parameter names.
