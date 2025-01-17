@@ -191,6 +191,7 @@ class WalletServiceImpl implements WalletService {
     final connection = Connection(
       pubkey: connectionKeyPair.publicKey,
       methods: methods,
+      notifications: notifications,
       relayUrl: relayUrl,
       uri: _buildConnectionUri(connectionKeyPair.privateKey, relayUrl, lud16),
     );
