@@ -1,3 +1,7 @@
+## 0.2.1+1
+
+ - **REFACTOR**: improve parameter names.
+
 ## 0.2.1
 
  - **FEAT**: export notification type enum.

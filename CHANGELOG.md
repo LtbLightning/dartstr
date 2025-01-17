@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip47` - `v0.2.1+1`](#nip47---v0211)
+
+---
+
+#### `nip47` - `v0.2.1+1`
+
+ - **REFACTOR**: improve parameter names.
+
+
 ## 2025-01-15
 
 ### Changes
