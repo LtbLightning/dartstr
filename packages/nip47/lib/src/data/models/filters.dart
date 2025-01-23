@@ -31,13 +31,13 @@ class Filters extends nip01.Filters {
       );
 
   factory Filters.requests({
-    required String walletPublicKey,
+    required String walletServicePubkey,
     int? since,
   }) =>
       Filters(
         kinds: [EventKind.request.value],
         tags: {
-          'p': [walletPublicKey]
+          'p': [walletServicePubkey]
         },
         since: since,
       );

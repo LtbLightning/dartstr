@@ -7,10 +7,14 @@ import 'package:nip47/src/enums/notification_type.dart';
 
 @immutable
 class InfoEvent extends Equatable {
+  final String relayUrl;
+  final String walletServicePubkey;
   final List<Method> methods;
   final List<NotificationType>? notifications;
 
   const InfoEvent({
+    required this.relayUrl,
+    required this.walletServicePubkey,
     required this.methods,
     this.notifications,
   });
@@ -33,16 +37,19 @@ class InfoEvent extends Equatable {
           }).toList()
         : null;
 
+    final aTag = event.tags.firstWhere((tag) => tag.first == 'a');
+    final relayUrl = aTag[2];
+
     return InfoEvent(
       methods: methods,
       notifications: notifications,
+      walletServicePubkey: event.pubkey,
+      relayUrl: relayUrl,
     );
   }
 
   nip01.Event toSignedEvent({
-    required nip01.KeyPair creatorKeyPair,
-    required String connectionPubkey,
-    required String relayUrl,
+    required nip01.KeyPair walletServiceKeyPair,
   }) {
     // NIP-47 spec: The content should be a plaintext string with the supported commands, space-separated.
     // If the node supports notifications, the string should also contain 'notifications'.
@@ -51,7 +58,7 @@ class InfoEvent extends Equatable {
 
     final replaceableEventTag = [
       'a',
-      '${EventKind.info.value}:$connectionPubkey:',
+      '${EventKind.info.value}:$walletServicePubkey:',
       relayUrl
     ];
     final notificationsTag = notifications != null
@@ -64,7 +71,7 @@ class InfoEvent extends Equatable {
         : null;
 
     final partialEvent = nip01.Event(
-      pubkey: creatorKeyPair.publicKey,
+      pubkey: walletServiceKeyPair.publicKey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       kind: EventKind.info.value,
       // The info event should be a replaceable event, so add 'a' tag.
@@ -75,11 +82,16 @@ class InfoEvent extends Equatable {
       content: content,
     );
 
-    final signedNostrEvent = partialEvent.sign(creatorKeyPair);
+    final signedNostrEvent = partialEvent.sign(walletServiceKeyPair);
 
     return signedNostrEvent;
   }
 
   @override
-  List<Object?> get props => [methods];
+  List<Object?> get props => [
+        relayUrl,
+        walletServicePubkey,
+        methods,
+        notifications,
+      ];
 }

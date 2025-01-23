@@ -13,17 +13,23 @@ import 'package:nip47/src/enums/notification_type.dart';
 import 'package:nip47/src/enums/transaction_type.dart';
 
 sealed class Response extends Equatable {
+  final String requestId;
+  final String connectionPubkey;
   final String resultType;
   final ErrorCode? error;
   final Map<String, dynamic>? result;
 
   const Response({
+    required this.requestId,
+    required this.connectionPubkey,
     required this.resultType,
     this.error,
     this.result,
   });
 
   factory Response.getInfoResponse({
+    required String requestId,
+    required String connectionPubkey,
     String? alias,
     String? color,
     String? pubkey,
@@ -35,10 +41,14 @@ sealed class Response extends Equatable {
   }) = GetInfoResponse;
 
   factory Response.getBalanceResponse({
+    required String requestId,
+    required String connectionPubkey,
     required int balanceSat,
   }) = GetBalanceResponse;
 
   factory Response.makeInvoiceResponse({
+    required String requestId,
+    required String connectionPubkey,
     String? invoice,
     String? description,
     String? descriptionHash,
@@ -52,24 +62,34 @@ sealed class Response extends Equatable {
   }) = MakeInvoiceResponse;
 
   factory Response.payInvoiceResponse({
+    required String requestId,
+    required String connectionPubkey,
     required String preimage,
   }) = PayInvoiceResponse;
 
   factory Response.multiPayInvoiceResponse({
+    required String requestId,
+    required String connectionPubkey,
     required String id,
     required String preimage,
   }) = MultiPayInvoiceResponse;
 
   factory Response.payKeysendResponse({
+    required String requestId,
+    required String connectionPubkey,
     required String preimage,
   }) = PayKeysendResponse;
 
   factory Response.multiPayKeysendResponse({
+    required String requestId,
+    required String connectionPubkey,
     required String id,
     required String preimage,
   }) = MultiPayKeysendResponse;
 
   factory Response.lookupInvoiceResponse({
+    required String requestId,
+    required String connectionPubkey,
     String? invoice,
     String? description,
     String? descriptionHash,
@@ -84,19 +104,21 @@ sealed class Response extends Equatable {
   }) = LookupInvoiceResponse;
 
   factory Response.listTransactionsResponse({
+    required String requestId,
+    required String connectionPubkey,
     required List<Transaction> transactions,
   }) = ListTransactionsResponse;
 
   factory Response.errorResponse({
+    required String requestId,
+    required String connectionPubkey,
     required Method method,
     required ErrorCode error,
     String unknownMethod,
   }) = ErrorResponse;
 
   nip01.Event toSignedEvent({
-    required nip01.KeyPair creatorKeyPair,
-    required String requestId,
-    required String connectionPubkey,
+    required nip01.KeyPair walletServiceKeyPair,
     String? dTagValue,
   }) {
     final content = jsonEncode(
@@ -112,12 +134,12 @@ sealed class Response extends Equatable {
     );
     final encryptedContent = Nip04.encrypt(
       content,
-      creatorKeyPair.privateKey,
+      walletServiceKeyPair.privateKey,
       connectionPubkey,
     );
 
     final partialEvent = nip01.Event(
-      pubkey: creatorKeyPair.publicKey,
+      pubkey: walletServiceKeyPair.publicKey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       kind: EventKind.response.value,
       tags: [
@@ -128,13 +150,19 @@ sealed class Response extends Equatable {
       content: encryptedContent,
     );
 
-    final signedEvent = partialEvent.sign(creatorKeyPair);
+    final signedEvent = partialEvent.sign(walletServiceKeyPair);
 
     return signedEvent;
   }
 
   @override
-  List<Object?> get props => [resultType, error, result];
+  List<Object?> get props => [
+        requestId,
+        connectionPubkey,
+        resultType,
+        error,
+        result,
+      ];
 }
 
 // Standard responses
@@ -152,6 +180,8 @@ class GetInfoResponse extends Response {
   final List<NotificationType>? notifications;
 
   GetInfoResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     this.alias,
     this.color,
     this.pubkey,
@@ -196,6 +226,8 @@ class GetBalanceResponse extends Response {
   final int balanceSat;
 
   GetBalanceResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required this.balanceSat,
   }) : super(resultType: Method.getBalance.plaintext, result: {
           'balance': balanceSat * 1000, // user's balance in msats
@@ -220,6 +252,8 @@ class MakeInvoiceResponse extends Response {
   final Map<dynamic, dynamic> metadata;
 
   MakeInvoiceResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     this.invoice,
     this.description,
     this.descriptionHash,
@@ -268,6 +302,8 @@ class PayInvoiceResponse extends Response {
   final String preimage;
 
   PayInvoiceResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required this.preimage,
   }) : super(
           resultType: Method.payInvoice.plaintext,
@@ -286,6 +322,8 @@ class MultiPayInvoiceResponse extends Response {
   final String preimage;
 
   MultiPayInvoiceResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required this.id,
     required this.preimage,
   }) : super(
@@ -297,15 +335,11 @@ class MultiPayInvoiceResponse extends Response {
 
   @override
   nip01.Event toSignedEvent({
-    required nip01.KeyPair creatorKeyPair,
-    required String requestId,
-    required String connectionPubkey,
+    required nip01.KeyPair walletServiceKeyPair,
     String? dTagValue,
   }) {
     return super.toSignedEvent(
-      creatorKeyPair: creatorKeyPair,
-      requestId: requestId,
-      connectionPubkey: connectionPubkey,
+      walletServiceKeyPair: walletServiceKeyPair,
       dTagValue: dTagValue ?? id,
     );
   }
@@ -319,6 +353,8 @@ class PayKeysendResponse extends Response {
   final String preimage;
 
   PayKeysendResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required this.preimage,
   }) : super(
           resultType: Method.payKeysend.plaintext,
@@ -337,6 +373,8 @@ class MultiPayKeysendResponse extends Response {
   final String preimage;
 
   MultiPayKeysendResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required this.id,
     required this.preimage,
   }) : super(
@@ -348,15 +386,11 @@ class MultiPayKeysendResponse extends Response {
 
   @override
   nip01.Event toSignedEvent({
-    required nip01.KeyPair creatorKeyPair,
-    required String requestId,
-    required String connectionPubkey,
+    required nip01.KeyPair walletServiceKeyPair,
     String? dTagValue,
   }) {
     return super.toSignedEvent(
-      creatorKeyPair: creatorKeyPair,
-      requestId: requestId,
-      connectionPubkey: connectionPubkey,
+      walletServiceKeyPair: walletServiceKeyPair,
       dTagValue: dTagValue ?? id,
     );
   }
@@ -380,6 +414,8 @@ class LookupInvoiceResponse extends Response {
   final Map<dynamic, dynamic> metadata;
 
   LookupInvoiceResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     this.invoice,
     this.description,
     this.descriptionHash,
@@ -431,6 +467,8 @@ class ListTransactionsResponse extends Response {
   final List<Transaction> transactions;
 
   ListTransactionsResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required this.transactions,
   }) : super(
           resultType: Method.listTransactions.plaintext,
@@ -473,6 +511,8 @@ class ErrorResponse extends Response {
   final String unknownMethod;
 
   ErrorResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required Method method,
     required ErrorCode error,
     this.unknownMethod = '',
@@ -489,6 +529,8 @@ class ErrorResponse extends Response {
 // Custom responses
 class CustomResponse extends Response {
   const CustomResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required super.resultType,
     super.error,
     super.result,
