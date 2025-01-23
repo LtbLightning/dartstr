@@ -1,3 +1,7 @@
+## 0.3.0
+
+ - WalletService interface change for better reusability and cleaner architecture
+
 ## 0.2.1+3
 
  - **FIX**: notifications were not set in connection instance when adding a connection.

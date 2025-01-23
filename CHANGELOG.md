@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip47` - `v0.3.0`](#nip47---v030)
+
+---
+
+#### `nip47` - `v0.3.0`
+
+ - WalletService interface change for better reusability and cleaner architecture
+
+
 ## 2025-01-17
 
 ### Changes
