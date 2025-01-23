@@ -181,6 +181,11 @@ class WalletServiceImpl implements WalletService {
     required nip01.KeyPair walletServiceKeyPair,
   }) async {
     // Push wallet capabilities to relay with the nip47 Info Event
+    await _ensureRequestSubscription(
+      walletServiceKeyPair: walletServiceKeyPair,
+      relayUrl: relayUrl.toString(),
+    );
+
     final info = InfoEvent(
       relayUrl: relayUrl.toString(),
       walletServicePubkey: walletServiceKeyPair.publicKey,
@@ -210,11 +215,6 @@ class WalletServiceImpl implements WalletService {
     List<NotificationType>? notifications,
     String? lud16,
   }) async {
-    await _ensureRequestSubscription(
-      walletServiceKeyPair: walletServiceKeyPair,
-      relayUrl: relayUrl.toString(),
-    );
-
     // Generate a new random connection key pair
     final connectionKeyPair = nip01.KeyPair.generate();
 
@@ -223,9 +223,11 @@ class WalletServiceImpl implements WalletService {
     final connection = Connection(
       pubkey: connectionKeyPair.publicKey,
       walletServicePubkey: walletServiceKeyPair.publicKey,
+      relayUrl: relayUrl.toString(),
+      secret: connectionKeyPair.privateKey,
       methods: methods,
       notifications: notifications,
-      relayUrl: relayUrl.toString(),
+      lud16: lud16,
     );
     // Save the connection in memory (user of the package should persist it securely)
     _connections[connectionKeyPair.publicKey] = connection;

@@ -3,7 +3,7 @@ import 'package:nip47/nip47.dart';
 
 Future<void> main() async {
   // Generate a key pair for the wallet
-  final nostrKeyPair = KeyPair.generate();
+  final walletServiceKeyPair = KeyPair.generate();
   // Create a Nip01Repository instance to manage the relay connections
   //  it can be empty if you don't want to set any relay until an nwc
   //  connection is added. At that point the relay client will be created
@@ -13,7 +13,6 @@ Future<void> main() async {
   );
 
   final nwcWalletService = WalletServiceImpl(
-    walletKeyPair: nostrKeyPair,
     nip01Repository: nip01Repository,
   );
 
@@ -22,11 +21,15 @@ Future<void> main() async {
 
   // Restore existing connections
   final existingConnections = <Connection>[/* existing connections here */];
-  nwcWalletService.restoreConnections(existingConnections);
+  nwcWalletService.restoreConnections(
+    existingConnections,
+    walletServiceKeyPair: walletServiceKeyPair,
+  );
 
   // Add a new connection
   final connection = await nwcWalletService.addConnection(
-    relayUrl: relayUrl,
+    walletServiceKeyPair: walletServiceKeyPair,
+    relayUrl: Uri.parse(relayUrl),
     methods: [
       Method.getInfo,
       Method.getBalance,
@@ -46,7 +49,6 @@ Future<void> main() async {
           request as GetInfoRequest,
           alias: 'kumulynja',
           color: '#FF9900',
-          pubkey: nostrKeyPair.publicKey,
           network: BitcoinNetwork.signet,
           blockHeight: 1220149,
           blockHash:
@@ -61,11 +63,15 @@ Future<void> main() async {
             Method.lookupInvoice,
             Method.listTransactions,
           ],
+          walletServiceKeyPair: walletServiceKeyPair,
         );
 
       case Method.getBalance:
-        nwcWalletService.getBalanceRequestHandled(request as GetBalanceRequest,
-            balanceSat: 987123);
+        nwcWalletService.getBalanceRequestHandled(
+          request as GetBalanceRequest,
+          balanceSat: 987123,
+          walletServiceKeyPair: walletServiceKeyPair,
+        );
       case Method.makeInvoice:
         const invoice =
             'lntbs750u1pngrch7dq8w3jhxaqpp56sm3029nrfdjg67rr7tcdcpvtnngq5dz90xxf7h5zq6cp0y6vhyssp529ge5rfqtfryp4dn2gr4qg84rejfus653j3cf975fj9wyyhz2a7q9qyysgqcqp6xqrgegrzjqdcadltawh0z6qmj6ql2qr5t4ndvk5xz0582ag98dgrz9ml37hhjkzyuuqqqdugqqvqqqqqqqqqqqqqqfqef3lceuteux4sv0xarvmtw2sck964s4xwn2wx8d4q4k772v8jn3jtfhf9tjhqge5nhesgt6rvxlkkwvn4f8kwmtx0ghjal72nkv8gsqpc4uyvg';
@@ -79,11 +85,14 @@ Future<void> main() async {
           createdAt: 1719788286,
           expiresAt: 1719797286,
           metadata: {},
+          walletServiceKeyPair: walletServiceKeyPair,
         );
       case Method.listTransactions:
         nwcWalletService.listTransactionsRequestHandled(
-            request as ListTransactionsRequest,
-            transactions: []);
+          request as ListTransactionsRequest,
+          transactions: [],
+          walletServiceKeyPair: walletServiceKeyPair,
+        );
       case Method.lookupInvoice:
         nwcWalletService.lookupInvoiceRequestHandled(
           request as LookupInvoiceRequest,
@@ -99,6 +108,7 @@ Future<void> main() async {
           expiresAt: 1719797286,
           settledAt: 1719788757,
           metadata: {},
+          walletServiceKeyPair: walletServiceKeyPair,
         );
       default:
         print('Unpermitted method: ${request.method}');

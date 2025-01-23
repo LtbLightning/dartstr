@@ -15,7 +15,7 @@ class Filters extends nip01.Filters {
   });
 
   factory Filters.infoEvents({
-    required String connectionPubkey,
+    required String walletServicePubkey,
     required String relayUrl,
     int? since,
   }) =>
@@ -23,10 +23,11 @@ class Filters extends nip01.Filters {
         kinds: [EventKind.info.value],
         tags: {
           'a': [
-            '${EventKind.info.value}:$connectionPubkey:',
+            '${EventKind.info.value}:$walletServicePubkey:',
             relayUrl,
           ]
         },
+        authors: [walletServicePubkey],
         since: since,
       );
 

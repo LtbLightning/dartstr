@@ -7,7 +7,7 @@ class Connection extends Equatable {
   final String pubkey;
   final String walletServicePubkey;
   final String relayUrl;
-  final String? secret;
+  final String secret;
   final List<Method> methods;
   final List<NotificationType>? notifications;
   final String? lud16;
@@ -16,7 +16,7 @@ class Connection extends Equatable {
     required this.pubkey,
     required this.walletServicePubkey,
     required this.relayUrl,
-    this.secret,
+    required this.secret,
     required this.methods,
     this.notifications,
     this.lud16,
@@ -27,7 +27,7 @@ class Connection extends Equatable {
       pubkey: map['pubkey'] as String,
       walletServicePubkey: map['walletServicePubkey'] as String,
       relayUrl: map['relayUrl'] as String,
-      secret: map['secret'] as String?,
+      secret: map['secret'] as String,
       methods: (map['methods'] as List)
           .map((e) => Method.fromPlaintext(e as String))
           .toList(),
@@ -55,7 +55,7 @@ class Connection extends Equatable {
   String get uri => '${Constants.uriProtocol}://'
       '$walletServicePubkey?'
       'relay=$relayUrl'
-      'secret=$secret&'
+      '&secret=$secret'
       '${lud16 != null ? '&lud16=$lud16' : ''}';
 
   @override
