@@ -39,6 +39,8 @@ class MakeLiquidAddressResponse extends CustomResponse {
   final String address;
 
   MakeLiquidAddressResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required this.address,
   }) : super(
             resultType: MakeLiquidAddressMethod.instance.plaintext,
@@ -52,6 +54,8 @@ class PayLiquidResponse extends CustomResponse {
   final String transactionId;
 
   PayLiquidResponse({
+    required super.requestId,
+    required super.connectionPubkey,
     required this.transactionId,
   }) : super(
             resultType: PayLiquidMethod.instance.plaintext,
@@ -89,42 +93,66 @@ void main() {
   test(
     'adds a connection',
     () async {
-      const relayUrl = 'wss://nostr2.daedaluslabs.io';
+      Uri relayUrl = Uri.parse('wss://relay.paywithflash.com');
       final nip01Repository = nip01.Nip01RepositoryImpl(
-        relayClientsManager: nip01.RelayClientsManagerImpl([relayUrl]),
+        relayClientsManager: nip01.RelayClientsManagerImpl(['$relayUrl']),
       );
-      final nostrKeyPair = nip01.KeyPair.generate();
+      final walletServiceKeyPair = nip01.KeyPair.generate();
       final nwcWallet = WalletServiceImpl(
-        walletKeyPair: nostrKeyPair,
         nip01Repository: nip01Repository,
       );
 
+      final methods = [
+        Method.getInfo,
+        Method.getBalance,
+        Method.makeInvoice,
+        Method.lookupInvoice,
+        MakeLiquidAddressMethod.instance,
+        PayLiquidMethod.instance,
+      ];
+
+      final notifications = [
+        NotificationType.paymentReceived,
+        NotificationType.paymentSent,
+      ];
+
       final connection = await nwcWallet.addConnection(
+        walletServiceKeyPair: walletServiceKeyPair,
         relayUrl: relayUrl,
-        methods: [
-          Method.getInfo,
-          Method.getBalance,
-          Method.makeInvoice,
-          Method.lookupInvoice,
-          MakeLiquidAddressMethod.instance,
-          PayLiquidMethod.instance,
-        ],
+        methods: methods,
+        notifications: notifications,
       );
 
+      final connectionUri = Uri.parse(connection.uri);
       expect(
-        connection.uri,
-        startsWith('nostr+walletconnect://${nostrKeyPair.publicKey}?secret='),
+        connectionUri.scheme,
+        'nostr+walletconnect',
       );
-      expect(connection.uri, endsWith('&relay=$relayUrl'));
+      expect(connectionUri.host, walletServiceKeyPair.publicKey);
+      expect(connectionUri.queryParameters['relay'], relayUrl.toString());
+      expect(connectionUri.queryParameters['secret'], connection.secret);
+      expect(
+        connection.pubkey,
+        nip01.KeyPair(
+          privateKey: connection.secret,
+        ).publicKey,
+      );
+
+      await nwcWallet.sendInfoEvent(
+        relayUrl: relayUrl,
+        methods: methods,
+        notifications: notifications,
+        walletServiceKeyPair: walletServiceKeyPair,
+      );
 
       final infoEvents = await nip01Repository.getStoredEvents(
         [
           Filters.infoEvents(
-            connectionPubkey: connection.pubkey,
+            walletServicePubkey: walletServiceKeyPair.publicKey,
             relayUrl: connection.relayUrl,
           ),
         ],
-        relayUrls: [relayUrl],
+        relayUrls: ['$relayUrl'],
       );
 
       expect(infoEvents.length, 1);

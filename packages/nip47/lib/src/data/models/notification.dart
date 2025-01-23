@@ -8,15 +8,18 @@ import 'package:nip47/src/enums/event_kind.dart';
 import 'package:nip47/src/enums/notification_type.dart';
 
 sealed class Notification extends Equatable {
+  final String connectionPubkey;
   final String notificationType;
   final Map<String, dynamic>? notification;
 
   const Notification({
+    required this.connectionPubkey,
     required this.notificationType,
     this.notification,
   });
 
   factory Notification.paymentReceived({
+    required String connectionPubkey,
     required String invoice,
     String? description,
     String? descriptionHash,
@@ -31,6 +34,7 @@ sealed class Notification extends Equatable {
   }) = PaymentReceivedNotification;
 
   factory Notification.paymentSent({
+    required String connectionPubkey,
     required String invoice,
     String? description,
     String? descriptionHash,
@@ -45,8 +49,7 @@ sealed class Notification extends Equatable {
   }) = PaymentSentNotification;
 
   nip01.Event toSignedEvent({
-    required nip01.KeyPair creatorKeyPair,
-    required String connectionPubkey,
+    required nip01.KeyPair walletServiceKeyPair,
   }) {
     final content = jsonEncode(
       {
@@ -56,12 +59,12 @@ sealed class Notification extends Equatable {
     );
     final encryptedContent = Nip04.encrypt(
       content,
-      creatorKeyPair.privateKey,
+      walletServiceKeyPair.privateKey,
       connectionPubkey,
     );
 
     final partialEvent = nip01.Event(
-      pubkey: creatorKeyPair.publicKey,
+      pubkey: walletServiceKeyPair.publicKey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       kind: EventKind.response.value,
       tags: [
@@ -70,13 +73,17 @@ sealed class Notification extends Equatable {
       content: encryptedContent,
     );
 
-    final signedEvent = partialEvent.sign(creatorKeyPair);
+    final signedEvent = partialEvent.sign(walletServiceKeyPair);
 
     return signedEvent;
   }
 
   @override
-  List<Object?> get props => [notificationType, notification];
+  List<Object?> get props => [
+        connectionPubkey,
+        notificationType,
+        notification,
+      ];
 }
 
 // Standard responses
@@ -97,6 +104,7 @@ class PaymentReceivedNotification extends Notification {
   final Map<String, dynamic>? metadata;
 
   PaymentReceivedNotification({
+    required super.connectionPubkey,
     required this.invoice,
     this.description,
     this.descriptionHash,
@@ -162,6 +170,7 @@ class PaymentSentNotification extends Notification {
   final Map<String, dynamic>? metadata;
 
   PaymentSentNotification({
+    required super.connectionPubkey,
     required this.invoice,
     this.description,
     this.descriptionHash,
@@ -214,6 +223,7 @@ class PaymentSentNotification extends Notification {
 // Custom responses
 class CustomNotification extends Notification {
   const CustomNotification({
+    required super.connectionPubkey,
     required super.notificationType,
     super.notification,
   });
