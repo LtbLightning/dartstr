@@ -159,7 +159,7 @@ sealed class Request extends Equatable {
           until: map['until'] as int?,
           limit: map['limit'] as int?,
           offset: map['offset'] as int?,
-          unpaid: map['unpaid'] as bool,
+          unpaid: map['unpaid'] as bool? ?? false,
           type: map['type'] == null
               ? null
               : TransactionType.fromValue(

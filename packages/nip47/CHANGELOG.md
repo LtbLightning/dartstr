@@ -1,3 +1,7 @@
+## 0.3.0+1
+
+ - **FIX**: null type for bool in unpaid field of of list transactions request.
+
 ## 0.3.0
 
  - WalletService interface change for better reusability and cleaner architecture
