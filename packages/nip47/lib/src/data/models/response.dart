@@ -474,31 +474,29 @@ class ListTransactionsResponse extends Response {
           resultType: Method.listTransactions.plaintext,
           result: {
             'transactions': transactions
-              ..sort((a, b) =>
-                  a.createdAt -
-                  b.createdAt) // Ensure transactions are in descending order
-              ..map((transaction) => {
-                    'type': transaction.type.name,
-                    if (transaction.invoice != null)
-                      'invoice': transaction.invoice,
-                    if (transaction.description != null)
-                      'description': transaction.description,
-                    if (transaction.descriptionHash != null)
-                      'description_hash': transaction.descriptionHash,
-                    if (transaction.preimage != null)
-                      'preimage': transaction.preimage,
-                    'payment_hash': transaction.paymentHash,
-                    'amount':
-                        transaction.amountSat * 1000, // invoice amount in msats
-                    'fees_paid':
-                        transaction.feesPaidSat * 1000, // fees paid in msats
-                    'created_at': transaction.createdAt,
-                    if (transaction.expiresAt != null)
-                      'expires_at': transaction.expiresAt,
-                    if (transaction.settledAt != null)
-                      'settled_at': transaction.settledAt,
-                    'metadata': transaction.metadata,
-                  }).toList(),
+                .map((transaction) => {
+                      'type': transaction.type.name,
+                      if (transaction.invoice != null)
+                        'invoice': transaction.invoice,
+                      if (transaction.description != null)
+                        'description': transaction.description,
+                      if (transaction.descriptionHash != null)
+                        'description_hash': transaction.descriptionHash,
+                      if (transaction.preimage != null)
+                        'preimage': transaction.preimage,
+                      'payment_hash': transaction.paymentHash,
+                      'amount': transaction.amountSat *
+                          1000, // invoice amount in msats
+                      'fees_paid':
+                          transaction.feesPaidSat * 1000, // fees paid in msats
+                      'created_at': transaction.createdAt,
+                      if (transaction.expiresAt != null)
+                        'expires_at': transaction.expiresAt,
+                      if (transaction.settledAt != null)
+                        'settled_at': transaction.settledAt,
+                      'metadata': transaction.metadata,
+                    })
+                .toList(),
           },
         );
 
