@@ -1,3 +1,7 @@
+## 0.3.0+2
+
+ - **FIX**: list transactions transactions mapping.
+
 ## 0.3.0+1
 
  - **FIX**: null type for bool in unpaid field of of list transactions request.

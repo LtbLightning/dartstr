@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip47` - `v0.3.0+2`](#nip47---v0302)
+
+---
+
+#### `nip47` - `v0.3.0+2`
+
+ - **FIX**: list transactions transactions mapping.
+
+
+## 2025-01-24
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip47` - `v0.3.0+1`](#nip47---v0301)
 
 ---
