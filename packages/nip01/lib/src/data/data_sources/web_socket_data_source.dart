@@ -1,0 +1,167 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:nip01/src/data/models/client_message.dart';
+import 'package:nip01/src/data/models/relay_message.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
+
+abstract class WebSocketDataSource {
+  Stream<RelayMessage> get messages;
+  Stream<WebSocketState> get states;
+  WebSocketState get state;
+  String get url;
+  Future<void> get ready;
+  void sendMessage(ClientMessage message);
+  Future<void> dispose();
+}
+
+enum WebSocketState {
+  connecting,
+  connected,
+  disconnecting,
+  disconnected,
+  disposing,
+  disposed,
+}
+
+class WebSocketDataSourceImpl implements WebSocketDataSource {
+  final String _url;
+  final Duration _backoffDuration = Duration(seconds: 2);
+  final StreamController<WebSocketState> _stateBroadcast;
+  final StreamController<RelayMessage> _messageBroadcast;
+  WebSocketState _state;
+  WebSocketChannel? _channel;
+  StreamSubscription? _subscription;
+
+  WebSocketDataSourceImpl({required String url})
+      : _url = url,
+        _stateBroadcast = StreamController<WebSocketState>.broadcast(),
+        _messageBroadcast = StreamController<RelayMessage>.broadcast(),
+        _state = WebSocketState.disconnected {
+    _ensureConnection();
+  }
+
+  @override
+  Stream<RelayMessage> get messages =>
+      _messageBroadcast.stream.asBroadcastStream();
+
+  @override
+  Stream<WebSocketState> get states =>
+      _stateBroadcast.stream.asBroadcastStream();
+
+  @override
+  WebSocketState get state => _state;
+
+  @override
+  String get url => _url;
+
+  @override
+  Future<void> get ready async {
+    if (_channel == null) {
+      throw WebSocketConnectionException('WebSocket is not connected');
+    }
+
+    await _channel!.ready;
+  }
+
+  @override
+  void sendMessage(ClientMessage message) {
+    if (_channel == null) {
+      throw WebSocketConnectionException('WebSocket is not connected');
+    }
+
+    final serializedMessage = message.serialized;
+    log('Sending message: $serializedMessage to relay $_url');
+    _channel!.sink.add(message);
+  }
+
+  @override
+  Future<void> dispose() async {
+    _changeState(WebSocketState.disposing);
+
+    await _disconnect();
+    await _messageBroadcast.close();
+    _changeState(WebSocketState.disposed);
+
+    await _stateBroadcast.close();
+  }
+
+  Future<void> _ensureConnection() async {
+    while (_state != WebSocketState.disposing &&
+        _state != WebSocketState.disposed) {
+      // Check if a reconnection is needed
+      if (_channel == null) {
+        // Not connected, so connect
+        _connect();
+      } else {
+        try {
+          await _channel!.ready;
+          // Channel is ready, so do nothing
+        } catch (e) {
+          // A connection over the current channel was not possible,
+          //  disconnect from it.
+          await _disconnect();
+        }
+      }
+
+      // Don't wait for the backoff time to stop the loop
+      if (_state == WebSocketState.disposing ||
+          _state == WebSocketState.disposed) {
+        break;
+      }
+
+      await Future.delayed(_backoffDuration);
+    }
+  }
+
+  void _connect() {
+    _changeState(WebSocketState.connecting);
+
+    _channel = WebSocketChannel.connect(Uri.parse(url));
+
+    _subscription = _channel!.stream.listen(
+      (message) {
+        final relayMessage = RelayMessage.fromSerialized(message);
+        _messageBroadcast.add(relayMessage);
+      },
+      onError: (error) async {
+        await _disconnect();
+      },
+      onDone: () async {
+        await _disconnect();
+      },
+    );
+
+    _changeState(WebSocketState.connected);
+  }
+
+  Future<void> _disconnect() async {
+    _changeState(WebSocketState.disconnecting);
+
+    await _subscription?.cancel();
+    await _channel?.sink.close(status.goingAway);
+    _channel = null;
+    _subscription = null;
+
+    _changeState(WebSocketState.disconnected);
+  }
+
+  void _changeState(WebSocketState newState) {
+    if (_state == newState ||
+        _state == WebSocketState.disposing &&
+            newState != WebSocketState.disposed ||
+        _state == WebSocketState.disposed) {
+      return;
+    }
+
+    _state = newState;
+    _stateBroadcast.add(_state);
+  }
+}
+
+class WebSocketConnectionException implements Exception {
+  final String message;
+
+  WebSocketConnectionException(this.message);
+}
