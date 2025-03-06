@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:nip01/src/domain/entities/event.dart';
 import 'package:nip01/src/domain/entities/filters.dart';
 
 part 'subscription.freezed.dart';

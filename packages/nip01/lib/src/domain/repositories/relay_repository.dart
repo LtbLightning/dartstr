@@ -25,9 +25,8 @@ abstract class RelayRepository {
     bool waitForRelayClosedMessage = false,
     int timeoutSec = 10,
   });
-  /*
   Future<void> dispose({
     bool waitForRelayClosedMessage = false,
     int timeoutSec = 10,
-  });*/
+  });
 }

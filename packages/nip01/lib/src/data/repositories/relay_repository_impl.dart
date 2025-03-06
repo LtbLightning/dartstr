@@ -13,15 +13,59 @@ import 'package:nip01/src/domain/repositories/relay_repository.dart';
 
 class RelayRepositoryImpl implements RelayRepository {
   final WebSocketDataSource _dataSource;
+  late StreamSubscription<RelayMessageModel> _relayMessageSubscription;
+  late StreamSubscription<WebSocketState> _relayStateSubscription;
+  final StreamController<SignedEvent> _eventController;
+  final Map<String, Subscription> _subscriptions = {};
+  final Map<String, StreamController<SignedEvent>> _subscriptionControllers =
+      {};
+  final Map<String, void Function(List<SignedEvent>)>
+      _subscriptionEoseCallbacks = {};
+  final Map<String, List<SignedEvent>> _subscriptionStoredEvents = {};
+  final Map<String, Completer> _subscriptionClosedCompleters = {};
+  final Map<String, Completer<bool>> _eventAcceptedCompleters = {};
 
-  RelayRepositoryImpl(this._dataSource);
+  RelayRepositoryImpl(this._dataSource)
+      : _eventController = StreamController<SignedEvent>.broadcast() {
+    _relayMessageSubscription = _dataSource.messages.listen(
+      (message) {
+        switch (message.runtimeType) {
+          case RelayEventMessageModel _:
+            log('Received event message: $message');
+            _handleEventMessage(message as RelayEventMessageModel);
+          case RelayEoseMessageModel _:
+            log('Received EoSE message: $message');
+            _handleEoseMessage(message as RelayEoseMessageModel);
+          case RelayClosedMessageModel _:
+            log('Received closed message: $message');
+            _handleClosedMessage(message as RelayClosedMessageModel);
+          case RelayOkMessageModel _:
+            log('Received OK message: $message');
+            _handleOkMessage(message as RelayOkMessageModel);
+        }
+      },
+    );
+    // Listen to state changes of the data source to re-subscribe to subscriptions
+    //  when a new connection is established
+    _relayStateSubscription = _dataSource.states.listen(
+      (state) {
+        log('Relay state changed: $state');
+        if (state == WebSocketState.connected) {
+          // Re-subscribe to all subscriptions when reconnected
+          for (final subscription in _subscriptions.values) {
+            final message = ClientMessageModel.subscription(subscription);
+            _dataSource.sendMessage(message);
+          }
+        }
+      },
+    );
+  }
 
   @override
   Stream<Relay> get relayStream => _dataSource.states.map((state) {
         return Relay(
           url: _dataSource.url,
           isConnected: state == WebSocketState.connected,
-          isDisposed: state == WebSocketState.disposed,
         );
       });
 
@@ -29,7 +73,6 @@ class RelayRepositoryImpl implements RelayRepository {
   Relay get relay => Relay(
         url: _dataSource.url,
         isConnected: _dataSource.state == WebSocketState.connected,
-        isDisposed: _dataSource.state == WebSocketState.disposed,
       );
 
   @override
@@ -47,6 +90,8 @@ class RelayRepositoryImpl implements RelayRepository {
     int timeoutSec = 10,
   }) async {
     log('Publishing event: $event to relay ${_dataSource.url}');
+
+    // Verify the event signature
     final isValid = event.verify();
 
     if (!isValid) {
@@ -54,39 +99,24 @@ class RelayRepositoryImpl implements RelayRepository {
       return false;
     }
 
-    final message = ClientMessageModel.event(event);
+    // Set up a completer to wait for the OK message from the relay
     final completer = Completer<bool>();
+    _eventAcceptedCompleters[event.id] = completer;
 
-    final subscription = _dataSource.messages.listen((message) {
-      log('Received message: $message');
-      if (message is RelayOkMessageModel && message.eventId == event.id) {
-        if (!completer.isCompleted) {
-          completer.complete(true); // Successfully received acknowledgment
-        }
-      }
-    });
+    // Send the event message to the relay
+    final message = ClientMessageModel.event(event);
+    _dataSource.sendMessage(message);
 
-    try {
-      _dataSource.sendMessage(message);
+    // Wait for the completer or the timeout, whatever comes first
+    final accepted = await Future.any([
+      completer.future, // Completes if Ok is received
+      Future.delayed(
+        Duration(seconds: timeoutSec),
+        () => false, // Return accepted as false if timeout occurs
+      ),
+    ]);
 
-      // Use Future.any to complete as soon as one of the futures completes
-      final result = await Future.any([
-        completer.future, // Completes if Ok is received
-        Future.delayed(Duration(seconds: timeoutSec),
-            () => false), // Completes if timeout occurs
-      ]);
-
-      return result;
-    } catch (e) {
-      log('Error publishing event: $e');
-      return false;
-    } finally {
-      await subscription.cancel(); // Clean up listener
-      if (!completer.isCompleted) {
-        // Complete completer to avoid memory leak
-        completer.complete(false);
-      }
-    }
+    return accepted;
   }
 
   @override
@@ -94,38 +124,23 @@ class RelayRepositoryImpl implements RelayRepository {
     Subscription subscription, {
     void Function(List<SignedEvent>)? onEose,
   }) {
-    // Setup the stream to receive events and return to the caller
-    final controller = StreamController<SignedEvent>.broadcast();
-    bool isEoseReceived = false;
-    final List<SignedEvent> storedEvents = []; // Store events before EoSE
+    // Add the subscription to cache so it can be re-subscribed when the relay
+    //  reconnects
+    _subscriptions[subscription.id] = subscription;
 
-    final sub = _dataSource.messages.listen((relayMessage) {
-      if (relayMessage is RelayEventMessageModel &&
-          relayMessage.subscriptionId == subscription.id &&
-          relayMessage.event.verify()) {
-        // Store events before EoSE
-        if (!isEoseReceived) {
-          storedEvents.add(relayMessage.event);
-        }
-        controller.add(relayMessage.event);
-      } else if (relayMessage is RelayEoseMessageModel &&
-          relayMessage.subscriptionId == subscription.id) {
-        // When EoSE is received, call onEose with stored events
-        isEoseReceived = true;
-        if (onEose != null) {
-          onEose(storedEvents);
-        }
-      }
-    });
+    // Use and store a controller so the stream to the caller doesn't notice
+    // any interruptions if the relay disconnects and reconnects
+    final controller = StreamController<SignedEvent>.broadcast();
+    _subscriptionControllers[subscription.id] = controller;
 
     // Close relay subscription when the caller cancels the stream
     controller.onCancel = () {
-      sub.cancel();
       _dataSource.sendMessage(ClientMessageModel.close(subscription.id));
+      _subscriptionControllers.remove(subscription.id);
     };
 
-    // Now that the stream is setup to receive events,
-    //  send the subscription message to start
+    // Now that the controller is setup to stream events,
+    //  send the subscription message to start receiving them
     final message = ClientMessageModel.subscription(subscription);
     _dataSource.sendMessage(message);
 
@@ -145,32 +160,18 @@ class RelayRepositoryImpl implements RelayRepository {
       filters: filters,
     );
 
-    // Setup the stream to receive events from the subscription
-    final List<SignedEvent> storedEvents = [];
-    final completer = Completer(); // Completer to signal for EoSE
-    final sub = _dataSource.messages.listen((relayMessage) {
-      if (relayMessage is RelayEventMessageModel &&
-          relayMessage.subscriptionId == subscriptionId &&
-          relayMessage.event.verify()) {
-        storedEvents.add(relayMessage.event);
-      } else if (relayMessage is RelayEoseMessageModel &&
-          relayMessage.subscriptionId == subscriptionId) {
-        // When EoSE is received, complete the completer
-        completer.complete();
-      }
+    // Set up a completer to wait for the EoSE message from the relay and pass
+    // the completion as the eose callback of the subscribe method
+    final completer = Completer<List<SignedEvent>>();
+    subscribe(subscription, onEose: (List<SignedEvent> events) {
+      completer.complete(events);
     });
 
-    // Now that the stream is setup, send the subscription message to start
-    //  reveiving events.
-    final message = ClientMessageModel.subscription(subscription);
-    _dataSource.sendMessage(message);
+    // Wait for the EoSE message with the stored events
+    final storedEvents = await completer.future;
 
-    // Wait for the EoSE message
-    await completer.future;
-
-    // Close relay subscription and clean up
-    _dataSource.sendMessage(ClientMessageModel.close(subscriptionId));
-    sub.cancel();
+    // Clean up
+    await closeSubscription(subscriptionId);
 
     return storedEvents;
   }
@@ -183,33 +184,125 @@ class RelayRepositoryImpl implements RelayRepository {
   }) async {
     log('Closing subscription $subscriptionId at relay ${_dataSource.url}');
 
-    final completer =
-        Completer(); // To wait for the close response of the relay
-    StreamSubscription? sub;
+    // Register a completer for the close response of the relay
+    final completer = Completer();
 
     if (waitForRelayClosedMessage) {
-      sub = _dataSource.messages.listen((relayMessage) {
-        if (relayMessage is RelayClosedMessageModel &&
-            relayMessage.subscriptionId == subscriptionId) {
-          completer.complete();
-        }
-      });
+      // Store the completer to wait for the relay closed message
+      _subscriptionClosedCompleters[subscriptionId] = completer;
     } else {
-      // Don't wait for relay closed message
+      // Don't wait for relay closed message, so complete the completer already
       completer.complete();
     }
 
+    // Send the close message to the relay
     final message = ClientMessageModel.close(subscriptionId);
     _dataSource.sendMessage(message);
 
     // Wait until timeout if relay closed message is not received
     await Future.any([
-      completer.future, // Completes if closed message is received
+      completer.future,
       Future.delayed(
           Duration(seconds: timeoutSec)), // Completes if timeout occurs
     ]);
 
+    // Clean up everything related to the subscription
+    _subscriptions.remove(subscriptionId);
+    final controller = _subscriptionControllers[subscriptionId];
+    if (controller != null) {
+      controller.close();
+      _subscriptionControllers.remove(subscriptionId);
+    }
+    _subscriptionStoredEvents.remove(subscriptionId);
+    _subscriptionEoseCallbacks.remove(subscriptionId);
+    _subscriptionClosedCompleters.remove(subscriptionId);
+  }
+
+  @override
+  Future<void> dispose({
+    bool waitForRelayClosedMessage = false,
+    int timeoutSec = 10,
+  }) async {
+    // Close all subscriptions cleanly
+    for (final subscription in _subscriptionControllers.keys) {
+      await closeSubscription(
+        subscription,
+        waitForRelayClosedMessage: waitForRelayClosedMessage,
+        timeoutSec: timeoutSec,
+      );
+    }
+
+    // Close all streams and subscriptions
+    await Future.wait([
+      _relayMessageSubscription.cancel(),
+      _relayStateSubscription.cancel(),
+      _eventController.close(),
+    ]);
+
+    // Dispose the data source
+    await _dataSource.dispose();
+  }
+
+  void _handleEventMessage(RelayEventMessageModel message) {
+    final event = message.event;
+    if (event.verify()) {
+      // Put it on the general event stream
+      _eventController.add(message.event);
+      // Put it on the specific subscription stream
+      final controller = _subscriptionControllers[message.subscriptionId];
+      if (controller != null) {
+        controller.add(message.event);
+      }
+      // If the subscription has an eose callback, store the event for it
+      final eoseCallback = _subscriptionEoseCallbacks[message.subscriptionId];
+      if (eoseCallback != null) {
+        _subscriptionStoredEvents.putIfAbsent(
+          message.subscriptionId,
+          () => [],
+        );
+        _subscriptionStoredEvents[message.subscriptionId]!.add(message.event);
+      }
+    }
+  }
+
+  _handleEoseMessage(RelayEoseMessageModel message) {
+    final storedEvents = _subscriptionStoredEvents[message.subscriptionId];
+    final callback = _subscriptionEoseCallbacks[message.subscriptionId];
+    if (callback != null) {
+      callback(storedEvents ?? []);
+    }
+
     // Clean up
-    sub?.cancel();
+    _subscriptionStoredEvents.remove(message.subscriptionId);
+    _subscriptionEoseCallbacks.remove(message.subscriptionId);
+  }
+
+  _handleClosedMessage(RelayClosedMessageModel message) {
+    final completer = _subscriptionClosedCompleters[message.subscriptionId];
+    if (completer != null && !completer.isCompleted) {
+      completer.complete();
+    }
+
+    // Clean up
+    final controller = _subscriptionControllers[message.subscriptionId];
+    if (controller != null) {
+      controller.close();
+      _subscriptionControllers.remove(message.subscriptionId);
+    }
+    _subscriptionStoredEvents.remove(message.subscriptionId);
+    _subscriptionEoseCallbacks.remove(message.subscriptionId);
+    _subscriptionClosedCompleters.remove(message.subscriptionId);
+  }
+
+  _handleOkMessage(RelayOkMessageModel message) {
+    final eventId = message.eventId;
+    final accepted = message.accepted;
+    final completer = _eventAcceptedCompleters[eventId];
+    if (completer != null && !completer.isCompleted) {
+      completer.complete(accepted);
+    }
+
+    // Clean up
+    _eventAcceptedCompleters.remove(eventId);
   }
 }

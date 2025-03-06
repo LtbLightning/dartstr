@@ -17,7 +17,6 @@ T _$identity<T>(T value) => value;
 mixin _$Relay {
   String get url;
   bool get isConnected;
-  bool get isDisposed;
 
   /// Create a copy of Relay
   /// with the given fields replaced by the non-null parameter values.
@@ -33,17 +32,15 @@ mixin _$Relay {
             other is Relay &&
             (identical(other.url, url) || other.url == url) &&
             (identical(other.isConnected, isConnected) ||
-                other.isConnected == isConnected) &&
-            (identical(other.isDisposed, isDisposed) ||
-                other.isDisposed == isDisposed));
+                other.isConnected == isConnected));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, url, isConnected, isDisposed);
+  int get hashCode => Object.hash(runtimeType, url, isConnected);
 
   @override
   String toString() {
-    return 'Relay(url: $url, isConnected: $isConnected, isDisposed: $isDisposed)';
+    return 'Relay(url: $url, isConnected: $isConnected)';
   }
 }
 
@@ -52,7 +49,7 @@ abstract mixin class $RelayCopyWith<$Res> {
   factory $RelayCopyWith(Relay value, $Res Function(Relay) _then) =
       _$RelayCopyWithImpl;
   @useResult
-  $Res call({String url, bool isConnected, bool isDisposed});
+  $Res call({String url, bool isConnected});
 }
 
 /// @nodoc
@@ -69,7 +66,6 @@ class _$RelayCopyWithImpl<$Res> implements $RelayCopyWith<$Res> {
   $Res call({
     Object? url = null,
     Object? isConnected = null,
-    Object? isDisposed = null,
   }) {
     return _then(_self.copyWith(
       url: null == url
@@ -80,10 +76,6 @@ class _$RelayCopyWithImpl<$Res> implements $RelayCopyWith<$Res> {
           ? _self.isConnected
           : isConnected // ignore: cast_nullable_to_non_nullable
               as bool,
-      isDisposed: null == isDisposed
-          ? _self.isDisposed
-          : isDisposed // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -91,17 +83,13 @@ class _$RelayCopyWithImpl<$Res> implements $RelayCopyWith<$Res> {
 /// @nodoc
 
 class _Relay extends Relay {
-  _Relay({required this.url, this.isConnected = false, this.isDisposed = false})
-      : super._();
+  _Relay({required this.url, this.isConnected = false}) : super._();
 
   @override
   final String url;
   @override
   @JsonKey()
   final bool isConnected;
-  @override
-  @JsonKey()
-  final bool isDisposed;
 
   /// Create a copy of Relay
   /// with the given fields replaced by the non-null parameter values.
@@ -118,17 +106,15 @@ class _Relay extends Relay {
             other is _Relay &&
             (identical(other.url, url) || other.url == url) &&
             (identical(other.isConnected, isConnected) ||
-                other.isConnected == isConnected) &&
-            (identical(other.isDisposed, isDisposed) ||
-                other.isDisposed == isDisposed));
+                other.isConnected == isConnected));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, url, isConnected, isDisposed);
+  int get hashCode => Object.hash(runtimeType, url, isConnected);
 
   @override
   String toString() {
-    return 'Relay(url: $url, isConnected: $isConnected, isDisposed: $isDisposed)';
+    return 'Relay(url: $url, isConnected: $isConnected)';
   }
 }
 
@@ -138,7 +124,7 @@ abstract mixin class _$RelayCopyWith<$Res> implements $RelayCopyWith<$Res> {
       __$RelayCopyWithImpl;
   @override
   @useResult
-  $Res call({String url, bool isConnected, bool isDisposed});
+  $Res call({String url, bool isConnected});
 }
 
 /// @nodoc
@@ -155,7 +141,6 @@ class __$RelayCopyWithImpl<$Res> implements _$RelayCopyWith<$Res> {
   $Res call({
     Object? url = null,
     Object? isConnected = null,
-    Object? isDisposed = null,
   }) {
     return _then(_Relay(
       url: null == url
@@ -165,10 +150,6 @@ class __$RelayCopyWithImpl<$Res> implements _$RelayCopyWith<$Res> {
       isConnected: null == isConnected
           ? _self.isConnected
           : isConnected // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isDisposed: null == isDisposed
-          ? _self.isDisposed
-          : isDisposed // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
