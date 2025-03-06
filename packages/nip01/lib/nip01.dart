@@ -3,19 +3,10 @@
 /// More dartdocs go here.
 library;
 
-export 'src/nip01_base.dart';
-
-export 'src/data/models/client_message.dart';
-export 'src/data/models/event.dart';
-export 'src/data/models/filters.dart';
-export 'src/data/models/key_pair.dart';
-export 'src/data/models/kind_0_metadata.dart';
-export 'src/data/models/relay_message.dart';
-
-export 'src/data/providers/relay_stream_provider.dart';
-export 'src/data/clients/relay_client.dart';
-export 'src/data/clients/relay_clients_manager.dart';
-
-export 'src/enums/event_kind.dart';
-export 'src/enums/client_message_type.dart';
-export 'src/enums/relay_message_type.dart';
+// Only expose the public API which consists of repositories, services, entities and use cases
+// Models and data sources should not be exposed and are only used internally
+export 'src/domain/repositories/relay_repository.dart';
+export 'src/domain/services/relay_manager_service.dart';
+export 'src/data/repositories/relay_repository_impl.dart';
+export 'src/data/services/relay_manager_service_impl.dart';
+export 'src/domain/entities/entities.dart';

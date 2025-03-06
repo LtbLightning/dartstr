@@ -1,18 +1,18 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:nip01/src/data/models/client_message.dart';
-import 'package:nip01/src/data/models/relay_message.dart';
+import 'package:nip01/src/data/models/client_message_model.dart';
+import 'package:nip01/src/data/models/relay_message_model.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 abstract class WebSocketDataSource {
-  Stream<RelayMessage> get messages;
+  Stream<RelayMessageModel> get messages;
   Stream<WebSocketState> get states;
   WebSocketState get state;
   String get url;
   Future<void> get ready;
-  void sendMessage(ClientMessage message);
+  void sendMessage(ClientMessageModel message);
   Future<void> dispose();
 }
 
@@ -29,7 +29,7 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
   final String _url;
   final Duration _backoffDuration = Duration(seconds: 2);
   final StreamController<WebSocketState> _stateBroadcast;
-  final StreamController<RelayMessage> _messageBroadcast;
+  final StreamController<RelayMessageModel> _messageBroadcast;
   WebSocketState _state;
   WebSocketChannel? _channel;
   StreamSubscription? _subscription;
@@ -37,13 +37,13 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
   WebSocketDataSourceImpl({required String url})
       : _url = url,
         _stateBroadcast = StreamController<WebSocketState>.broadcast(),
-        _messageBroadcast = StreamController<RelayMessage>.broadcast(),
+        _messageBroadcast = StreamController<RelayMessageModel>.broadcast(),
         _state = WebSocketState.disconnected {
     _ensureConnection();
   }
 
   @override
-  Stream<RelayMessage> get messages =>
+  Stream<RelayMessageModel> get messages =>
       _messageBroadcast.stream.asBroadcastStream();
 
   @override
@@ -66,14 +66,14 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
   }
 
   @override
-  void sendMessage(ClientMessage message) {
+  void sendMessage(ClientMessageModel message) {
     if (_channel == null) {
       throw WebSocketConnectionException('WebSocket is not connected');
     }
 
-    final serializedMessage = message.serialized;
-    log('Sending message: $serializedMessage to relay $_url');
-    _channel!.sink.add(message);
+    final data = message.data;
+    log('Sending message: $data to relay $_url');
+    _channel!.sink.add(data);
   }
 
   @override
@@ -122,7 +122,7 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
 
     _subscription = _channel!.stream.listen(
       (message) {
-        final relayMessage = RelayMessage.fromSerialized(message);
+        final relayMessage = RelayMessageModel.fromString(message);
         _messageBroadcast.add(relayMessage);
       },
       onError: (error) async {

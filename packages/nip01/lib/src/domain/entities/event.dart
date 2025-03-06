@@ -4,37 +4,32 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nip01/src/domain/entities/key_pair.dart';
+import 'package:bip340/bip340.dart' as bip340;
 
 part 'event.freezed.dart';
+part 'event.g.dart';
 
 @freezed
-class Event with _$Event {
-  @override
-  final String? _id;
-  @override
-  final String pubkey;
-  @override
-  final int createdAt;
-  @override
-  final int kind;
-  @override
-  final List<List<String>> tags;
-  @override
-  final String content;
-  @override
-  final String? sig;
+sealed class Event with _$Event {
+  const factory Event.signed({
+    required String id,
+    required String pubkey,
+    required int createdAt,
+    required int kind,
+    @Default([]) List<List<String>> tags,
+    required String content,
+    required String sig,
+  }) = SignedEvent;
+  const factory Event.unsigned({
+    required String pubkey,
+    required int createdAt,
+    required int kind,
+    @Default([]) List<List<String>> tags,
+    required String content,
+  }) = UnsignedEvent;
+  const Event._();
 
-  const Event({
-    String? id,
-    required this.pubkey,
-    required this.createdAt,
-    required this.kind,
-    this.tags = const [],
-    required this.content,
-    this.sig,
-  }) : _id = id;
-
-  factory Event.sign(Event event, {required KeyPair keyPair}) {
+  factory Event.sign(UnsignedEvent event, {required KeyPair keyPair}) {
     if (keyPair.publicKey != event.pubkey) {
       throw ArgumentError(
         'Invalid keypair to sign event with pubkey: ${event.pubkey}',
@@ -43,14 +38,18 @@ class Event with _$Event {
 
     final signature = keyPair.sign(event.id);
 
-    return event.copyWith(sig: signature);
+    return Event.signed(
+      id: event.id,
+      pubkey: event.pubkey,
+      createdAt: event.createdAt,
+      kind: event.kind,
+      tags: event.tags,
+      content: event.content,
+      sig: signature,
+    );
   }
 
   String get id {
-    if (_id != null) {
-      return _id;
-    }
-
     final data = [
       0,
       pubkey,
@@ -65,4 +64,14 @@ class Event with _$Event {
     final digest = sha256.convert(bytes);
     return hex.encode(digest.bytes);
   }
+
+  bool verify() {
+    if (this is SignedEvent) {
+      final signedEvent = this as SignedEvent;
+      return bip340.verify(signedEvent.pubkey, signedEvent.id, signedEvent.sig);
+    }
+    return false;
+  }
+
+  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 }

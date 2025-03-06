@@ -4,29 +4,30 @@ import 'package:nip01/src/domain/entities/relay.dart';
 import 'package:nip01/src/domain/entities/subscription.dart';
 
 abstract class RelayRepository {
-  Stream<Relay> get relay;
+  Stream<Relay> get relayStream;
+  Relay get relay;
   String get url;
   bool get isConnected;
   bool get isDisposed;
   Future<bool> publishEvent(
-    Event event, {
+    SignedEvent event, {
     int timeoutSec = 10,
   });
-  Future<Stream<Event>> requestEvents(
-    String subscriptionId,
-    List<Filters> filters, {
+  Stream<SignedEvent> subscribe(
+    Subscription subscription, {
     void Function(List<Event>)? onEose,
   });
-  Future<List<Event>> requestStoredEvents(
+  Future<List<SignedEvent>> getStoredEvents(
     List<Filters> filters,
   );
-  Future<Subscription?> closeSubscription(
+  Future<void> closeSubscription(
     String subscriptionId, {
     bool waitForRelayClosedMessage = false,
     int timeoutSec = 10,
   });
+  /*
   Future<void> dispose({
     bool waitForRelayClosedMessage = false,
     int timeoutSec = 10,
-  });
+  });*/
 }
