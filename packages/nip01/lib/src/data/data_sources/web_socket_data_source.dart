@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:nip01/src/data/models/client_message_model.dart';
 import 'package:nip01/src/data/models/relay_message_model.dart';
+import 'package:synchronized/synchronized.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
@@ -33,6 +34,8 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
   WebSocketState _state;
   WebSocketChannel? _channel;
   StreamSubscription? _subscription;
+  // Lock to ensure connecting, disconnecting, and disposing are not executed concurrently
+  Lock _lock = Lock();
 
   WebSocketDataSourceImpl({required String url})
       : _url = url,
@@ -78,13 +81,15 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
 
   @override
   Future<void> dispose() async {
-    _changeState(WebSocketState.disposing);
+    await _lock.synchronized(() async {
+      _changeState(WebSocketState.disposing);
 
-    await _disconnect();
-    await _messageBroadcast.close();
-    _changeState(WebSocketState.disposed);
+      await _disconnect();
+      await _messageBroadcast.close();
+      _changeState(WebSocketState.disposed);
 
-    await _stateBroadcast.close();
+      await _stateBroadcast.close();
+    });
   }
 
   Future<void> _ensureConnection() async {
@@ -93,7 +98,7 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
       // Check if a reconnection is needed
       if (_channel == null) {
         // Not connected, so connect
-        _connect();
+        await _connect();
       } else {
         try {
           await _channel!.ready;
@@ -115,36 +120,40 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
     }
   }
 
-  void _connect() {
-    _changeState(WebSocketState.connecting);
+  Future<void> _connect() async {
+    await _lock.synchronized(() {
+      _changeState(WebSocketState.connecting);
 
-    _channel = WebSocketChannel.connect(Uri.parse(url));
+      _channel = WebSocketChannel.connect(Uri.parse(url));
 
-    _subscription = _channel!.stream.listen(
-      (message) {
-        final relayMessage = RelayMessageModel.fromString(message);
-        _messageBroadcast.add(relayMessage);
-      },
-      onError: (error) async {
-        await _disconnect();
-      },
-      onDone: () async {
-        await _disconnect();
-      },
-    );
+      _subscription = _channel!.stream.listen(
+        (message) {
+          final relayMessage = RelayMessageModel.fromString(message);
+          _messageBroadcast.add(relayMessage);
+        },
+        onError: (error) async {
+          await _disconnect();
+        },
+        onDone: () async {
+          await _disconnect();
+        },
+      );
 
-    _changeState(WebSocketState.connected);
+      _changeState(WebSocketState.connected);
+    });
   }
 
   Future<void> _disconnect() async {
-    _changeState(WebSocketState.disconnecting);
+    await _lock.synchronized(() async {
+      _changeState(WebSocketState.disconnecting);
 
-    await _subscription?.cancel();
-    await _channel?.sink.close(status.goingAway);
-    _channel = null;
-    _subscription = null;
+      await _subscription?.cancel();
+      await _channel?.sink.close(status.goingAway);
+      _channel = null;
+      _subscription = null;
 
-    _changeState(WebSocketState.disconnected);
+      _changeState(WebSocketState.disconnected);
+    });
   }
 
   void _changeState(WebSocketState newState) {
