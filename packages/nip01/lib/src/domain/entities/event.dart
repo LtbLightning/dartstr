@@ -11,6 +11,7 @@ part 'event.g.dart';
 
 @freezed
 sealed class Event with _$Event {
+  @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
   const factory Event.signed({
     required String id,
     required String pubkey,
@@ -20,6 +21,7 @@ sealed class Event with _$Event {
     required String content,
     required String sig,
   }) = SignedEvent;
+  @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
   const factory Event.unsigned({
     required String pubkey,
     required int createdAt,
@@ -29,24 +31,24 @@ sealed class Event with _$Event {
   }) = UnsignedEvent;
   const Event._();
 
-  factory Event.sign(UnsignedEvent event, {required KeyPair keyPair}) {
-    if (keyPair.publicKey != event.pubkey) {
-      throw ArgumentError(
-        'Invalid keypair to sign event with pubkey: ${event.pubkey}',
+  SignedEvent sign(KeyPair keyPair) {
+    if (keyPair.publicKey != pubkey) {
+      throw EventSigningException(
+        'Keypair can nog sign event for pubkey: $pubkey',
       );
     }
 
-    final signature = keyPair.sign(event.id);
+    final signature = keyPair.sign(id);
 
     return Event.signed(
-      id: event.id,
-      pubkey: event.pubkey,
-      createdAt: event.createdAt,
-      kind: event.kind,
-      tags: event.tags,
-      content: event.content,
+      id: id,
+      pubkey: pubkey,
+      createdAt: createdAt,
+      kind: kind,
+      tags: tags,
+      content: content,
       sig: signature,
-    );
+    ) as SignedEvent;
   }
 
   String get id {
@@ -74,4 +76,10 @@ sealed class Event with _$Event {
   }
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+}
+
+class EventSigningException implements Exception {
+  final String message;
+
+  EventSigningException(this.message);
 }

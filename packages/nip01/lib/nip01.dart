@@ -7,6 +7,5 @@ library;
 // Models and data sources should not be exposed and are only used internally
 export 'src/domain/repositories/relay_repository.dart';
 export 'src/domain/services/relay_manager_service.dart';
-export 'src/data/repositories/relay_repository_impl.dart';
 export 'src/data/services/relay_manager_service_impl.dart';
 export 'src/domain/entities/entities.dart';

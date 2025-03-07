@@ -1,33 +1,33 @@
-import 'package:nip01/src/domain/entities/relay.dart';
+import 'package:nip01/src/domain/entities/entities.dart';
 
 abstract class RelayManagerService {
   List<Relay> get relays;
   Stream<List<Relay>> get relaysStream;
-  /*
-  List<Relay> addRelays(List<String> url);
-  void removeRelays(List<String> url);
-
+  Stream<SignedEvent> get eventsStream;
+  Future<List<Stream<Relay>>> addRelays(List<String> urls);
+  void removeRelays(List<String> urls);
   Future<bool> publishEvent(
-    Event event, {
+    SignedEvent event, {
+    List<String>? relayUrls,
     int successTreshold = 1,
-    List<String>? relayUrls,
+    int timeoutSec = 10,
   });
-  Future<List<Event>> getStoredEvents(
+  Future<List<SignedEvent>> getStoredEvents(
     List<Filters> filters, {
     List<String>? relayUrls,
   });
-  Future<Stream<Event>> subscribeToEvents(
-    String subscriptionId,
-    List<Filters> filters, {
+  Future<Stream<Event>> subscribe(
+    Subscription subscription, {
     List<String>? relayUrls,
     void Function(List<Event>)? onEose,
   });
-  Future<void> unsubscribeFromEvents(
+  Future<void> unsubscribe(
     String subscriptionId, {
     List<String>? relayUrls,
     bool waitForRelayClosedMessage = false,
     int timeoutSec = 10,
   });
+  /*
   Future<void> setUserMetadata({
     required KeyPair userKeyPair,
     required Kind0Metadata metadata,
@@ -38,15 +38,6 @@ abstract class RelayManagerService {
   Future<Kind0Metadata> getUserMetadata(
     String userPubkey, {
     List<String>? relayUrls,
-  });
-  Future<void> disposeRelayClient(
-    String relayUrl, {
-    bool waitForRelayClosedMessage = false,
-    int timeoutSec = 10,
-  });
-  Future<void> disposeAllRelayClients({
-    bool waitForRelayClosedMessage = false,
-    int timeoutSec = 10,
   });
   */
 }

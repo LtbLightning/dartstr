@@ -124,7 +124,8 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
 class SignedEvent extends Event {
   const SignedEvent(
       {required this.id,
@@ -277,7 +278,8 @@ class _$SignedEventCopyWithImpl<$Res> implements $SignedEventCopyWith<$Res> {
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
 class UnsignedEvent extends Event {
   const UnsignedEvent(
       {required this.pubkey,

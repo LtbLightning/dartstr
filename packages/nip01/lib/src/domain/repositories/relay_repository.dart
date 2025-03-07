@@ -5,6 +5,7 @@ import 'package:nip01/src/domain/entities/subscription.dart';
 
 abstract class RelayRepository {
   Stream<Relay> get relayStream;
+  Stream<SignedEvent> get eventStream;
   Relay get relay;
   String get url;
   bool get isConnected;

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:nip01/src/data/models/client_message_model.dart';
@@ -35,13 +36,14 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
   WebSocketChannel? _channel;
   StreamSubscription? _subscription;
   // Lock to ensure connecting, disconnecting, and disposing are not executed concurrently
-  Lock _lock = Lock();
+  final Lock _lock;
 
   WebSocketDataSourceImpl({required String url})
       : _url = url,
         _stateBroadcast = StreamController<WebSocketState>.broadcast(),
         _messageBroadcast = StreamController<RelayMessageModel>.broadcast(),
-        _state = WebSocketState.disconnected {
+        _state = WebSocketState.disconnected,
+        _lock = Lock() {
     _ensureConnection();
   }
 
@@ -128,6 +130,7 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
 
       _subscription = _channel!.stream.listen(
         (message) {
+          log('Received message: $message from relay $_url');
           final relayMessage = RelayMessageModel.fromString(message);
           _messageBroadcast.add(relayMessage);
         },

@@ -5,10 +5,7 @@ import 'package:dartstr_utils/dartstr_utils.dart';
 import 'package:nip01/src/data/data_sources/web_socket_data_source.dart';
 import 'package:nip01/src/data/models/client_message_model.dart';
 import 'package:nip01/src/data/models/relay_message_model.dart';
-import 'package:nip01/src/domain/entities/event.dart';
-import 'package:nip01/src/domain/entities/filters.dart';
-import 'package:nip01/src/domain/entities/relay.dart';
-import 'package:nip01/src/domain/entities/subscription.dart';
+import 'package:nip01/src/domain/entities/entities.dart';
 import 'package:nip01/src/domain/repositories/relay_repository.dart';
 
 class RelayRepositoryImpl implements RelayRepository {
@@ -29,19 +26,21 @@ class RelayRepositoryImpl implements RelayRepository {
       : _eventController = StreamController<SignedEvent>.broadcast() {
     _relayMessageSubscription = _dataSource.messages.listen(
       (message) {
-        switch (message.runtimeType) {
+        switch (message) {
           case RelayEventMessageModel _:
             log('Received event message: $message');
-            _handleEventMessage(message as RelayEventMessageModel);
+            _handleEventMessage(message);
           case RelayEoseMessageModel _:
             log('Received EoSE message: $message');
-            _handleEoseMessage(message as RelayEoseMessageModel);
+            _handleEoseMessage(message);
           case RelayClosedMessageModel _:
             log('Received closed message: $message');
-            _handleClosedMessage(message as RelayClosedMessageModel);
+            _handleClosedMessage(message);
           case RelayOkMessageModel _:
             log('Received OK message: $message');
-            _handleOkMessage(message as RelayOkMessageModel);
+            _handleOkMessage(message);
+          case RelayNoticeMessageModel _:
+            log('Received notice message: $message');
         }
       },
     );
@@ -68,6 +67,9 @@ class RelayRepositoryImpl implements RelayRepository {
           isConnected: state == WebSocketState.connected,
         );
       });
+
+  @override
+  Stream<SignedEvent> get eventStream => _eventController.stream;
 
   @override
   Relay get relay => Relay(
@@ -127,7 +129,11 @@ class RelayRepositoryImpl implements RelayRepository {
     // Add the subscription to cache so it can be re-subscribed when the relay
     //  reconnects
     _subscriptions[subscription.id] = subscription;
-
+    // Add the EoSE callback to cache so it can be called when the EoSE message
+    //  is received
+    if (onEose != null) {
+      _subscriptionEoseCallbacks[subscription.id] = onEose;
+    }
     // Use and store a controller so the stream to the caller doesn't notice
     // any interruptions if the relay disconnects and reconnects
     final controller = StreamController<SignedEvent>.broadcast();

@@ -9,7 +9,7 @@ part of 'event.dart';
 SignedEvent _$SignedEventFromJson(Map<String, dynamic> json) => SignedEvent(
       id: json['id'] as String,
       pubkey: json['pubkey'] as String,
-      createdAt: (json['createdAt'] as num).toInt(),
+      createdAt: (json['created_at'] as num).toInt(),
       kind: (json['kind'] as num).toInt(),
       tags: (json['tags'] as List<dynamic>?)
               ?.map(
@@ -25,7 +25,7 @@ Map<String, dynamic> _$SignedEventToJson(SignedEvent instance) =>
     <String, dynamic>{
       'id': instance.id,
       'pubkey': instance.pubkey,
-      'createdAt': instance.createdAt,
+      'created_at': instance.createdAt,
       'kind': instance.kind,
       'tags': instance.tags,
       'content': instance.content,
@@ -36,7 +36,7 @@ Map<String, dynamic> _$SignedEventToJson(SignedEvent instance) =>
 UnsignedEvent _$UnsignedEventFromJson(Map<String, dynamic> json) =>
     UnsignedEvent(
       pubkey: json['pubkey'] as String,
-      createdAt: (json['createdAt'] as num).toInt(),
+      createdAt: (json['created_at'] as num).toInt(),
       kind: (json['kind'] as num).toInt(),
       tags: (json['tags'] as List<dynamic>?)
               ?.map(
@@ -50,7 +50,7 @@ UnsignedEvent _$UnsignedEventFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$UnsignedEventToJson(UnsignedEvent instance) =>
     <String, dynamic>{
       'pubkey': instance.pubkey,
-      'createdAt': instance.createdAt,
+      'created_at': instance.createdAt,
       'kind': instance.kind,
       'tags': instance.tags,
       'content': instance.content,
