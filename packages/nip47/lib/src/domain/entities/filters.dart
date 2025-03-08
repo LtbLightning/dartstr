@@ -1,25 +1,13 @@
-import 'package:meta/meta.dart';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/src/enums/event_kind.dart';
 
-@immutable
-class Filters extends nip01.Filters {
-  const Filters({
-    super.ids,
-    super.authors,
-    super.kinds,
-    super.tags,
-    super.since,
-    super.until,
-    super.limit,
-  });
-
-  factory Filters.infoEvents({
+extension Nip47Filters on nip01.Filters {
+  static nip01.Filters infoEvents({
     required String walletServicePubkey,
     required String relayUrl,
     int? since,
   }) =>
-      Filters(
+      nip01.Filters(
         kinds: [EventKind.info.value],
         tags: {
           'a': [
@@ -31,11 +19,11 @@ class Filters extends nip01.Filters {
         since: since,
       );
 
-  factory Filters.requests({
+  static nip01.Filters requests({
     required String walletServicePubkey,
     int? since,
   }) =>
-      Filters(
+      nip01.Filters(
         kinds: [EventKind.request.value],
         tags: {
           'p': [walletServicePubkey]
