@@ -3,18 +3,18 @@ import 'dart:developer';
 
 import 'package:dartstr_utils/dartstr_utils.dart';
 import 'package:nip01/nip01.dart' as nip01;
-import 'package:nip47/src/data/models/connection.dart';
-import 'package:nip47/src/data/models/filters.dart';
-import 'package:nip47/src/data/models/info_event.dart';
-import 'package:nip47/src/data/models/notification.dart';
-import 'package:nip47/src/data/models/request.dart';
+import 'package:nip47/src/domain/entities/connection.dart';
+import 'package:nip47/src/domain/entities/filters.dart';
+import 'package:nip47/src/data/models/info_event_model.dart';
+import 'package:nip47/src/data/models/notification_model.dart';
+import 'package:nip47/src/data/models/request_model.dart';
 import 'package:nip47/src/data/models/request_subscription.dart';
-import 'package:nip47/src/data/models/response.dart';
-import 'package:nip47/src/data/models/transaction.dart';
+import 'package:nip47/src/data/models/response_model.dart';
+import 'package:nip47/src/domain/entities/transaction.dart';
 import 'package:nip47/src/enums/bitcoin_network.dart';
 import 'package:nip47/src/enums/error_code.dart';
 import 'package:nip47/src/enums/event_kind.dart';
-import 'package:nip47/src/data/models/method.dart';
+import 'package:nip47/src/domain/entities/method.dart';
 import 'package:nip47/src/enums/notification_type.dart';
 
 abstract class WalletService {

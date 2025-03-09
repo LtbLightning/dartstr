@@ -11,8 +11,6 @@ dependencies:
   dartstr_utils: ^0.0.2
   nip01: ^0.1.1+3
   nip04: ^0.0.2
-  meta: ^1.15.0
-  equatable: ^2.0.5
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
   # path: ^1.8.0

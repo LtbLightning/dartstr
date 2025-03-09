@@ -79,11 +79,11 @@ class NotificationModel {
     }
   }
 
-  factory NotificationModel.fromEvent(nip01.Event event,
-      {required String receiverPrivateKey}) {
+  factory NotificationModel.fromEvent(nip01.SignedEvent event,
+      {required String clientPrivateKey}) {
     final content = Nip04.decrypt(
       event.content,
-      receiverPrivateKey,
+      clientPrivateKey,
       event.pubkey,
     );
     final notification = jsonDecode(content) as Map<String, dynamic>;
