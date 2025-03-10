@@ -82,7 +82,7 @@ sealed class Connection with _$Connection {
           host: walletConnection.walletServiceKeyPair.publicKey,
           queryParameters: {
             'relay': walletConnection.relayUrl,
-            'secret': walletConnection.clientKeyPair.privateKey,
+            'secret': walletConnection.clientSecret,
             if (walletConnection.lud16 != null)
               'lud16': walletConnection.lud16!,
           },
@@ -90,7 +90,7 @@ sealed class Connection with _$Connection {
       case ClientConnection clientConnection:
         return Uri(
           scheme: ConnectionType.client.protocol,
-          host: clientConnection.clientPubkey,
+          host: clientConnection.clientKeyPair.publicKey,
           queryParameters: {
             'relay': clientConnection.relayUrl,
             if (clientConnection.name != null) 'name': clientConnection.name,

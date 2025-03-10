@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/src/data/models/info_event_model.dart';
+import 'package:nip47/src/data/models/request_model.dart';
+import 'package:nip47/src/data/models/response_model.dart';
 import 'package:nip47/src/domain/entities/entities.dart';
 import 'package:nip47/src/domain/repositories/wallet_service_repository.dart';
 import 'package:nip47/src/enums/event_kind.dart';
@@ -103,25 +105,16 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   }
 
   @override
-  Future<void> respond(Response response) {
-    // TODO: implement respond
-    throw UnimplementedError();
-  }
+  Future<void> respond(Response response, {int timeoutSec = 10}) async {
+    final connection = _connections[response.clientPubkey];
 
-  Future<void> _publishInfoEvent({
-    required WalletConnection connection,
-    int timeoutSec = 10,
-  }) async {
-    final infoEvent = InfoEvent(
-      walletServicePubkey: connection.walletServiceKeyPair.publicKey,
-      relayUrl: connection.relayUrl,
-      methods: connection.methods,
-      notifications: connection.notifications,
-      clientPubkey: connection.clientPubkey,
-    );
+    if (connection == null) {
+      throw ResponseException('Connection not found');
+    }
 
-    final model = InfoEventModel.fromEntity(infoEvent);
-    final event = model.toUnsignedEvent();
+    final model = ResponseModel.fromEntity(response);
+    final event =
+        model.toEvent(walletServiceKeyPair: connection.walletServiceKeyPair);
     final signedEvent = event.sign(connection.walletServiceKeyPair);
 
     final isPublished = await _relayManagerService.publishEvent(
@@ -133,8 +126,57 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     );
 
     if (!isPublished) {
+      throw ResponseException('Failed to publish response');
+    }
+  }
+
+  Future<void> _publishInfoEvent({
+    required WalletConnection connection,
+    int timeoutSec = 10,
+  }) async {
+    final infoEvent = InfoEvent(
+      walletServicePubkey: connection.walletServiceKeyPair.publicKey,
+      relayUrl: connection.relayUrl,
+      methods: connection.methods,
+      notifications: connection.notifications,
+      clientPubkey:
+          connection.clientPubkey, // Add tag for client with preffered relay
+    );
+
+    final model = InfoEventModel.fromEntity(infoEvent);
+    final event = model.toUnsignedEvent();
+    final signedEvent = event.sign(connection.walletServiceKeyPair);
+
+    final isPublished = await _relayManagerService.publishEvent(
+      signedEvent,
+      relayUrls: [
+        connection.relayUrl.toString(), // TODO: If client relay is set, add it
+      ],
+      timeoutSec: timeoutSec,
+    );
+
+    if (!isPublished) {
       throw InfoEventException('Failed to publish info event');
     }
+  }
+
+  Future<void> _handleRequest(nip01.SignedEvent request) async {
+    final connection = _connections[request.pubkey];
+
+    if (connection == null) {
+      throw RequestException('Connection not found');
+    }
+
+    final model = RequestModel.fromEvent(
+      request,
+      walletServicePrivateKey: connection.walletServiceKeyPair.privateKey,
+    );
+
+    // TODO: Validate request
+
+    final entity = model.toEntity();
+
+    _requestsController.add(entity);
   }
 }
 
@@ -142,4 +184,22 @@ class InfoEventException implements Exception {
   final String message;
 
   InfoEventException(this.message);
+}
+
+class ResponseException implements Exception {
+  final String message;
+
+  ResponseException(this.message);
+}
+
+class RequestException implements Exception {
+  final String message;
+
+  RequestException(this.message);
+}
+
+class NotificationException implements Exception {
+  final String message;
+
+  NotificationException(this.message);
 }

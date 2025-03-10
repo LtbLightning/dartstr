@@ -31,6 +31,9 @@ class RelayManagerServiceImpl implements RelayManagerService {
 
   @override
   Future<List<Stream<Relay>>> addRelays(List<String> urls) async {
+    // Remove any urls that are already added
+    urls.removeWhere((url) => _relays.containsKey(url));
+
     final relayStreams = <Stream<Relay>>[];
 
     for (final url in urls) {
