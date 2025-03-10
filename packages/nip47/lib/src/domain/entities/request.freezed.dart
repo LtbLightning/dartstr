@@ -30,8 +30,8 @@ Request _$RequestFromJson(Map<String, dynamic> json) {
       return MultiPayKeysendRequest.fromJson(json);
     case 'lookupInvoice':
       return LookupInvoiceRequest.fromJson(json);
-    case 'listTransaction':
-      return ListTransactionRequest.fromJson(json);
+    case 'listTransactions':
+      return ListTransactionsRequest.fromJson(json);
     case 'custom':
       return CustomRequest.fromJson(json);
 
@@ -45,7 +45,9 @@ Request _$RequestFromJson(Map<String, dynamic> json) {
 mixin _$Request {
   String get id;
   String get clientPubkey;
+  String get walletServicePubkey;
   int get createdAt;
+  int? get expiresAt;
 
   /// Create a copy of Request
   /// with the given fields replaced by the non-null parameter values.
@@ -65,17 +67,22 @@ mixin _$Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, clientPubkey, walletServicePubkey, createdAt, expiresAt);
 
   @override
   String toString() {
-    return 'Request(id: $id, clientPubkey: $clientPubkey, createdAt: $createdAt)';
+    return 'Request(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -84,7 +91,12 @@ abstract mixin class $RequestCopyWith<$Res> {
   factory $RequestCopyWith(Request value, $Res Function(Request) _then) =
       _$RequestCopyWithImpl;
   @useResult
-  $Res call({String id, String clientPubkey, int createdAt});
+  $Res call(
+      {String id,
+      String clientPubkey,
+      String walletServicePubkey,
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -101,7 +113,9 @@ class _$RequestCopyWithImpl<$Res> implements $RequestCopyWith<$Res> {
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -112,10 +126,18 @@ class _$RequestCopyWithImpl<$Res> implements $RequestCopyWith<$Res> {
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -126,7 +148,9 @@ class GetInfoRequest extends Request {
   const GetInfoRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : $type = $type ?? 'getInfo',
         super._();
@@ -138,7 +162,11 @@ class GetInfoRequest extends Request {
   @override
   final String clientPubkey;
   @override
+  final String walletServicePubkey;
+  @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -166,17 +194,22 @@ class GetInfoRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, clientPubkey, walletServicePubkey, createdAt, expiresAt);
 
   @override
   String toString() {
-    return 'Request.getInfo(id: $id, clientPubkey: $clientPubkey, createdAt: $createdAt)';
+    return 'Request.getInfo(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -188,7 +221,12 @@ abstract mixin class $GetInfoRequestCopyWith<$Res>
       _$GetInfoRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, String clientPubkey, int createdAt});
+  $Res call(
+      {String id,
+      String clientPubkey,
+      String walletServicePubkey,
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -206,7 +244,9 @@ class _$GetInfoRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(GetInfoRequest(
       id: null == id
@@ -217,10 +257,18 @@ class _$GetInfoRequestCopyWithImpl<$Res>
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -231,7 +279,9 @@ class GetBalanceRequest extends Request {
   const GetBalanceRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : $type = $type ?? 'getBalance',
         super._();
@@ -243,7 +293,11 @@ class GetBalanceRequest extends Request {
   @override
   final String clientPubkey;
   @override
+  final String walletServicePubkey;
+  @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -271,17 +325,22 @@ class GetBalanceRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, clientPubkey, walletServicePubkey, createdAt, expiresAt);
 
   @override
   String toString() {
-    return 'Request.getBalance(id: $id, clientPubkey: $clientPubkey, createdAt: $createdAt)';
+    return 'Request.getBalance(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -293,7 +352,12 @@ abstract mixin class $GetBalanceRequestCopyWith<$Res>
       _$GetBalanceRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, String clientPubkey, int createdAt});
+  $Res call(
+      {String id,
+      String clientPubkey,
+      String walletServicePubkey,
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -311,7 +375,9 @@ class _$GetBalanceRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(GetBalanceRequest(
       id: null == id
@@ -322,10 +388,18 @@ class _$GetBalanceRequestCopyWithImpl<$Res>
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -336,11 +410,13 @@ class MakeInvoiceRequest extends Request {
   const MakeInvoiceRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       required this.amountSat,
       this.description,
       this.descriptionHash,
       this.expiry,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : $type = $type ?? 'makeInvoice',
         super._();
@@ -351,12 +427,16 @@ class MakeInvoiceRequest extends Request {
   final String id;
   @override
   final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final BigInt amountSat;
   final String? description;
   final String? descriptionHash;
   final int? expiry;
   @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -384,6 +464,8 @@ class MakeInvoiceRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.amountSat, amountSat) ||
                 other.amountSat == amountSat) &&
             (identical(other.description, description) ||
@@ -392,17 +474,28 @@ class MakeInvoiceRequest extends Request {
                 other.descriptionHash == descriptionHash) &&
             (identical(other.expiry, expiry) || other.expiry == expiry) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey, amountSat,
-      description, descriptionHash, expiry, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      clientPubkey,
+      walletServicePubkey,
+      amountSat,
+      description,
+      descriptionHash,
+      expiry,
+      createdAt,
+      expiresAt);
 
   @override
   String toString() {
-    return 'Request.makeInvoice(id: $id, clientPubkey: $clientPubkey, amountSat: $amountSat, description: $description, descriptionHash: $descriptionHash, expiry: $expiry, createdAt: $createdAt)';
+    return 'Request.makeInvoice(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, amountSat: $amountSat, description: $description, descriptionHash: $descriptionHash, expiry: $expiry, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -417,11 +510,13 @@ abstract mixin class $MakeInvoiceRequestCopyWith<$Res>
   $Res call(
       {String id,
       String clientPubkey,
+      String walletServicePubkey,
       BigInt amountSat,
       String? description,
       String? descriptionHash,
       int? expiry,
-      int createdAt});
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -439,11 +534,13 @@ class _$MakeInvoiceRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? amountSat = null,
     Object? description = freezed,
     Object? descriptionHash = freezed,
     Object? expiry = freezed,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(MakeInvoiceRequest(
       id: null == id
@@ -453,6 +550,10 @@ class _$MakeInvoiceRequestCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       amountSat: null == amountSat
           ? _self.amountSat
@@ -474,6 +575,10 @@ class _$MakeInvoiceRequestCopyWithImpl<$Res>
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -484,8 +589,11 @@ class PayInvoiceRequest extends Request {
   const PayInvoiceRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       required this.invoice,
+      this.amountSat,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : $type = $type ?? 'payInvoice',
         super._();
@@ -496,9 +604,14 @@ class PayInvoiceRequest extends Request {
   final String id;
   @override
   final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final String invoice;
+  final BigInt? amountSat;
   @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -526,19 +639,25 @@ class PayInvoiceRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
+            (identical(other.amountSat, amountSat) ||
+                other.amountSat == amountSat) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, clientPubkey, invoice, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, clientPubkey,
+      walletServicePubkey, invoice, amountSat, createdAt, expiresAt);
 
   @override
   String toString() {
-    return 'Request.payInvoice(id: $id, clientPubkey: $clientPubkey, invoice: $invoice, createdAt: $createdAt)';
+    return 'Request.payInvoice(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, invoice: $invoice, amountSat: $amountSat, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -550,7 +669,14 @@ abstract mixin class $PayInvoiceRequestCopyWith<$Res>
       _$PayInvoiceRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, String clientPubkey, String invoice, int createdAt});
+  $Res call(
+      {String id,
+      String clientPubkey,
+      String walletServicePubkey,
+      String invoice,
+      BigInt? amountSat,
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -568,8 +694,11 @@ class _$PayInvoiceRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? invoice = null,
+    Object? amountSat = freezed,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(PayInvoiceRequest(
       id: null == id
@@ -580,14 +709,26 @@ class _$PayInvoiceRequestCopyWithImpl<$Res>
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
       invoice: null == invoice
           ? _self.invoice
           : invoice // ignore: cast_nullable_to_non_nullable
               as String,
+      amountSat: freezed == amountSat
+          ? _self.amountSat
+          : amountSat // ignore: cast_nullable_to_non_nullable
+              as BigInt?,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -598,8 +739,10 @@ class MultiPayInvoiceRequest extends Request {
   const MultiPayInvoiceRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       required final List<MultiPayInvoiceRequestInvoice> invoices,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : _invoices = invoices,
         $type = $type ?? 'multiPayInvoice',
@@ -611,6 +754,8 @@ class MultiPayInvoiceRequest extends Request {
   final String id;
   @override
   final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final List<MultiPayInvoiceRequestInvoice> _invoices;
   List<MultiPayInvoiceRequestInvoice> get invoices {
     if (_invoices is EqualUnmodifiableListView) return _invoices;
@@ -620,6 +765,8 @@ class MultiPayInvoiceRequest extends Request {
 
   @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -648,19 +795,29 @@ class MultiPayInvoiceRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             const DeepCollectionEquality().equals(other._invoices, _invoices) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey,
-      const DeepCollectionEquality().hash(_invoices), createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      clientPubkey,
+      walletServicePubkey,
+      const DeepCollectionEquality().hash(_invoices),
+      createdAt,
+      expiresAt);
 
   @override
   String toString() {
-    return 'Request.multiPayInvoice(id: $id, clientPubkey: $clientPubkey, invoices: $invoices, createdAt: $createdAt)';
+    return 'Request.multiPayInvoice(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, invoices: $invoices, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -675,8 +832,10 @@ abstract mixin class $MultiPayInvoiceRequestCopyWith<$Res>
   $Res call(
       {String id,
       String clientPubkey,
+      String walletServicePubkey,
       List<MultiPayInvoiceRequestInvoice> invoices,
-      int createdAt});
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -694,8 +853,10 @@ class _$MultiPayInvoiceRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? invoices = null,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(MultiPayInvoiceRequest(
       id: null == id
@@ -706,6 +867,10 @@ class _$MultiPayInvoiceRequestCopyWithImpl<$Res>
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
       invoices: null == invoices
           ? _self._invoices
           : invoices // ignore: cast_nullable_to_non_nullable
@@ -714,6 +879,10 @@ class _$MultiPayInvoiceRequestCopyWithImpl<$Res>
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -724,11 +893,13 @@ class PayKeysendRequest extends Request {
   const PayKeysendRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       required this.amountSat,
       required this.pubkey,
       this.preimage,
       final List<TlvRecord>? tlvRecords,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : _tlvRecords = tlvRecords,
         $type = $type ?? 'payKeysend',
@@ -740,6 +911,8 @@ class PayKeysendRequest extends Request {
   final String id;
   @override
   final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final BigInt amountSat;
   final String pubkey;
   final String? preimage;
@@ -754,6 +927,8 @@ class PayKeysendRequest extends Request {
 
   @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -781,6 +956,8 @@ class PayKeysendRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.amountSat, amountSat) ||
                 other.amountSat == amountSat) &&
             (identical(other.pubkey, pubkey) || other.pubkey == pubkey) &&
@@ -789,7 +966,9 @@ class PayKeysendRequest extends Request {
             const DeepCollectionEquality()
                 .equals(other._tlvRecords, _tlvRecords) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -798,15 +977,17 @@ class PayKeysendRequest extends Request {
       runtimeType,
       id,
       clientPubkey,
+      walletServicePubkey,
       amountSat,
       pubkey,
       preimage,
       const DeepCollectionEquality().hash(_tlvRecords),
-      createdAt);
+      createdAt,
+      expiresAt);
 
   @override
   String toString() {
-    return 'Request.payKeysend(id: $id, clientPubkey: $clientPubkey, amountSat: $amountSat, pubkey: $pubkey, preimage: $preimage, tlvRecords: $tlvRecords, createdAt: $createdAt)';
+    return 'Request.payKeysend(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, amountSat: $amountSat, pubkey: $pubkey, preimage: $preimage, tlvRecords: $tlvRecords, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -821,11 +1002,13 @@ abstract mixin class $PayKeysendRequestCopyWith<$Res>
   $Res call(
       {String id,
       String clientPubkey,
+      String walletServicePubkey,
       BigInt amountSat,
       String pubkey,
       String? preimage,
       List<TlvRecord>? tlvRecords,
-      int createdAt});
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -843,11 +1026,13 @@ class _$PayKeysendRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? amountSat = null,
     Object? pubkey = null,
     Object? preimage = freezed,
     Object? tlvRecords = freezed,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(PayKeysendRequest(
       id: null == id
@@ -857,6 +1042,10 @@ class _$PayKeysendRequestCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       amountSat: null == amountSat
           ? _self.amountSat
@@ -878,6 +1067,10 @@ class _$PayKeysendRequestCopyWithImpl<$Res>
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -888,8 +1081,10 @@ class MultiPayKeysendRequest extends Request {
   const MultiPayKeysendRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       required final List<MultiPayKeysendRequestKeysend> keysends,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : _keysends = keysends,
         $type = $type ?? 'multiPayKeysend',
@@ -901,6 +1096,8 @@ class MultiPayKeysendRequest extends Request {
   final String id;
   @override
   final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final List<MultiPayKeysendRequestKeysend> _keysends;
   List<MultiPayKeysendRequestKeysend> get keysends {
     if (_keysends is EqualUnmodifiableListView) return _keysends;
@@ -910,6 +1107,8 @@ class MultiPayKeysendRequest extends Request {
 
   @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -938,19 +1137,29 @@ class MultiPayKeysendRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             const DeepCollectionEquality().equals(other._keysends, _keysends) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey,
-      const DeepCollectionEquality().hash(_keysends), createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      clientPubkey,
+      walletServicePubkey,
+      const DeepCollectionEquality().hash(_keysends),
+      createdAt,
+      expiresAt);
 
   @override
   String toString() {
-    return 'Request.multiPayKeysend(id: $id, clientPubkey: $clientPubkey, keysends: $keysends, createdAt: $createdAt)';
+    return 'Request.multiPayKeysend(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, keysends: $keysends, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -965,8 +1174,10 @@ abstract mixin class $MultiPayKeysendRequestCopyWith<$Res>
   $Res call(
       {String id,
       String clientPubkey,
+      String walletServicePubkey,
       List<MultiPayKeysendRequestKeysend> keysends,
-      int createdAt});
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -984,8 +1195,10 @@ class _$MultiPayKeysendRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? keysends = null,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(MultiPayKeysendRequest(
       id: null == id
@@ -996,6 +1209,10 @@ class _$MultiPayKeysendRequestCopyWithImpl<$Res>
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
       keysends: null == keysends
           ? _self._keysends
           : keysends // ignore: cast_nullable_to_non_nullable
@@ -1004,6 +1221,10 @@ class _$MultiPayKeysendRequestCopyWithImpl<$Res>
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -1014,9 +1235,11 @@ class LookupInvoiceRequest extends Request {
   const LookupInvoiceRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       this.paymentHash,
       this.invoice,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : $type = $type ?? 'lookupInvoice',
         super._();
@@ -1027,10 +1250,14 @@ class LookupInvoiceRequest extends Request {
   final String id;
   @override
   final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final String? paymentHash;
   final String? invoice;
   @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1059,21 +1286,25 @@ class LookupInvoiceRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.paymentHash, paymentHash) ||
                 other.paymentHash == paymentHash) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, clientPubkey, paymentHash, invoice, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, clientPubkey,
+      walletServicePubkey, paymentHash, invoice, createdAt, expiresAt);
 
   @override
   String toString() {
-    return 'Request.lookupInvoice(id: $id, clientPubkey: $clientPubkey, paymentHash: $paymentHash, invoice: $invoice, createdAt: $createdAt)';
+    return 'Request.lookupInvoice(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, paymentHash: $paymentHash, invoice: $invoice, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -1088,9 +1319,11 @@ abstract mixin class $LookupInvoiceRequestCopyWith<$Res>
   $Res call(
       {String id,
       String clientPubkey,
+      String walletServicePubkey,
       String? paymentHash,
       String? invoice,
-      int createdAt});
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -1108,9 +1341,11 @@ class _$LookupInvoiceRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? paymentHash = freezed,
     Object? invoice = freezed,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(LookupInvoiceRequest(
       id: null == id
@@ -1120,6 +1355,10 @@ class _$LookupInvoiceRequestCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       paymentHash: freezed == paymentHash
           ? _self.paymentHash
@@ -1133,16 +1372,21 @@ class _$LookupInvoiceRequestCopyWithImpl<$Res>
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class ListTransactionRequest extends Request {
-  const ListTransactionRequest(
+class ListTransactionsRequest extends Request {
+  const ListTransactionsRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       this.from,
       this.until,
       this.limit,
@@ -1150,16 +1394,19 @@ class ListTransactionRequest extends Request {
       this.unpaid = false,
       this.type,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
-      : $type = $type ?? 'listTransaction',
+      : $type = $type ?? 'listTransactions',
         super._();
-  factory ListTransactionRequest.fromJson(Map<String, dynamic> json) =>
-      _$ListTransactionRequestFromJson(json);
+  factory ListTransactionsRequest.fromJson(Map<String, dynamic> json) =>
+      _$ListTransactionsRequestFromJson(json);
 
   @override
   final String id;
   @override
   final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final int? from;
   final int? until;
   final int? limit;
@@ -1169,6 +1416,8 @@ class ListTransactionRequest extends Request {
   final TransactionType? type;
   @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1178,13 +1427,13 @@ class ListTransactionRequest extends Request {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ListTransactionRequestCopyWith<ListTransactionRequest> get copyWith =>
-      _$ListTransactionRequestCopyWithImpl<ListTransactionRequest>(
+  $ListTransactionsRequestCopyWith<ListTransactionsRequest> get copyWith =>
+      _$ListTransactionsRequestCopyWithImpl<ListTransactionsRequest>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$ListTransactionRequestToJson(
+    return _$ListTransactionsRequestToJson(
       this,
     );
   }
@@ -1193,10 +1442,12 @@ class ListTransactionRequest extends Request {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ListTransactionRequest &&
+            other is ListTransactionsRequest &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.from, from) || other.from == from) &&
             (identical(other.until, until) || other.until == until) &&
             (identical(other.limit, limit) || other.limit == limit) &&
@@ -1204,47 +1455,62 @@ class ListTransactionRequest extends Request {
             (identical(other.unpaid, unpaid) || other.unpaid == unpaid) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey, from, until,
-      limit, offset, unpaid, type, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      clientPubkey,
+      walletServicePubkey,
+      from,
+      until,
+      limit,
+      offset,
+      unpaid,
+      type,
+      createdAt,
+      expiresAt);
 
   @override
   String toString() {
-    return 'Request.listTransaction(id: $id, clientPubkey: $clientPubkey, from: $from, until: $until, limit: $limit, offset: $offset, unpaid: $unpaid, type: $type, createdAt: $createdAt)';
+    return 'Request.listTransactions(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, from: $from, until: $until, limit: $limit, offset: $offset, unpaid: $unpaid, type: $type, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ListTransactionRequestCopyWith<$Res>
+abstract mixin class $ListTransactionsRequestCopyWith<$Res>
     implements $RequestCopyWith<$Res> {
-  factory $ListTransactionRequestCopyWith(ListTransactionRequest value,
-          $Res Function(ListTransactionRequest) _then) =
-      _$ListTransactionRequestCopyWithImpl;
+  factory $ListTransactionsRequestCopyWith(ListTransactionsRequest value,
+          $Res Function(ListTransactionsRequest) _then) =
+      _$ListTransactionsRequestCopyWithImpl;
   @override
   @useResult
   $Res call(
       {String id,
       String clientPubkey,
+      String walletServicePubkey,
       int? from,
       int? until,
       int? limit,
       int? offset,
       bool? unpaid,
       TransactionType? type,
-      int createdAt});
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
-class _$ListTransactionRequestCopyWithImpl<$Res>
-    implements $ListTransactionRequestCopyWith<$Res> {
-  _$ListTransactionRequestCopyWithImpl(this._self, this._then);
+class _$ListTransactionsRequestCopyWithImpl<$Res>
+    implements $ListTransactionsRequestCopyWith<$Res> {
+  _$ListTransactionsRequestCopyWithImpl(this._self, this._then);
 
-  final ListTransactionRequest _self;
-  final $Res Function(ListTransactionRequest) _then;
+  final ListTransactionsRequest _self;
+  final $Res Function(ListTransactionsRequest) _then;
 
   /// Create a copy of Request
   /// with the given fields replaced by the non-null parameter values.
@@ -1253,6 +1519,7 @@ class _$ListTransactionRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? from = freezed,
     Object? until = freezed,
     Object? limit = freezed,
@@ -1260,8 +1527,9 @@ class _$ListTransactionRequestCopyWithImpl<$Res>
     Object? unpaid = freezed,
     Object? type = freezed,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
-    return _then(ListTransactionRequest(
+    return _then(ListTransactionsRequest(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -1269,6 +1537,10 @@ class _$ListTransactionRequestCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       from: freezed == from
           ? _self.from
@@ -1298,6 +1570,10 @@ class _$ListTransactionRequestCopyWithImpl<$Res>
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -1308,9 +1584,11 @@ class CustomRequest extends Request {
   const CustomRequest(
       {required this.id,
       required this.clientPubkey,
+      required this.walletServicePubkey,
       required this.method,
       required final Map<String, dynamic> params,
       required this.createdAt,
+      this.expiresAt,
       final String? $type})
       : _params = params,
         $type = $type ?? 'custom',
@@ -1322,6 +1600,8 @@ class CustomRequest extends Request {
   final String id;
   @override
   final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final String method;
   final Map<String, dynamic> _params;
   Map<String, dynamic> get params {
@@ -1332,6 +1612,8 @@ class CustomRequest extends Request {
 
   @override
   final int createdAt;
+  @override
+  final int? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1359,20 +1641,31 @@ class CustomRequest extends Request {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.method, method) || other.method == method) &&
             const DeepCollectionEquality().equals(other._params, _params) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey, method,
-      const DeepCollectionEquality().hash(_params), createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      clientPubkey,
+      walletServicePubkey,
+      method,
+      const DeepCollectionEquality().hash(_params),
+      createdAt,
+      expiresAt);
 
   @override
   String toString() {
-    return 'Request.custom(id: $id, clientPubkey: $clientPubkey, method: $method, params: $params, createdAt: $createdAt)';
+    return 'Request.custom(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, method: $method, params: $params, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 }
 
@@ -1387,9 +1680,11 @@ abstract mixin class $CustomRequestCopyWith<$Res>
   $Res call(
       {String id,
       String clientPubkey,
+      String walletServicePubkey,
       String method,
       Map<String, dynamic> params,
-      int createdAt});
+      int createdAt,
+      int? expiresAt});
 }
 
 /// @nodoc
@@ -1407,9 +1702,11 @@ class _$CustomRequestCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? method = null,
     Object? params = null,
     Object? createdAt = null,
+    Object? expiresAt = freezed,
   }) {
     return _then(CustomRequest(
       id: null == id
@@ -1419,6 +1716,10 @@ class _$CustomRequestCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       method: null == method
           ? _self.method
@@ -1432,6 +1733,10 @@ class _$CustomRequestCopyWithImpl<$Res>
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }

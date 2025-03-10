@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'transaction.dart';
+part of 'invoice.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_Transaction _$TransactionFromJson(Map<String, dynamic> json) => _Transaction(
-      type: $enumDecode(_$TransactionTypeEnumMap, json['type']),
+_Invoice _$InvoiceFromJson(Map<String, dynamic> json) => _Invoice(
       invoice: json['invoice'] as String?,
       description: json['description'] as String?,
       descriptionHash: json['descriptionHash'] as String?,
@@ -16,14 +15,11 @@ _Transaction _$TransactionFromJson(Map<String, dynamic> json) => _Transaction(
       amountSat: BigInt.parse(json['amountSat'] as String),
       feesPaidSat: BigInt.parse(json['feesPaidSat'] as String),
       createdAt: (json['createdAt'] as num).toInt(),
-      expiresAt: (json['expiresAt'] as num?)?.toInt(),
-      settledAt: (json['settledAt'] as num?)?.toInt(),
-      metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
+      expiresAt: (json['expiresAt'] as num).toInt(),
+      metadata: json['metadata'] as Map<String, dynamic>,
     );
 
-Map<String, dynamic> _$TransactionToJson(_Transaction instance) =>
-    <String, dynamic>{
-      'type': _$TransactionTypeEnumMap[instance.type]!,
+Map<String, dynamic> _$InvoiceToJson(_Invoice instance) => <String, dynamic>{
       'invoice': instance.invoice,
       'description': instance.description,
       'descriptionHash': instance.descriptionHash,
@@ -33,11 +29,5 @@ Map<String, dynamic> _$TransactionToJson(_Transaction instance) =>
       'feesPaidSat': instance.feesPaidSat.toString(),
       'createdAt': instance.createdAt,
       'expiresAt': instance.expiresAt,
-      'settledAt': instance.settledAt,
       'metadata': instance.metadata,
     };
-
-const _$TransactionTypeEnumMap = {
-  TransactionType.incoming: 'incoming',
-  TransactionType.outgoing: 'outgoing',
-};

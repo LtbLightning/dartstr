@@ -1,536 +1,340 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip04/nip04.dart';
 import 'package:nip47/src/domain/entities/method.dart';
+import 'package:nip47/src/domain/entities/response.dart';
 import 'package:nip47/src/domain/entities/transaction.dart';
-import 'package:nip47/src/enums/bitcoin_network.dart';
-import 'package:nip47/src/enums/error_code.dart';
 import 'package:nip47/src/enums/event_kind.dart';
-import 'package:nip47/src/enums/notification_type.dart';
-import 'package:nip47/src/enums/transaction_type.dart';
 
-sealed class Response extends Equatable {
+class ResponseModel {
   final String requestId;
-  final String connectionPubkey;
+  final String walletServicePubkey;
+  final String clientPubkey;
   final String resultType;
-  final ErrorCode? error;
   final Map<String, dynamic>? result;
+  final String? errorCode;
+  final String? errorMessage;
+  // The id of the invoice or keysend from a multi-pay request
+  final String? multiId;
+  final int createdAt;
 
-  const Response({
+  const ResponseModel({
     required this.requestId,
-    required this.connectionPubkey,
+    required this.walletServicePubkey,
+    required this.clientPubkey,
     required this.resultType,
-    this.error,
     this.result,
+    this.errorCode,
+    this.errorMessage,
+    this.multiId,
+    required this.createdAt,
   });
 
-  factory Response.getInfoResponse({
-    required String requestId,
-    required String connectionPubkey,
-    String? alias,
-    String? color,
-    String? pubkey,
-    BitcoinNetwork? network,
-    int? blockHeight,
-    String? blockHash,
-    required List<Method> methods,
-    List<NotificationType>? notifications,
-  }) = GetInfoResponse;
+  factory ResponseModel.fromEvent(nip01.Event event,
+      {required nip01.KeyPair clientKeyPair}) {
+    final walletServicePubkey = event.pubkey;
+    final clientPubkey = event.tags.firstWhere((tag) => tag[0] == 'p')[1];
 
-  factory Response.getBalanceResponse({
-    required String requestId,
-    required String connectionPubkey,
-    required int balanceSat,
-  }) = GetBalanceResponse;
+    String content;
+    try {
+      content = Nip04.decrypt(
+        event.content,
+        clientKeyPair.privateKey,
+        walletServicePubkey,
+      );
+    } catch (e) {
+      throw ResponseDecryptionException(
+        'Failed to decrypt response content: $e',
+      );
+    }
+    final contentMap = jsonDecode(content) as Map<String, dynamic>;
 
-  factory Response.makeInvoiceResponse({
-    required String requestId,
-    required String connectionPubkey,
-    String? invoice,
-    String? description,
-    String? descriptionHash,
-    String? preimage,
-    required String paymentHash,
-    required int amountSat,
-    required int feesPaidSat,
-    required int createdAt,
-    required int expiresAt,
-    required Map<dynamic, dynamic> metadata,
-  }) = MakeInvoiceResponse;
+    return ResponseModel(
+      requestId: event.tags.firstWhere((tag) => tag[0] == 'e')[1],
+      walletServicePubkey: walletServicePubkey,
+      clientPubkey: clientPubkey,
+      resultType: contentMap['result_type'],
+      result: contentMap['result'],
+      errorCode: contentMap['error']?['code'],
+      errorMessage: contentMap['error']?['message'],
+      createdAt: event.createdAt,
+    );
+  }
 
-  factory Response.payInvoiceResponse({
-    required String requestId,
-    required String connectionPubkey,
-    required String preimage,
-  }) = PayInvoiceResponse;
+  factory ResponseModel.fromEntity(Response response) {
+    switch (response) {
+      case GetInfoResponse response:
+        final supportedCommands =
+            response.info?.methods.map((method) => method.plaintext).toList();
+        List<String>? notifications;
+        if (response.info?.notifications != null) {
+          supportedCommands?.add('notifications');
+          notifications = response.info!.notifications!
+              .map((notification) => notification.value)
+              .toList();
+        }
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.getInfo.plaintext,
+          result: response.info != null
+              ? {
+                  'alias': response.info!.alias,
+                  'color': response.info!.color,
+                  'pubkey': response.info!.pubkey,
+                  'network': response.info!.network?.name,
+                  'block_height': response.info!.blockHeight,
+                  'block_hash': response.info!.blockHash,
+                  'methods': supportedCommands,
+                  'notifications': notifications
+                }
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          createdAt: response.createdAt,
+        );
+      case GetBalanceResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.getBalance.plaintext,
+          result: response.balanceSat != null
+              ? {'balance': response.balanceSat! * BigInt.from(1000)}
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          createdAt: response.createdAt,
+        );
 
-  factory Response.multiPayInvoiceResponse({
-    required String requestId,
-    required String connectionPubkey,
-    required String id,
-    required String preimage,
-  }) = MultiPayInvoiceResponse;
+      case MakeInvoiceResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.makeInvoice.plaintext,
+          result: response.invoice != null
+              ? {
+                  'type': TransactionType.incoming.value,
+                  'invoice': response.invoice!.invoice,
+                  'description': response.invoice!.description,
+                  'description_hash': response.invoice!.descriptionHash,
+                  'preimage': response.invoice!.preimage,
+                  'payment_hash': response.invoice!.paymentHash,
+                  'amount': response.invoice!.amountSat * BigInt.from(1000),
+                  'fees_paid':
+                      response.invoice!.feesPaidSat * BigInt.from(1000),
+                  'created_at': response.invoice!.createdAt,
+                  'expires_at': response.invoice!.expiresAt,
+                  'metadata': response.invoice!.metadata,
+                }
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          createdAt: response.createdAt,
+        );
+      case PayInvoiceResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.payInvoice.plaintext,
+          result: response.payResult != null
+              ? {
+                  'preimage': response.payResult!.preimage,
+                  'fees_paid':
+                      response.payResult!.feesPaidSat! * BigInt.from(1000),
+                }
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          createdAt: response.createdAt,
+        );
+      case MultiPayInvoiceResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.multiPayInvoice.plaintext,
+          result: response.payResult != null
+              ? {
+                  'preimage': response.payResult!.preimage,
+                  'fees_paid':
+                      response.payResult!.feesPaidSat! * BigInt.from(1000),
+                }
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          multiId: response.invoiceId,
+          createdAt: response.createdAt,
+        );
+      case PayKeysendResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.payKeysend.plaintext,
+          result: response.payResult != null
+              ? {
+                  'preimage': response.payResult!.preimage,
+                  'fees_paid':
+                      response.payResult!.feesPaidSat! * BigInt.from(1000),
+                }
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          createdAt: response.createdAt,
+        );
+      case MultiPayKeysendResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.multiPayKeysend.plaintext,
+          result: response.payResult != null
+              ? {
+                  'preimage': response.payResult!.preimage,
+                  'fees_paid':
+                      response.payResult!.feesPaidSat! * BigInt.from(1000),
+                }
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          multiId: response.keysendId,
+          createdAt: response.createdAt,
+        );
+      case LookupInvoiceResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.lookupInvoice.plaintext,
+          result: response.transaction != null
+              ? {
+                  'type': response.transaction!.type.value,
+                  'invoice': response.transaction!.invoice,
+                  'description': response.transaction!.description,
+                  'description_hash': response.transaction!.descriptionHash,
+                  'preimage': response.transaction!.preimage,
+                  'payment_hash': response.transaction!.paymentHash,
+                  'amount': response.transaction!.amountSat * BigInt.from(1000),
+                  'fees_paid':
+                      response.transaction!.feesPaidSat * BigInt.from(1000),
+                  'created_at': response.transaction!.createdAt,
+                  'expires_at': response.transaction!.expiresAt,
+                  'settled_at': response.transaction!.settledAt,
+                  'metadata': response.transaction!.metadata,
+                }
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          createdAt: response.createdAt,
+        );
+      case ListTransactionsResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: Method.listTransactions.plaintext,
+          result: response.transactions != null
+              ? {
+                  'transactions': response.transactions!
+                      .map((transaction) => {
+                            'type': transaction.type.value,
+                            'invoice': transaction.invoice,
+                            'description': transaction.description,
+                            'description_hash': transaction.descriptionHash,
+                            'preimage': transaction.preimage,
+                            'payment_hash': transaction.paymentHash,
+                            'amount': transaction.amountSat * BigInt.from(1000),
+                            'fees_paid':
+                                transaction.feesPaidSat * BigInt.from(1000),
+                            'created_at': transaction.createdAt,
+                            'expires_at': transaction.expiresAt,
+                            'settled_at': transaction.settledAt,
+                            'metadata': transaction.metadata,
+                          })
+                      .toList(),
+                }
+              : null,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          createdAt: response.createdAt,
+        );
+      case CustomResponse response:
+        return ResponseModel(
+          requestId: response.requestId,
+          walletServicePubkey: response.walletServicePubkey,
+          clientPubkey: response.clientPubkey,
+          resultType: response.resultType,
+          result: response.result,
+          errorCode: response.error?.value,
+          errorMessage: response.error?.message,
+          createdAt: response.createdAt,
+        );
+    }
+  }
 
-  factory Response.payKeysendResponse({
-    required String requestId,
-    required String connectionPubkey,
-    required String preimage,
-  }) = PayKeysendResponse;
-
-  factory Response.multiPayKeysendResponse({
-    required String requestId,
-    required String connectionPubkey,
-    required String id,
-    required String preimage,
-  }) = MultiPayKeysendResponse;
-
-  factory Response.lookupInvoiceResponse({
-    required String requestId,
-    required String connectionPubkey,
-    String? invoice,
-    String? description,
-    String? descriptionHash,
-    String? preimage,
-    required String paymentHash,
-    required int amountSat,
-    required int feesPaidSat,
-    required int createdAt,
-    int? expiresAt,
-    int? settledAt,
-    required Map<dynamic, dynamic> metadata,
-  }) = LookupInvoiceResponse;
-
-  factory Response.listTransactionsResponse({
-    required String requestId,
-    required String connectionPubkey,
-    required List<Transaction> transactions,
-  }) = ListTransactionsResponse;
-
-  factory Response.errorResponse({
-    required String requestId,
-    required String connectionPubkey,
-    required Method method,
-    required ErrorCode error,
-    String unknownMethod,
-  }) = ErrorResponse;
-
-  nip01.Event toSignedEvent({
-    required nip01.KeyPair walletServiceKeyPair,
-    String? dTagValue,
-  }) {
+  nip01.SignedEvent toEvent({required nip01.KeyPair walletServiceKeyPair}) {
     final content = jsonEncode(
       {
         'result_type': resultType,
-        if (error != null)
+        if (errorCode != null)
           'error': {
-            'code': error!.value,
-            'message': error!.message,
+            'code': errorCode,
+            'message': errorMessage,
           },
         if (result != null) 'result': result,
       },
     );
-    final encryptedContent = Nip04.encrypt(
-      content,
-      walletServiceKeyPair.privateKey,
-      connectionPubkey,
-    );
 
-    final partialEvent = nip01.Event(
+    String encryptedContent;
+    try {
+      encryptedContent = Nip04.encrypt(
+        content,
+        walletServiceKeyPair.privateKey,
+        clientPubkey,
+      );
+    } catch (e) {
+      throw ResponseEncryptionException(
+        'Failed to encrypt response content: $e',
+      );
+    }
+
+    final event = nip01.UnsignedEvent(
       pubkey: walletServiceKeyPair.publicKey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       kind: EventKind.response.value,
       tags: [
         ['e', requestId],
-        ['p', connectionPubkey],
-        if (dTagValue != null) ['d', dTagValue],
+        ['p', clientPubkey],
+        if (multiId != null) ['d', multiId!],
       ],
       content: encryptedContent,
     );
 
-    final signedEvent = partialEvent.sign(walletServiceKeyPair);
+    final signedEvent = event.sign(walletServiceKeyPair);
 
     return signedEvent;
   }
 
-  @override
-  List<Object?> get props => [
-        requestId,
-        connectionPubkey,
-        resultType,
-        error,
-        result,
-      ];
-}
-
-// Standard responses
-
-// Subclass for the get_info response
-@immutable
-class GetInfoResponse extends Response {
-  final String? alias;
-  final String? color;
-  final String? pubkey;
-  final BitcoinNetwork? network;
-  final int? blockHeight;
-  final String? blockHash;
-  final List<Method> methods;
-  final List<NotificationType>? notifications;
-
-  GetInfoResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    this.alias,
-    this.color,
-    this.pubkey,
-    this.network,
-    this.blockHeight,
-    this.blockHash,
-    required this.methods,
-    this.notifications,
-  }) : super(
-          resultType: Method.getInfo.plaintext,
-          result: {
-            'alias': alias,
-            'color': color,
-            'pubkey': pubkey,
-            'network': network?.name,
-            'block_height': blockHeight,
-            'block_hash': blockHash,
-            'methods': methods.map((method) => method.plaintext).toList(),
-            'notifications': notifications
-                ?.map((notification) => notification.notificationType)
-                .toList(),
-          },
-        );
-
-  @override
-  List<Object?> get props => [
-        ...super.props,
-        alias,
-        color,
-        pubkey,
-        network,
-        blockHeight,
-        blockHash,
-        methods,
-        notifications,
-      ];
-}
-
-// Subclass for the get_balance response
-@immutable
-class GetBalanceResponse extends Response {
-  final int balanceSat;
-
-  GetBalanceResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    required this.balanceSat,
-  }) : super(resultType: Method.getBalance.plaintext, result: {
-          'balance': balanceSat * 1000, // user's balance in msats
-        });
-
-  @override
-  List<Object?> get props => [...super.props, balanceSat];
-}
-
-// Subclass for the make_invoice response
-@immutable
-class MakeInvoiceResponse extends Response {
-  final String? invoice;
-  final String? description;
-  final String? descriptionHash;
-  final String? preimage;
-  final String paymentHash;
-  final int amountSat;
-  final int feesPaidSat;
-  final int createdAt;
-  final int? expiresAt;
-  final Map<dynamic, dynamic> metadata;
-
-  MakeInvoiceResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    this.invoice,
-    this.description,
-    this.descriptionHash,
-    this.preimage,
-    required this.paymentHash,
-    required this.amountSat,
-    required this.feesPaidSat,
-    required this.createdAt,
-    this.expiresAt,
-    required this.metadata,
-  }) : super(
-          resultType: Method.makeInvoice.plaintext,
-          result: {
-            'type': TransactionType.incoming.name,
-            if (invoice != null) 'invoice': invoice,
-            if (description != null) 'description': description,
-            if (descriptionHash != null) 'description_hash': descriptionHash,
-            if (preimage != null) 'preimage': preimage,
-            'payment_hash': paymentHash,
-            'amount': amountSat * 1000, // invoice amount in msats
-            'fees_paid': feesPaidSat * 1000, // fees paid in msats
-            'created_at': createdAt,
-            if (expiresAt != null) 'expires_at': expiresAt,
-            'metadata': metadata,
-          },
-        );
-
-  @override
-  List<Object?> get props => [
-        ...super.props,
-        invoice,
-        description,
-        descriptionHash,
-        preimage,
-        paymentHash,
-        amountSat,
-        feesPaidSat,
-        createdAt,
-        expiresAt,
-        metadata,
-      ];
-}
-
-@immutable
-class PayInvoiceResponse extends Response {
-  final String preimage;
-
-  PayInvoiceResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    required this.preimage,
-  }) : super(
-          resultType: Method.payInvoice.plaintext,
-          result: {
-            'preimage': preimage,
-          },
-        );
-
-  @override
-  List<Object?> get props => [...super.props, preimage];
-}
-
-@immutable
-class MultiPayInvoiceResponse extends Response {
-  final String id;
-  final String preimage;
-
-  MultiPayInvoiceResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    required this.id,
-    required this.preimage,
-  }) : super(
-          resultType: Method.multiPayInvoice.plaintext,
-          result: {
-            'preimage': preimage,
-          },
-        );
-
-  @override
-  nip01.Event toSignedEvent({
-    required nip01.KeyPair walletServiceKeyPair,
-    String? dTagValue,
-  }) {
-    return super.toSignedEvent(
-      walletServiceKeyPair: walletServiceKeyPair,
-      dTagValue: dTagValue ?? id,
-    );
+  /* TODO: Implement for client side
+  Response toEntity() {
+    final type = Method.fromPlaintext(resultType);
   }
-
-  @override
-  List<Object?> get props => [...super.props, id, preimage];
+  */
 }
 
-@immutable
-class PayKeysendResponse extends Response {
-  final String preimage;
+class ResponseDecryptionException implements Exception {
+  final String message;
 
-  PayKeysendResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    required this.preimage,
-  }) : super(
-          resultType: Method.payKeysend.plaintext,
-          result: {
-            'preimage': preimage,
-          },
-        );
-
-  @override
-  List<Object?> get props => [...super.props, preimage];
+  ResponseDecryptionException(this.message);
 }
 
-@immutable
-class MultiPayKeysendResponse extends Response {
-  final String id;
-  final String preimage;
+class ResponseEncryptionException implements Exception {
+  final String message;
 
-  MultiPayKeysendResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    required this.id,
-    required this.preimage,
-  }) : super(
-          resultType: Method.multiPayKeysend.plaintext,
-          result: {
-            'preimage': preimage,
-          },
-        );
-
-  @override
-  nip01.Event toSignedEvent({
-    required nip01.KeyPair walletServiceKeyPair,
-    String? dTagValue,
-  }) {
-    return super.toSignedEvent(
-      walletServiceKeyPair: walletServiceKeyPair,
-      dTagValue: dTagValue ?? id,
-    );
-  }
-
-  @override
-  List<Object?> get props => [...super.props, id, preimage];
-}
-
-@immutable
-class LookupInvoiceResponse extends Response {
-  final String? invoice;
-  final String? description;
-  final String? descriptionHash;
-  final String? preimage;
-  final String paymentHash;
-  final int amountSat;
-  final int feesPaidSat;
-  final int createdAt;
-  final int? expiresAt;
-  final int? settledAt;
-  final Map<dynamic, dynamic> metadata;
-
-  LookupInvoiceResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    this.invoice,
-    this.description,
-    this.descriptionHash,
-    this.preimage,
-    required this.paymentHash,
-    required this.amountSat,
-    required this.feesPaidSat,
-    required this.createdAt,
-    this.expiresAt,
-    this.settledAt,
-    required this.metadata,
-  }) : super(
-          resultType: Method.lookupInvoice.plaintext,
-          result: {
-            'type': TransactionType.incoming.name,
-            if (invoice != null) 'invoice': invoice,
-            if (description != null) 'description': description,
-            if (descriptionHash != null) 'description_hash': descriptionHash,
-            if (preimage != null) 'preimage': preimage,
-            'payment_hash': paymentHash,
-            'amount': amountSat * 1000, // invoice amount in msats
-            'fees_paid': feesPaidSat * 1000, // fees paid in msats
-            'created_at': createdAt,
-            if (expiresAt != null) 'expires_at': expiresAt,
-            if (settledAt != null) 'settled_at': settledAt,
-            'metadata': metadata,
-          },
-        );
-
-  @override
-  List<Object?> get props => [
-        ...super.props,
-        invoice,
-        description,
-        descriptionHash,
-        preimage,
-        paymentHash,
-        amountSat,
-        feesPaidSat,
-        createdAt,
-        expiresAt,
-        settledAt,
-        metadata,
-      ];
-}
-
-@immutable
-class ListTransactionsResponse extends Response {
-  final List<Transaction> transactions;
-
-  ListTransactionsResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    required this.transactions,
-  }) : super(
-          resultType: Method.listTransactions.plaintext,
-          result: {
-            'transactions': transactions
-                .map((transaction) => {
-                      'type': transaction.type.name,
-                      if (transaction.invoice != null)
-                        'invoice': transaction.invoice,
-                      if (transaction.description != null)
-                        'description': transaction.description,
-                      if (transaction.descriptionHash != null)
-                        'description_hash': transaction.descriptionHash,
-                      if (transaction.preimage != null)
-                        'preimage': transaction.preimage,
-                      'payment_hash': transaction.paymentHash,
-                      'amount': transaction.amountSat *
-                          1000, // invoice amount in msats
-                      'fees_paid':
-                          transaction.feesPaidSat * 1000, // fees paid in msats
-                      'created_at': transaction.createdAt,
-                      if (transaction.expiresAt != null)
-                        'expires_at': transaction.expiresAt,
-                      if (transaction.settledAt != null)
-                        'settled_at': transaction.settledAt,
-                      'metadata': transaction.metadata,
-                    })
-                .toList(),
-          },
-        );
-
-  @override
-  List<Object?> get props => [...super.props, transactions];
-}
-
-@immutable
-class ErrorResponse extends Response {
-  final String unknownMethod;
-
-  ErrorResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    required Method method,
-    required ErrorCode error,
-    this.unknownMethod = '',
-  }) : super(
-          resultType:
-              method == Method.unknown ? unknownMethod : method.plaintext,
-          error: ErrorCode.notImplemented,
-        );
-
-  @override
-  List<Object?> get props => [...super.props, unknownMethod];
-}
-
-// Custom responses
-class CustomResponse extends Response {
-  const CustomResponse({
-    required super.requestId,
-    required super.connectionPubkey,
-    required super.resultType,
-    super.error,
-    super.result,
-  });
+  ResponseEncryptionException(this.message);
 }

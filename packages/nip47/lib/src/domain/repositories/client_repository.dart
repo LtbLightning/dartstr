@@ -1,6 +1,4 @@
-import 'package:nip47/nip47.dart';
-import 'package:nip47/src/domain/entities/info_event.dart';
-import 'package:nip47/src/domain/entities/notification.dart';
+import 'package:nip47/src/domain/entities/entities.dart';
 
 abstract class ClientRepository {
   Stream<InfoEvent> get infoEvents;

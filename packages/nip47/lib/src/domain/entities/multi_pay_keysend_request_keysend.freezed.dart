@@ -15,6 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$MultiPayKeysendRequestKeysend {
+  String? get id;
   String get pubkey;
   BigInt get amountSat;
   String? get preimage;
@@ -37,6 +38,7 @@ mixin _$MultiPayKeysendRequestKeysend {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is MultiPayKeysendRequestKeysend &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.pubkey, pubkey) || other.pubkey == pubkey) &&
             (identical(other.amountSat, amountSat) ||
                 other.amountSat == amountSat) &&
@@ -48,12 +50,12 @@ mixin _$MultiPayKeysendRequestKeysend {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, pubkey, amountSat, preimage,
+  int get hashCode => Object.hash(runtimeType, id, pubkey, amountSat, preimage,
       const DeepCollectionEquality().hash(tlvRecords));
 
   @override
   String toString() {
-    return 'MultiPayKeysendRequestKeysend(pubkey: $pubkey, amountSat: $amountSat, preimage: $preimage, tlvRecords: $tlvRecords)';
+    return 'MultiPayKeysendRequestKeysend(id: $id, pubkey: $pubkey, amountSat: $amountSat, preimage: $preimage, tlvRecords: $tlvRecords)';
   }
 }
 
@@ -65,7 +67,8 @@ abstract mixin class $MultiPayKeysendRequestKeysendCopyWith<$Res> {
       _$MultiPayKeysendRequestKeysendCopyWithImpl;
   @useResult
   $Res call(
-      {String pubkey,
+      {String? id,
+      String pubkey,
       BigInt amountSat,
       String? preimage,
       List<TlvRecord>? tlvRecords});
@@ -84,12 +87,17 @@ class _$MultiPayKeysendRequestKeysendCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? pubkey = null,
     Object? amountSat = null,
     Object? preimage = freezed,
     Object? tlvRecords = freezed,
   }) {
     return _then(_self.copyWith(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       pubkey: null == pubkey
           ? _self.pubkey
           : pubkey // ignore: cast_nullable_to_non_nullable
@@ -114,7 +122,8 @@ class _$MultiPayKeysendRequestKeysendCopyWithImpl<$Res>
 @JsonSerializable()
 class _MultiPayKeysendRequestKeysend extends MultiPayKeysendRequestKeysend {
   const _MultiPayKeysendRequestKeysend(
-      {required this.pubkey,
+      {this.id,
+      required this.pubkey,
       required this.amountSat,
       this.preimage,
       final List<TlvRecord>? tlvRecords})
@@ -123,6 +132,8 @@ class _MultiPayKeysendRequestKeysend extends MultiPayKeysendRequestKeysend {
   factory _MultiPayKeysendRequestKeysend.fromJson(Map<String, dynamic> json) =>
       _$MultiPayKeysendRequestKeysendFromJson(json);
 
+  @override
+  final String? id;
   @override
   final String pubkey;
   @override
@@ -160,6 +171,7 @@ class _MultiPayKeysendRequestKeysend extends MultiPayKeysendRequestKeysend {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _MultiPayKeysendRequestKeysend &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.pubkey, pubkey) || other.pubkey == pubkey) &&
             (identical(other.amountSat, amountSat) ||
                 other.amountSat == amountSat) &&
@@ -171,12 +183,12 @@ class _MultiPayKeysendRequestKeysend extends MultiPayKeysendRequestKeysend {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, pubkey, amountSat, preimage,
+  int get hashCode => Object.hash(runtimeType, id, pubkey, amountSat, preimage,
       const DeepCollectionEquality().hash(_tlvRecords));
 
   @override
   String toString() {
-    return 'MultiPayKeysendRequestKeysend(pubkey: $pubkey, amountSat: $amountSat, preimage: $preimage, tlvRecords: $tlvRecords)';
+    return 'MultiPayKeysendRequestKeysend(id: $id, pubkey: $pubkey, amountSat: $amountSat, preimage: $preimage, tlvRecords: $tlvRecords)';
   }
 }
 
@@ -190,7 +202,8 @@ abstract mixin class _$MultiPayKeysendRequestKeysendCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String pubkey,
+      {String? id,
+      String pubkey,
       BigInt amountSat,
       String? preimage,
       List<TlvRecord>? tlvRecords});
@@ -209,12 +222,17 @@ class __$MultiPayKeysendRequestKeysendCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? id = freezed,
     Object? pubkey = null,
     Object? amountSat = null,
     Object? preimage = freezed,
     Object? tlvRecords = freezed,
   }) {
     return _then(_MultiPayKeysendRequestKeysend(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       pubkey: null == pubkey
           ? _self.pubkey
           : pubkey // ignore: cast_nullable_to_non_nullable

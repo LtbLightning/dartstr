@@ -1,40 +1,48 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'connection.dart';
+part of 'info_result.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-WalletConnection _$WalletConnectionFromJson(Map<String, dynamic> json) =>
-    WalletConnection(
-      pubkey: json['pubkey'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
-      relayUrl: json['relayUrl'] as String,
-      secret: json['secret'] as String,
+GetInfoResult _$GetInfoResultFromJson(Map<String, dynamic> json) =>
+    GetInfoResult(
+      alias: json['alias'] as String?,
+      color: json['color'] as String?,
+      pubkey: json['pubkey'] as String?,
+      network: $enumDecodeNullable(_$BitcoinNetworkEnumMap, json['network']),
+      blockHeight: (json['blockHeight'] as num?)?.toInt(),
+      blockHash: json['blockHash'] as String?,
       methods: (json['methods'] as List<dynamic>)
           .map((e) => $enumDecode(_$MethodEnumMap, e))
           .toList(),
       notifications: (json['notifications'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$NotificationTypeEnumMap, e))
           .toList(),
-      lud16: json['lud16'] as String?,
-      $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$WalletConnectionToJson(WalletConnection instance) =>
+Map<String, dynamic> _$GetInfoResultToJson(GetInfoResult instance) =>
     <String, dynamic>{
+      'alias': instance.alias,
+      'color': instance.color,
       'pubkey': instance.pubkey,
-      'walletServicePubkey': instance.walletServicePubkey,
-      'relayUrl': instance.relayUrl,
-      'secret': instance.secret,
+      'network': _$BitcoinNetworkEnumMap[instance.network],
+      'blockHeight': instance.blockHeight,
+      'blockHash': instance.blockHash,
       'methods': instance.methods.map((e) => _$MethodEnumMap[e]!).toList(),
       'notifications': instance.notifications
           ?.map((e) => _$NotificationTypeEnumMap[e]!)
           .toList(),
-      'lud16': instance.lud16,
-      'runtimeType': instance.$type,
     };
+
+const _$BitcoinNetworkEnumMap = {
+  BitcoinNetwork.mainnet: 'mainnet',
+  BitcoinNetwork.testnet: 'testnet',
+  BitcoinNetwork.signet: 'signet',
+  BitcoinNetwork.mutinynet: 'mutinynet',
+  BitcoinNetwork.regtest: 'regtest',
+};
 
 const _$MethodEnumMap = {
   Method.payInvoice: 'payInvoice',
@@ -54,19 +62,3 @@ const _$NotificationTypeEnumMap = {
   NotificationType.paymentSent: 'paymentSent',
   NotificationType.custom: 'custom',
 };
-
-ClientConnection _$ClientConnectionFromJson(Map<String, dynamic> json) =>
-    ClientConnection(
-      pubkey: json['pubkey'] as String,
-      clientPubkey: json['clientPubkey'] as String,
-      relayUrl: json['relayUrl'] as String,
-      $type: json['runtimeType'] as String?,
-    );
-
-Map<String, dynamic> _$ClientConnectionToJson(ClientConnection instance) =>
-    <String, dynamic>{
-      'pubkey': instance.pubkey,
-      'clientPubkey': instance.clientPubkey,
-      'relayUrl': instance.relayUrl,
-      'runtimeType': instance.$type,
-    };

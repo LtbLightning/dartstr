@@ -9,6 +9,7 @@ part of 'multi_pay_keysend_request_keysend.dart';
 _MultiPayKeysendRequestKeysend _$MultiPayKeysendRequestKeysendFromJson(
         Map<String, dynamic> json) =>
     _MultiPayKeysendRequestKeysend(
+      id: json['id'] as String?,
       pubkey: json['pubkey'] as String,
       amountSat: BigInt.parse(json['amountSat'] as String),
       preimage: json['preimage'] as String?,
@@ -20,6 +21,7 @@ _MultiPayKeysendRequestKeysend _$MultiPayKeysendRequestKeysendFromJson(
 Map<String, dynamic> _$MultiPayKeysendRequestKeysendToJson(
         _MultiPayKeysendRequestKeysend instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'pubkey': instance.pubkey,
       'amountSat': instance.amountSat.toString(),
       'preimage': instance.preimage,

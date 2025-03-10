@@ -8,6 +8,7 @@ part 'multi_pay_keysend_request_keysend.g.dart';
 sealed class MultiPayKeysendRequestKeysend
     with _$MultiPayKeysendRequestKeysend {
   const factory MultiPayKeysendRequestKeysend({
+    String? id,
     required String pubkey,
     required BigInt amountSat,
     String? preimage,

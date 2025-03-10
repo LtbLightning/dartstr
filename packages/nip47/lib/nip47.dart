@@ -5,19 +5,10 @@ library;
 
 export 'src/nip47_base.dart';
 
-export 'src/domain/entities/connection.dart';
-export 'src/domain/entities/filters.dart';
-export 'src/data/models/info_event_model.dart';
-export 'src/data/models/request_model.dart';
-export 'src/data/models/response_model.dart';
-export 'src/domain/entities/tlv_record.dart';
-export 'src/domain/entities/transaction.dart';
+export 'src/domain/entities/entities.dart';
+export 'src/domain/repositories/client_repository.dart';
+export 'src/domain/repositories/wallet_service_repository.dart';
+export 'src/data/repositories/wallet_service_repository_impl.dart';
 
-export 'src/enums/bitcoin_network.dart';
 export 'src/enums/error_code.dart';
 export 'src/enums/event_kind.dart';
-export 'src/domain/entities/method.dart';
-export 'src/enums/transaction_type.dart';
-export 'src/enums/notification_type.dart';
-
-export 'src/constants.dart';

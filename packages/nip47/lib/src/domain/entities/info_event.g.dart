@@ -7,7 +7,7 @@ part of 'info_event.dart';
 // **************************************************************************
 
 _InfoEvent _$InfoEventFromJson(Map<String, dynamic> json) => _InfoEvent(
-      relayUrl: json['relayUrl'] as String,
+      relayUrl: Uri.parse(json['relayUrl'] as String),
       walletServicePubkey: json['walletServicePubkey'] as String,
       methods: (json['methods'] as List<dynamic>)
           .map((e) => $enumDecode(_$MethodEnumMap, e))
@@ -19,7 +19,7 @@ _InfoEvent _$InfoEventFromJson(Map<String, dynamic> json) => _InfoEvent(
 
 Map<String, dynamic> _$InfoEventToJson(_InfoEvent instance) =>
     <String, dynamic>{
-      'relayUrl': instance.relayUrl,
+      'relayUrl': instance.relayUrl.toString(),
       'walletServicePubkey': instance.walletServicePubkey,
       'methods': instance.methods.map((e) => _$MethodEnumMap[e]!).toList(),
       'notifications': instance.notifications

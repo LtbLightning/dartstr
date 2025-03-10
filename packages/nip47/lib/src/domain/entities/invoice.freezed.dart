@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'transaction.dart';
+part of 'invoice.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,8 +14,7 @@ part of 'transaction.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$Transaction {
-  TransactionType get type;
+mixin _$Invoice {
   String? get invoice;
   String? get description;
   String? get descriptionHash;
@@ -24,26 +23,24 @@ mixin _$Transaction {
   BigInt get amountSat;
   BigInt get feesPaidSat;
   int get createdAt;
-  int? get expiresAt;
-  int? get settledAt;
-  Map<dynamic, dynamic>? get metadata;
+  int get expiresAt;
+  Map<dynamic, dynamic> get metadata;
 
-  /// Create a copy of Transaction
+  /// Create a copy of Invoice
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TransactionCopyWith<Transaction> get copyWith =>
-      _$TransactionCopyWithImpl<Transaction>(this as Transaction, _$identity);
+  $InvoiceCopyWith<Invoice> get copyWith =>
+      _$InvoiceCopyWithImpl<Invoice>(this as Invoice, _$identity);
 
-  /// Serializes this Transaction to a JSON map.
+  /// Serializes this Invoice to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is Transaction &&
-            (identical(other.type, type) || other.type == type) &&
+            other is Invoice &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -61,8 +58,6 @@ mixin _$Transaction {
                 other.createdAt == createdAt) &&
             (identical(other.expiresAt, expiresAt) ||
                 other.expiresAt == expiresAt) &&
-            (identical(other.settledAt, settledAt) ||
-                other.settledAt == settledAt) &&
             const DeepCollectionEquality().equals(other.metadata, metadata));
   }
 
@@ -70,7 +65,6 @@ mixin _$Transaction {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      type,
       invoice,
       description,
       descriptionHash,
@@ -80,24 +74,21 @@ mixin _$Transaction {
       feesPaidSat,
       createdAt,
       expiresAt,
-      settledAt,
       const DeepCollectionEquality().hash(metadata));
 
   @override
   String toString() {
-    return 'Transaction(type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, preimage: $preimage, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
+    return 'Invoice(invoice: $invoice, description: $description, descriptionHash: $descriptionHash, preimage: $preimage, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, metadata: $metadata)';
   }
 }
 
 /// @nodoc
-abstract mixin class $TransactionCopyWith<$Res> {
-  factory $TransactionCopyWith(
-          Transaction value, $Res Function(Transaction) _then) =
-      _$TransactionCopyWithImpl;
+abstract mixin class $InvoiceCopyWith<$Res> {
+  factory $InvoiceCopyWith(Invoice value, $Res Function(Invoice) _then) =
+      _$InvoiceCopyWithImpl;
   @useResult
   $Res call(
-      {TransactionType type,
-      String? invoice,
+      {String? invoice,
       String? description,
       String? descriptionHash,
       String? preimage,
@@ -105,24 +96,22 @@ abstract mixin class $TransactionCopyWith<$Res> {
       BigInt amountSat,
       BigInt feesPaidSat,
       int createdAt,
-      int? expiresAt,
-      int? settledAt,
-      Map<dynamic, dynamic>? metadata});
+      int expiresAt,
+      Map<dynamic, dynamic> metadata});
 }
 
 /// @nodoc
-class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
-  _$TransactionCopyWithImpl(this._self, this._then);
+class _$InvoiceCopyWithImpl<$Res> implements $InvoiceCopyWith<$Res> {
+  _$InvoiceCopyWithImpl(this._self, this._then);
 
-  final Transaction _self;
-  final $Res Function(Transaction) _then;
+  final Invoice _self;
+  final $Res Function(Invoice) _then;
 
-  /// Create a copy of Transaction
+  /// Create a copy of Invoice
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? type = null,
     Object? invoice = freezed,
     Object? description = freezed,
     Object? descriptionHash = freezed,
@@ -131,15 +120,10 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
     Object? amountSat = null,
     Object? feesPaidSat = null,
     Object? createdAt = null,
-    Object? expiresAt = freezed,
-    Object? settledAt = freezed,
-    Object? metadata = freezed,
+    Object? expiresAt = null,
+    Object? metadata = null,
   }) {
     return _then(_self.copyWith(
-      type: null == type
-          ? _self.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as TransactionType,
       invoice: freezed == invoice
           ? _self.invoice
           : invoice // ignore: cast_nullable_to_non_nullable
@@ -172,28 +156,23 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
-      expiresAt: freezed == expiresAt
+      expiresAt: null == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
-      settledAt: freezed == settledAt
-          ? _self.settledAt
-          : settledAt // ignore: cast_nullable_to_non_nullable
-              as int?,
-      metadata: freezed == metadata
+              as int,
+      metadata: null == metadata
           ? _self.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
-              as Map<dynamic, dynamic>?,
+              as Map<dynamic, dynamic>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _Transaction extends Transaction {
-  const _Transaction(
-      {required this.type,
-      this.invoice,
+class _Invoice extends Invoice {
+  const _Invoice(
+      {this.invoice,
       this.description,
       this.descriptionHash,
       this.preimage,
@@ -201,16 +180,13 @@ class _Transaction extends Transaction {
       required this.amountSat,
       required this.feesPaidSat,
       required this.createdAt,
-      this.expiresAt,
-      this.settledAt,
-      final Map<dynamic, dynamic>? metadata = const {}})
+      required this.expiresAt,
+      required final Map<dynamic, dynamic> metadata})
       : _metadata = metadata,
         super._();
-  factory _Transaction.fromJson(Map<String, dynamic> json) =>
-      _$TransactionFromJson(json);
+  factory _Invoice.fromJson(Map<String, dynamic> json) =>
+      _$InvoiceFromJson(json);
 
-  @override
-  final TransactionType type;
   @override
   final String? invoice;
   @override
@@ -228,31 +204,26 @@ class _Transaction extends Transaction {
   @override
   final int createdAt;
   @override
-  final int? expiresAt;
+  final int expiresAt;
+  final Map<dynamic, dynamic> _metadata;
   @override
-  final int? settledAt;
-  final Map<dynamic, dynamic>? _metadata;
-  @override
-  @JsonKey()
-  Map<dynamic, dynamic>? get metadata {
-    final value = _metadata;
-    if (value == null) return null;
+  Map<dynamic, dynamic> get metadata {
     if (_metadata is EqualUnmodifiableMapView) return _metadata;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
+    return EqualUnmodifiableMapView(_metadata);
   }
 
-  /// Create a copy of Transaction
+  /// Create a copy of Invoice
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TransactionCopyWith<_Transaction> get copyWith =>
-      __$TransactionCopyWithImpl<_Transaction>(this, _$identity);
+  _$InvoiceCopyWith<_Invoice> get copyWith =>
+      __$InvoiceCopyWithImpl<_Invoice>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$TransactionToJson(
+    return _$InvoiceToJson(
       this,
     );
   }
@@ -261,8 +232,7 @@ class _Transaction extends Transaction {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Transaction &&
-            (identical(other.type, type) || other.type == type) &&
+            other is _Invoice &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -280,8 +250,6 @@ class _Transaction extends Transaction {
                 other.createdAt == createdAt) &&
             (identical(other.expiresAt, expiresAt) ||
                 other.expiresAt == expiresAt) &&
-            (identical(other.settledAt, settledAt) ||
-                other.settledAt == settledAt) &&
             const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
 
@@ -289,7 +257,6 @@ class _Transaction extends Transaction {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      type,
       invoice,
       description,
       descriptionHash,
@@ -299,26 +266,22 @@ class _Transaction extends Transaction {
       feesPaidSat,
       createdAt,
       expiresAt,
-      settledAt,
       const DeepCollectionEquality().hash(_metadata));
 
   @override
   String toString() {
-    return 'Transaction(type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, preimage: $preimage, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
+    return 'Invoice(invoice: $invoice, description: $description, descriptionHash: $descriptionHash, preimage: $preimage, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, metadata: $metadata)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$TransactionCopyWith<$Res>
-    implements $TransactionCopyWith<$Res> {
-  factory _$TransactionCopyWith(
-          _Transaction value, $Res Function(_Transaction) _then) =
-      __$TransactionCopyWithImpl;
+abstract mixin class _$InvoiceCopyWith<$Res> implements $InvoiceCopyWith<$Res> {
+  factory _$InvoiceCopyWith(_Invoice value, $Res Function(_Invoice) _then) =
+      __$InvoiceCopyWithImpl;
   @override
   @useResult
   $Res call(
-      {TransactionType type,
-      String? invoice,
+      {String? invoice,
       String? description,
       String? descriptionHash,
       String? preimage,
@@ -326,24 +289,22 @@ abstract mixin class _$TransactionCopyWith<$Res>
       BigInt amountSat,
       BigInt feesPaidSat,
       int createdAt,
-      int? expiresAt,
-      int? settledAt,
-      Map<dynamic, dynamic>? metadata});
+      int expiresAt,
+      Map<dynamic, dynamic> metadata});
 }
 
 /// @nodoc
-class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
-  __$TransactionCopyWithImpl(this._self, this._then);
+class __$InvoiceCopyWithImpl<$Res> implements _$InvoiceCopyWith<$Res> {
+  __$InvoiceCopyWithImpl(this._self, this._then);
 
-  final _Transaction _self;
-  final $Res Function(_Transaction) _then;
+  final _Invoice _self;
+  final $Res Function(_Invoice) _then;
 
-  /// Create a copy of Transaction
+  /// Create a copy of Invoice
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? type = null,
     Object? invoice = freezed,
     Object? description = freezed,
     Object? descriptionHash = freezed,
@@ -352,15 +313,10 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
     Object? amountSat = null,
     Object? feesPaidSat = null,
     Object? createdAt = null,
-    Object? expiresAt = freezed,
-    Object? settledAt = freezed,
-    Object? metadata = freezed,
+    Object? expiresAt = null,
+    Object? metadata = null,
   }) {
-    return _then(_Transaction(
-      type: null == type
-          ? _self.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as TransactionType,
+    return _then(_Invoice(
       invoice: freezed == invoice
           ? _self.invoice
           : invoice // ignore: cast_nullable_to_non_nullable
@@ -393,18 +349,14 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as int,
-      expiresAt: freezed == expiresAt
+      expiresAt: null == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
-      settledAt: freezed == settledAt
-          ? _self.settledAt
-          : settledAt // ignore: cast_nullable_to_non_nullable
-              as int?,
-      metadata: freezed == metadata
+              as int,
+      metadata: null == metadata
           ? _self._metadata
           : metadata // ignore: cast_nullable_to_non_nullable
-              as Map<dynamic, dynamic>?,
+              as Map<dynamic, dynamic>,
     ));
   }
 }

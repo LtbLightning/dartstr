@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$InfoEvent {
-  String get relayUrl;
+  Uri get relayUrl;
   String get walletServicePubkey;
   List<Method> get methods;
   List<NotificationType>? get notifications;
@@ -65,7 +65,7 @@ abstract mixin class $InfoEventCopyWith<$Res> {
       _$InfoEventCopyWithImpl;
   @useResult
   $Res call(
-      {String relayUrl,
+      {Uri relayUrl,
       String walletServicePubkey,
       List<Method> methods,
       List<NotificationType>? notifications});
@@ -92,7 +92,7 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
       relayUrl: null == relayUrl
           ? _self.relayUrl
           : relayUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Uri,
       walletServicePubkey: null == walletServicePubkey
           ? _self.walletServicePubkey
           : walletServicePubkey // ignore: cast_nullable_to_non_nullable
@@ -124,7 +124,7 @@ class _InfoEvent extends InfoEvent {
       _$InfoEventFromJson(json);
 
   @override
-  final String relayUrl;
+  final Uri relayUrl;
   @override
   final String walletServicePubkey;
   final List<Method> _methods;
@@ -198,7 +198,7 @@ abstract mixin class _$InfoEventCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String relayUrl,
+      {Uri relayUrl,
       String walletServicePubkey,
       List<Method> methods,
       List<NotificationType>? notifications});
@@ -225,7 +225,7 @@ class __$InfoEventCopyWithImpl<$Res> implements _$InfoEventCopyWith<$Res> {
       relayUrl: null == relayUrl
           ? _self.relayUrl
           : relayUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Uri,
       walletServicePubkey: null == walletServicePubkey
           ? _self.walletServicePubkey
           : walletServicePubkey // ignore: cast_nullable_to_non_nullable

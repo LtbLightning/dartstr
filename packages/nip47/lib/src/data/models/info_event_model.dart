@@ -1,4 +1,5 @@
 import 'package:nip01/nip01.dart' as nip01;
+import 'package:nip47/src/domain/entities/entities.dart';
 import 'package:nip47/src/enums/event_kind.dart';
 
 class InfoEventModel {
@@ -13,6 +14,18 @@ class InfoEventModel {
     required this.methods,
     this.notifications = const [],
   });
+
+  factory InfoEventModel.fromEntity(InfoEvent infoEvent) {
+    return InfoEventModel(
+      relayUrl: infoEvent.relayUrl.toString(),
+      walletServicePubkey: infoEvent.walletServicePubkey,
+      methods: infoEvent.methods.map((method) => method.plaintext).toList(),
+      notifications: infoEvent.notifications
+              ?.map((notification) => notification.value)
+              .toList() ??
+          [],
+    );
+  }
 
   factory InfoEventModel.fromEvent(nip01.SignedEvent event) {
     final contentElements = event.content.split(' ');

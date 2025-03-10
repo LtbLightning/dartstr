@@ -8,7 +8,7 @@ part 'info_event.g.dart';
 @freezed
 sealed class InfoEvent with _$InfoEvent {
   const factory InfoEvent({
-    required String relayUrl,
+    required Uri relayUrl,
     required String walletServicePubkey,
     required List<Method> methods,
     List<NotificationType>? notifications,
