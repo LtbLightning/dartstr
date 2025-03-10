@@ -31,6 +31,11 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       _requestsController.stream.asBroadcastStream();
 
   @override
+  Future<List<WalletConnection>> get connections async {
+    return _connections.values.toList();
+  }
+
+  @override
   Future<WalletConnection> createConnection({
     required nip01.KeyPair walletServiceKeyPair,
     required Uri relayUrl,
@@ -127,6 +132,16 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
 
     if (!isPublished) {
       throw ResponseException('Failed to publish response');
+    }
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _eventSubscription.cancel();
+    await _requestsController.close();
+
+    for (final subscription in _connectionSubscriptions.values) {
+      await _relayManagerService.unsubscribe(subscription.id);
     }
   }
 

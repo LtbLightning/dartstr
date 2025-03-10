@@ -3,6 +3,7 @@ import 'package:nip47/src/domain/entities/entities.dart';
 
 abstract class WalletServiceRepository {
   Stream<Request> get requests;
+  Future<List<WalletConnection>> get connections;
   Future<WalletConnection> createConnection({
     required nip01.KeyPair walletServiceKeyPair,
     required Uri relayUrl,
@@ -13,4 +14,6 @@ abstract class WalletServiceRepository {
   Future<void> connect(WalletConnection connection);
   Future<void> respond(Response response);
   Future<void> notify(Notification notification);
+  Future<void> disconnect(WalletConnection connection);
+  Future<void> dispose();
 }
