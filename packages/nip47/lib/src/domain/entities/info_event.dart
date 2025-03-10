@@ -8,10 +8,14 @@ part 'info_event.g.dart';
 @freezed
 sealed class InfoEvent with _$InfoEvent {
   const factory InfoEvent({
-    required Uri relayUrl,
     required String walletServicePubkey,
     required List<Method> methods,
     List<NotificationType>? notifications,
+    // For client-created connections in which the info event should be tagged with the client's pubkey
+    String? clientPubkey,
+    Uri? walletRelayUrl,
+    List<String>? customMethods,
+    List<String>? customNotifications,
   }) = _InfoEvent;
   const InfoEvent._();
 

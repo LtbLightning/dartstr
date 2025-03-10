@@ -10,6 +10,8 @@ abstract class WalletServiceRepository {
     required List<Method> methods,
     List<NotificationType>? notifications,
     String? lud16,
+    List<String>? customMethods,
+    List<String>? customNotifications,
   });
   Future<void> connect(WalletConnection connection);
   Future<void> respond(Response response);

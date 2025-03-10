@@ -9,7 +9,7 @@ import 'package:nip47/src/domain/entities/multi_pay_keysend_request_keysend.dart
 import 'package:nip47/src/domain/entities/request.dart';
 import 'package:nip47/src/domain/entities/tlv_record.dart';
 import 'package:nip47/src/domain/entities/transaction.dart';
-import 'package:nip47/src/enums/event_kind.dart';
+import 'package:nip47/src/nip47_base.dart';
 
 class RequestModel {
   final String id;

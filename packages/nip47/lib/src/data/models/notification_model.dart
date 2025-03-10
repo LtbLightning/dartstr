@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip04/nip04.dart';
 import 'package:nip47/src/domain/entities/notification.dart';
-import 'package:nip47/src/enums/event_kind.dart';
+import 'package:nip47/src/nip47_base.dart';
 
 class NotificationModel {
   final String connectionPubkey;

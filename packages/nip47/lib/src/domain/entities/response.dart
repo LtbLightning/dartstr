@@ -3,7 +3,7 @@ import 'package:nip47/src/domain/entities/info_result.dart';
 import 'package:nip47/src/domain/entities/invoice.dart';
 import 'package:nip47/src/domain/entities/pay_result.dart';
 import 'package:nip47/src/domain/entities/transaction.dart';
-import 'package:nip47/src/enums/error_code.dart';
+import 'package:nip47/src/nip47_base.dart';
 
 part 'response.freezed.dart';
 part 'response.g.dart';

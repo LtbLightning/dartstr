@@ -5,7 +5,7 @@ import 'package:nip04/nip04.dart';
 import 'package:nip47/src/domain/entities/method.dart';
 import 'package:nip47/src/domain/entities/response.dart';
 import 'package:nip47/src/domain/entities/transaction.dart';
-import 'package:nip47/src/enums/event_kind.dart';
+import 'package:nip47/src/nip47_base.dart';
 
 class ResponseModel {
   final String requestId;
@@ -67,12 +67,18 @@ class ResponseModel {
       case GetInfoResponse response:
         final supportedCommands =
             response.info?.methods.map((method) => method.plaintext).toList();
+        if (response.info?.customMethods != null) {
+          supportedCommands?.addAll(response.info!.customMethods!);
+        }
         List<String>? notifications;
         if (response.info?.notifications != null) {
           supportedCommands?.add('notifications');
           notifications = response.info!.notifications!
               .map((notification) => notification.value)
               .toList();
+          if (response.info?.customNotifications != null) {
+            notifications.addAll(response.info!.customNotifications!);
+          }
         }
         return ResponseModel(
           requestId: response.requestId,

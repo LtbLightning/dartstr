@@ -20,6 +20,12 @@ GetInfoResult _$GetInfoResultFromJson(Map<String, dynamic> json) =>
       notifications: (json['notifications'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$NotificationTypeEnumMap, e))
           .toList(),
+      customMethods: (json['customMethods'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      customNotifications: (json['customNotifications'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$GetInfoResultToJson(GetInfoResult instance) =>
@@ -34,6 +40,8 @@ Map<String, dynamic> _$GetInfoResultToJson(GetInfoResult instance) =>
       'notifications': instance.notifications
           ?.map((e) => _$NotificationTypeEnumMap[e]!)
           .toList(),
+      'customMethods': instance.customMethods,
+      'customNotifications': instance.customNotifications,
     };
 
 const _$BitcoinNetworkEnumMap = {

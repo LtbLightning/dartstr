@@ -1,29 +1,43 @@
+import 'dart:developer';
+
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/src/domain/entities/entities.dart';
-import 'package:nip47/src/enums/event_kind.dart';
+import 'package:nip47/src/nip47_base.dart';
 
 class InfoEventModel {
-  final String relayUrl;
   final String walletServicePubkey;
   final List<String> methods;
   final List<String> notifications;
+  final String? clientPubkey;
+  final String? walletRelayUrl;
 
   const InfoEventModel({
-    required this.relayUrl,
     required this.walletServicePubkey,
     required this.methods,
     this.notifications = const [],
+    this.clientPubkey,
+    this.walletRelayUrl,
   });
 
   factory InfoEventModel.fromEntity(InfoEvent infoEvent) {
+    final methods =
+        infoEvent.methods.map((method) => method.plaintext).toList();
+    if (infoEvent.customMethods != null) {
+      methods.addAll(infoEvent.customMethods!);
+    }
+    final notifications = infoEvent.notifications
+            ?.map((notification) => notification.value)
+            .toList() ??
+        [];
+    if (infoEvent.customNotifications != null) {
+      notifications.addAll(infoEvent.customNotifications!);
+    }
     return InfoEventModel(
-      relayUrl: infoEvent.relayUrl.toString(),
       walletServicePubkey: infoEvent.walletServicePubkey,
-      methods: infoEvent.methods.map((method) => method.plaintext).toList(),
-      notifications: infoEvent.notifications
-              ?.map((notification) => notification.value)
-              .toList() ??
-          [],
+      methods: methods,
+      notifications: notifications,
+      clientPubkey: infoEvent.clientPubkey,
+      walletRelayUrl: infoEvent.walletRelayUrl?.toString(),
     );
   }
 
@@ -39,14 +53,26 @@ class InfoEventModel {
             .split(' ')
         : <String>[];
 
-    final aTag = event.tags.firstWhere((tag) => tag.first == 'a');
-    final relayUrl = aTag[2];
+    // If the event is for a client-created connection, it should have a 'p' tag with the client's pubkey,
+    // so the client can listen for events tagged with their pubkey.
+    // It may also contain another relay the wallet service prefers instead of the one the info event was received on.
+    List<String>? pTag;
+    String? walletRelayUrl;
+    String? clientPubkey;
+    try {
+      pTag = event.tags.firstWhere((tag) => tag.first == 'p');
+      clientPubkey = pTag[1];
+      walletRelayUrl = pTag.length > 2 ? pTag[2] : null;
+    } catch (e) {
+      log('No p tag found in event tags.');
+    }
 
     return InfoEventModel(
       methods: methods,
       notifications: notifications,
       walletServicePubkey: event.pubkey,
-      relayUrl: relayUrl,
+      clientPubkey: clientPubkey,
+      walletRelayUrl: walletRelayUrl,
     );
   }
 
@@ -55,8 +81,14 @@ class InfoEventModel {
     final replaceableEventTag = [
       'a',
       '${EventKind.info.value}:$walletServicePubkey:',
-      relayUrl
     ];
+    List<String>? pTag;
+    if (clientPubkey != null) {
+      pTag = ['p', clientPubkey!];
+      if (walletRelayUrl != null) {
+        pTag.add(walletRelayUrl!);
+      }
+    }
 
     // Check for notification support.
     List<String>? notificationsTag;
@@ -77,6 +109,7 @@ class InfoEventModel {
       tags: [
         replaceableEventTag,
         if (notificationsTag != null) notificationsTag,
+        if (pTag != null) pTag,
       ],
       content: content,
     );

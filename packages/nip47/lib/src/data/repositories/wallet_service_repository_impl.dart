@@ -6,7 +6,7 @@ import 'package:nip47/src/data/models/request_model.dart';
 import 'package:nip47/src/data/models/response_model.dart';
 import 'package:nip47/src/domain/entities/entities.dart';
 import 'package:nip47/src/domain/repositories/wallet_service_repository.dart';
-import 'package:nip47/src/enums/event_kind.dart';
+import 'package:nip47/src/nip47_base.dart';
 
 class WalletServiceRepositoryImpl implements WalletServiceRepository {
   final nip01.RelayManagerService _relayManagerService;
@@ -42,6 +42,8 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     required List<Method> methods,
     List<NotificationType>? notifications,
     String? lud16,
+    List<String>? customMethods,
+    List<String>? customNotifications,
   }) async {
     final clientKeyPair = nip01.KeyPair.generate();
 
@@ -53,6 +55,8 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       methods: methods,
       notifications: notifications,
       lud16: lud16,
+      customMethods: customMethods,
+      customNotifications: customNotifications,
     );
 
     // Add relay to the relay manager in case it's not already added
@@ -151,22 +155,35 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   }) async {
     final infoEvent = InfoEvent(
       walletServicePubkey: connection.walletServiceKeyPair.publicKey,
-      relayUrl: connection.relayUrl,
       methods: connection.methods,
       notifications: connection.notifications,
+      // Client relay url means this was a client-created connection,
+      //  so the client's pubkey should be included as a tag in the event
       clientPubkey:
-          connection.clientPubkey, // Add tag for client with preffered relay
+          connection.clientRelayUrl != null ? connection.clientPubkey : null,
+      // If the wallet service prefers a different relay than the client,
+      // it should also be included in the tag with the client's pubkey
+      walletRelayUrl: connection.clientRelayUrl != null &&
+              connection.clientRelayUrl != connection.relayUrl
+          ? connection.relayUrl
+          : null,
+      customMethods: connection.customMethods,
+      customNotifications: connection.customNotifications,
     );
 
     final model = InfoEventModel.fromEntity(infoEvent);
     final event = model.toUnsignedEvent();
     final signedEvent = event.sign(connection.walletServiceKeyPair);
 
+    // It should be published to the client's relay if it's a client-created connection
+    // else it should be published to the wallet service's relay
+    final publishingRelayUrl = connection.clientRelayUrl != null
+        ? connection.clientRelayUrl.toString()
+        : connection.relayUrl.toString();
+
     final isPublished = await _relayManagerService.publishEvent(
       signedEvent,
-      relayUrls: [
-        connection.relayUrl.toString(), // TODO: If client relay is set, add it
-      ],
+      relayUrls: [publishingRelayUrl],
       timeoutSec: timeoutSec,
     );
 
@@ -192,6 +209,16 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     final entity = model.toEntity();
 
     _requestsController.add(entity);
+  }
+
+  @override
+  Future<void> disconnect(WalletConnection connection) async {
+    _connections.remove(connection.clientPubkey);
+    final subscription =
+        _connectionSubscriptions.remove(connection.clientPubkey);
+    if (subscription != null) {
+      return _relayManagerService.unsubscribe(subscription.id);
+    }
   }
 }
 

@@ -57,6 +57,8 @@ sealed class Connection with _$Connection {
     required List<Method> methods,
     List<NotificationType>? notifications,
     String? lud16,
+    List<String>? customMethods,
+    List<String>? customNotifications,
   }) = WalletConnection;
   const factory Connection.client({
     required KeyPair clientKeyPair,
@@ -71,6 +73,8 @@ sealed class Connection with _$Connection {
     List<NotificationType>? notificationTypes,
     bool? isolated,
     Object? metadata,
+    List<String>? customRequestMethods,
+    List<String>? customNotificationTypes,
   }) = ClientConnection;
   const Connection._();
 
@@ -81,18 +85,30 @@ sealed class Connection with _$Connection {
           scheme: ConnectionType.wallet.protocol,
           host: walletConnection.walletServiceKeyPair.publicKey,
           queryParameters: {
-            'relay': walletConnection.relayUrl,
+            'relay': walletConnection.relayUrl.toString(),
             'secret': walletConnection.clientSecret,
             if (walletConnection.lud16 != null)
               'lud16': walletConnection.lud16!,
           },
         );
       case ClientConnection clientConnection:
+        final requestMethods = clientConnection.requestMethods
+            ?.map((method) => method.plaintext)
+            .toList();
+        if (clientConnection.customRequestMethods != null) {
+          requestMethods?.addAll(clientConnection.customRequestMethods!);
+        }
+        final notificationTypes = clientConnection.notificationTypes
+            ?.map((type) => type.value)
+            .toList();
+        if (clientConnection.customNotificationTypes != null) {
+          notificationTypes?.addAll(clientConnection.customNotificationTypes!);
+        }
         return Uri(
           scheme: ConnectionType.client.protocol,
           host: clientConnection.clientKeyPair.publicKey,
           queryParameters: {
-            'relay': clientConnection.relayUrl,
+            'relay': clientConnection.relayUrl.toString(),
             if (clientConnection.name != null) 'name': clientConnection.name,
             if (clientConnection.icon != null)
               'icon': clientConnection.icon.toString(),
@@ -105,13 +121,9 @@ sealed class Connection with _$Connection {
             if (clientConnection.budgetRenewal != null)
               'budget_renewal': clientConnection.budgetRenewal!.plaintext,
             if (clientConnection.requestMethods != null)
-              'request_methods': clientConnection.requestMethods
-                  ?.map((method) => method.plaintext)
-                  .join(' '),
+              'request_methods': requestMethods?.join(' '),
             if (clientConnection.notificationTypes != null)
-              'notification_types': clientConnection.notificationTypes
-                  ?.map((type) => type.value)
-                  .join(' '),
+              'notification_types': notificationTypes?.join(' '),
             if (clientConnection.isolated != null)
               'isolated': clientConnection.isolated.toString(),
             if (clientConnection.metadata != null)

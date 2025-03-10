@@ -15,6 +15,8 @@ sealed class InfoResult with _$InfoResult {
     String? blockHash,
     required List<Method> methods,
     List<NotificationType>? notifications,
+    List<String>? customMethods,
+    List<String>? customNotifications,
   }) = GetInfoResult;
   const InfoResult._();
 

@@ -26,6 +26,8 @@ mixin _$InfoResult {
   String? get blockHash;
   List<Method> get methods;
   List<NotificationType>? get notifications;
+  List<String>? get customMethods;
+  List<String>? get customNotifications;
 
   /// Create a copy of InfoResult
   /// with the given fields replaced by the non-null parameter values.
@@ -52,7 +54,11 @@ mixin _$InfoResult {
                 other.blockHash == blockHash) &&
             const DeepCollectionEquality().equals(other.methods, methods) &&
             const DeepCollectionEquality()
-                .equals(other.notifications, notifications));
+                .equals(other.notifications, notifications) &&
+            const DeepCollectionEquality()
+                .equals(other.customMethods, customMethods) &&
+            const DeepCollectionEquality()
+                .equals(other.customNotifications, customNotifications));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -66,11 +72,13 @@ mixin _$InfoResult {
       blockHeight,
       blockHash,
       const DeepCollectionEquality().hash(methods),
-      const DeepCollectionEquality().hash(notifications));
+      const DeepCollectionEquality().hash(notifications),
+      const DeepCollectionEquality().hash(customMethods),
+      const DeepCollectionEquality().hash(customNotifications));
 
   @override
   String toString() {
-    return 'InfoResult(alias: $alias, color: $color, pubkey: $pubkey, network: $network, blockHeight: $blockHeight, blockHash: $blockHash, methods: $methods, notifications: $notifications)';
+    return 'InfoResult(alias: $alias, color: $color, pubkey: $pubkey, network: $network, blockHeight: $blockHeight, blockHash: $blockHash, methods: $methods, notifications: $notifications, customMethods: $customMethods, customNotifications: $customNotifications)';
   }
 }
 
@@ -88,7 +96,9 @@ abstract mixin class $InfoResultCopyWith<$Res> {
       int? blockHeight,
       String? blockHash,
       List<Method> methods,
-      List<NotificationType>? notifications});
+      List<NotificationType>? notifications,
+      List<String>? customMethods,
+      List<String>? customNotifications});
 }
 
 /// @nodoc
@@ -111,6 +121,8 @@ class _$InfoResultCopyWithImpl<$Res> implements $InfoResultCopyWith<$Res> {
     Object? blockHash = freezed,
     Object? methods = null,
     Object? notifications = freezed,
+    Object? customMethods = freezed,
+    Object? customNotifications = freezed,
   }) {
     return _then(_self.copyWith(
       alias: freezed == alias
@@ -145,6 +157,14 @@ class _$InfoResultCopyWithImpl<$Res> implements $InfoResultCopyWith<$Res> {
           ? _self.notifications
           : notifications // ignore: cast_nullable_to_non_nullable
               as List<NotificationType>?,
+      customMethods: freezed == customMethods
+          ? _self.customMethods
+          : customMethods // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      customNotifications: freezed == customNotifications
+          ? _self.customNotifications
+          : customNotifications // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -160,9 +180,13 @@ class GetInfoResult extends InfoResult {
       this.blockHeight,
       this.blockHash,
       required final List<Method> methods,
-      final List<NotificationType>? notifications})
+      final List<NotificationType>? notifications,
+      final List<String>? customMethods,
+      final List<String>? customNotifications})
       : _methods = methods,
         _notifications = notifications,
+        _customMethods = customMethods,
+        _customNotifications = customNotifications,
         super._();
   factory GetInfoResult.fromJson(Map<String, dynamic> json) =>
       _$GetInfoResultFromJson(json);
@@ -197,6 +221,27 @@ class GetInfoResult extends InfoResult {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String>? _customMethods;
+  @override
+  List<String>? get customMethods {
+    final value = _customMethods;
+    if (value == null) return null;
+    if (_customMethods is EqualUnmodifiableListView) return _customMethods;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _customNotifications;
+  @override
+  List<String>? get customNotifications {
+    final value = _customNotifications;
+    if (value == null) return null;
+    if (_customNotifications is EqualUnmodifiableListView)
+      return _customNotifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   /// Create a copy of InfoResult
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -227,7 +272,11 @@ class GetInfoResult extends InfoResult {
                 other.blockHash == blockHash) &&
             const DeepCollectionEquality().equals(other._methods, _methods) &&
             const DeepCollectionEquality()
-                .equals(other._notifications, _notifications));
+                .equals(other._notifications, _notifications) &&
+            const DeepCollectionEquality()
+                .equals(other._customMethods, _customMethods) &&
+            const DeepCollectionEquality()
+                .equals(other._customNotifications, _customNotifications));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -241,11 +290,13 @@ class GetInfoResult extends InfoResult {
       blockHeight,
       blockHash,
       const DeepCollectionEquality().hash(_methods),
-      const DeepCollectionEquality().hash(_notifications));
+      const DeepCollectionEquality().hash(_notifications),
+      const DeepCollectionEquality().hash(_customMethods),
+      const DeepCollectionEquality().hash(_customNotifications));
 
   @override
   String toString() {
-    return 'InfoResult(alias: $alias, color: $color, pubkey: $pubkey, network: $network, blockHeight: $blockHeight, blockHash: $blockHash, methods: $methods, notifications: $notifications)';
+    return 'InfoResult(alias: $alias, color: $color, pubkey: $pubkey, network: $network, blockHeight: $blockHeight, blockHash: $blockHash, methods: $methods, notifications: $notifications, customMethods: $customMethods, customNotifications: $customNotifications)';
   }
 }
 
@@ -265,7 +316,9 @@ abstract mixin class $GetInfoResultCopyWith<$Res>
       int? blockHeight,
       String? blockHash,
       List<Method> methods,
-      List<NotificationType>? notifications});
+      List<NotificationType>? notifications,
+      List<String>? customMethods,
+      List<String>? customNotifications});
 }
 
 /// @nodoc
@@ -289,6 +342,8 @@ class _$GetInfoResultCopyWithImpl<$Res>
     Object? blockHash = freezed,
     Object? methods = null,
     Object? notifications = freezed,
+    Object? customMethods = freezed,
+    Object? customNotifications = freezed,
   }) {
     return _then(GetInfoResult(
       alias: freezed == alias
@@ -323,6 +378,14 @@ class _$GetInfoResultCopyWithImpl<$Res>
           ? _self._notifications
           : notifications // ignore: cast_nullable_to_non_nullable
               as List<NotificationType>?,
+      customMethods: freezed == customMethods
+          ? _self._customMethods
+          : customMethods // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      customNotifications: freezed == customNotifications
+          ? _self._customNotifications
+          : customNotifications // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }

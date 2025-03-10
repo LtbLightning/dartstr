@@ -85,9 +85,13 @@ class WalletConnection extends Connection {
       required this.relayUrl,
       required final List<Method> methods,
       final List<NotificationType>? notifications,
-      this.lud16})
+      this.lud16,
+      final List<String>? customMethods,
+      final List<String>? customNotifications})
       : _methods = methods,
         _notifications = notifications,
+        _customMethods = customMethods,
+        _customNotifications = customNotifications,
         super._();
 
   final KeyPair walletServiceKeyPair;
@@ -113,6 +117,24 @@ class WalletConnection extends Connection {
   }
 
   final String? lud16;
+  final List<String>? _customMethods;
+  List<String>? get customMethods {
+    final value = _customMethods;
+    if (value == null) return null;
+    if (_customMethods is EqualUnmodifiableListView) return _customMethods;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _customNotifications;
+  List<String>? get customNotifications {
+    final value = _customNotifications;
+    if (value == null) return null;
+    if (_customNotifications is EqualUnmodifiableListView)
+      return _customNotifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   /// Create a copy of Connection
   /// with the given fields replaced by the non-null parameter values.
@@ -140,7 +162,11 @@ class WalletConnection extends Connection {
             const DeepCollectionEquality().equals(other._methods, _methods) &&
             const DeepCollectionEquality()
                 .equals(other._notifications, _notifications) &&
-            (identical(other.lud16, lud16) || other.lud16 == lud16));
+            (identical(other.lud16, lud16) || other.lud16 == lud16) &&
+            const DeepCollectionEquality()
+                .equals(other._customMethods, _customMethods) &&
+            const DeepCollectionEquality()
+                .equals(other._customNotifications, _customNotifications));
   }
 
   @override
@@ -153,11 +179,13 @@ class WalletConnection extends Connection {
       relayUrl,
       const DeepCollectionEquality().hash(_methods),
       const DeepCollectionEquality().hash(_notifications),
-      lud16);
+      lud16,
+      const DeepCollectionEquality().hash(_customMethods),
+      const DeepCollectionEquality().hash(_customNotifications));
 
   @override
   String toString() {
-    return 'Connection.wallet(walletServiceKeyPair: $walletServiceKeyPair, clientPubkey: $clientPubkey, clientSecret: $clientSecret, clientRelayUrl: $clientRelayUrl, relayUrl: $relayUrl, methods: $methods, notifications: $notifications, lud16: $lud16)';
+    return 'Connection.wallet(walletServiceKeyPair: $walletServiceKeyPair, clientPubkey: $clientPubkey, clientSecret: $clientSecret, clientRelayUrl: $clientRelayUrl, relayUrl: $relayUrl, methods: $methods, notifications: $notifications, lud16: $lud16, customMethods: $customMethods, customNotifications: $customNotifications)';
   }
 }
 
@@ -177,7 +205,9 @@ abstract mixin class $WalletConnectionCopyWith<$Res>
       Uri relayUrl,
       List<Method> methods,
       List<NotificationType>? notifications,
-      String? lud16});
+      String? lud16,
+      List<String>? customMethods,
+      List<String>? customNotifications});
 
   $KeyPairCopyWith<$Res> get walletServiceKeyPair;
 }
@@ -203,6 +233,8 @@ class _$WalletConnectionCopyWithImpl<$Res>
     Object? methods = null,
     Object? notifications = freezed,
     Object? lud16 = freezed,
+    Object? customMethods = freezed,
+    Object? customNotifications = freezed,
   }) {
     return _then(WalletConnection(
       walletServiceKeyPair: null == walletServiceKeyPair
@@ -237,6 +269,14 @@ class _$WalletConnectionCopyWithImpl<$Res>
           ? _self.lud16
           : lud16 // ignore: cast_nullable_to_non_nullable
               as String?,
+      customMethods: freezed == customMethods
+          ? _self._customMethods
+          : customMethods // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      customNotifications: freezed == customNotifications
+          ? _self._customNotifications
+          : customNotifications // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 
@@ -266,9 +306,13 @@ class ClientConnection extends Connection {
       final List<Method>? requestMethods,
       final List<NotificationType>? notificationTypes,
       this.isolated,
-      this.metadata})
+      this.metadata,
+      final List<String>? customRequestMethods,
+      final List<String>? customNotificationTypes})
       : _requestMethods = requestMethods,
         _notificationTypes = notificationTypes,
+        _customRequestMethods = customRequestMethods,
+        _customNotificationTypes = customNotificationTypes,
         super._();
 
   final KeyPair clientKeyPair;
@@ -301,6 +345,25 @@ class ClientConnection extends Connection {
 
   final bool? isolated;
   final Object? metadata;
+  final List<String>? _customRequestMethods;
+  List<String>? get customRequestMethods {
+    final value = _customRequestMethods;
+    if (value == null) return null;
+    if (_customRequestMethods is EqualUnmodifiableListView)
+      return _customRequestMethods;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _customNotificationTypes;
+  List<String>? get customNotificationTypes {
+    final value = _customNotificationTypes;
+    if (value == null) return null;
+    if (_customNotificationTypes is EqualUnmodifiableListView)
+      return _customNotificationTypes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   /// Create a copy of Connection
   /// with the given fields replaced by the non-null parameter values.
@@ -335,7 +398,11 @@ class ClientConnection extends Connection {
                 .equals(other._notificationTypes, _notificationTypes) &&
             (identical(other.isolated, isolated) ||
                 other.isolated == isolated) &&
-            const DeepCollectionEquality().equals(other.metadata, metadata));
+            const DeepCollectionEquality().equals(other.metadata, metadata) &&
+            const DeepCollectionEquality()
+                .equals(other._customRequestMethods, _customRequestMethods) &&
+            const DeepCollectionEquality().equals(
+                other._customNotificationTypes, _customNotificationTypes));
   }
 
   @override
@@ -352,11 +419,13 @@ class ClientConnection extends Connection {
       const DeepCollectionEquality().hash(_requestMethods),
       const DeepCollectionEquality().hash(_notificationTypes),
       isolated,
-      const DeepCollectionEquality().hash(metadata));
+      const DeepCollectionEquality().hash(metadata),
+      const DeepCollectionEquality().hash(_customRequestMethods),
+      const DeepCollectionEquality().hash(_customNotificationTypes));
 
   @override
   String toString() {
-    return 'Connection.client(clientKeyPair: $clientKeyPair, relayUrl: $relayUrl, name: $name, icon: $icon, returnTo: $returnTo, expiresAt: $expiresAt, maxAmountSat: $maxAmountSat, budgetRenewal: $budgetRenewal, requestMethods: $requestMethods, notificationTypes: $notificationTypes, isolated: $isolated, metadata: $metadata)';
+    return 'Connection.client(clientKeyPair: $clientKeyPair, relayUrl: $relayUrl, name: $name, icon: $icon, returnTo: $returnTo, expiresAt: $expiresAt, maxAmountSat: $maxAmountSat, budgetRenewal: $budgetRenewal, requestMethods: $requestMethods, notificationTypes: $notificationTypes, isolated: $isolated, metadata: $metadata, customRequestMethods: $customRequestMethods, customNotificationTypes: $customNotificationTypes)';
   }
 }
 
@@ -380,7 +449,9 @@ abstract mixin class $ClientConnectionCopyWith<$Res>
       List<Method>? requestMethods,
       List<NotificationType>? notificationTypes,
       bool? isolated,
-      Object? metadata});
+      Object? metadata,
+      List<String>? customRequestMethods,
+      List<String>? customNotificationTypes});
 
   $KeyPairCopyWith<$Res> get clientKeyPair;
 }
@@ -410,6 +481,8 @@ class _$ClientConnectionCopyWithImpl<$Res>
     Object? notificationTypes = freezed,
     Object? isolated = freezed,
     Object? metadata = freezed,
+    Object? customRequestMethods = freezed,
+    Object? customNotificationTypes = freezed,
   }) {
     return _then(ClientConnection(
       clientKeyPair: null == clientKeyPair
@@ -457,6 +530,14 @@ class _$ClientConnectionCopyWithImpl<$Res>
           : isolated // ignore: cast_nullable_to_non_nullable
               as bool?,
       metadata: freezed == metadata ? _self.metadata : metadata,
+      customRequestMethods: freezed == customRequestMethods
+          ? _self._customRequestMethods
+          : customRequestMethods // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      customNotificationTypes: freezed == customNotificationTypes
+          ? _self._customNotificationTypes
+          : customNotificationTypes // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 

@@ -15,10 +15,14 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$InfoEvent {
-  Uri get relayUrl;
   String get walletServicePubkey;
   List<Method> get methods;
-  List<NotificationType>? get notifications;
+  List<NotificationType>?
+      get notifications; // For client-created connections in which the info event should be tagged with the client's pubkey
+  String? get clientPubkey;
+  Uri? get walletRelayUrl;
+  List<String>? get customMethods;
+  List<String>? get customNotifications;
 
   /// Create a copy of InfoEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -35,27 +39,36 @@ mixin _$InfoEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is InfoEvent &&
-            (identical(other.relayUrl, relayUrl) ||
-                other.relayUrl == relayUrl) &&
             (identical(other.walletServicePubkey, walletServicePubkey) ||
                 other.walletServicePubkey == walletServicePubkey) &&
             const DeepCollectionEquality().equals(other.methods, methods) &&
             const DeepCollectionEquality()
-                .equals(other.notifications, notifications));
+                .equals(other.notifications, notifications) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
+            (identical(other.walletRelayUrl, walletRelayUrl) ||
+                other.walletRelayUrl == walletRelayUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.customMethods, customMethods) &&
+            const DeepCollectionEquality()
+                .equals(other.customNotifications, customNotifications));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      relayUrl,
       walletServicePubkey,
       const DeepCollectionEquality().hash(methods),
-      const DeepCollectionEquality().hash(notifications));
+      const DeepCollectionEquality().hash(notifications),
+      clientPubkey,
+      walletRelayUrl,
+      const DeepCollectionEquality().hash(customMethods),
+      const DeepCollectionEquality().hash(customNotifications));
 
   @override
   String toString() {
-    return 'InfoEvent(relayUrl: $relayUrl, walletServicePubkey: $walletServicePubkey, methods: $methods, notifications: $notifications)';
+    return 'InfoEvent(walletServicePubkey: $walletServicePubkey, methods: $methods, notifications: $notifications, clientPubkey: $clientPubkey, walletRelayUrl: $walletRelayUrl, customMethods: $customMethods, customNotifications: $customNotifications)';
   }
 }
 
@@ -65,10 +78,13 @@ abstract mixin class $InfoEventCopyWith<$Res> {
       _$InfoEventCopyWithImpl;
   @useResult
   $Res call(
-      {Uri relayUrl,
-      String walletServicePubkey,
+      {String walletServicePubkey,
       List<Method> methods,
-      List<NotificationType>? notifications});
+      List<NotificationType>? notifications,
+      String? clientPubkey,
+      Uri? walletRelayUrl,
+      List<String>? customMethods,
+      List<String>? customNotifications});
 }
 
 /// @nodoc
@@ -83,16 +99,15 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? relayUrl = null,
     Object? walletServicePubkey = null,
     Object? methods = null,
     Object? notifications = freezed,
+    Object? clientPubkey = freezed,
+    Object? walletRelayUrl = freezed,
+    Object? customMethods = freezed,
+    Object? customNotifications = freezed,
   }) {
     return _then(_self.copyWith(
-      relayUrl: null == relayUrl
-          ? _self.relayUrl
-          : relayUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
       walletServicePubkey: null == walletServicePubkey
           ? _self.walletServicePubkey
           : walletServicePubkey // ignore: cast_nullable_to_non_nullable
@@ -105,6 +120,22 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
           ? _self.notifications
           : notifications // ignore: cast_nullable_to_non_nullable
               as List<NotificationType>?,
+      clientPubkey: freezed == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String?,
+      walletRelayUrl: freezed == walletRelayUrl
+          ? _self.walletRelayUrl
+          : walletRelayUrl // ignore: cast_nullable_to_non_nullable
+              as Uri?,
+      customMethods: freezed == customMethods
+          ? _self.customMethods
+          : customMethods // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      customNotifications: freezed == customNotifications
+          ? _self.customNotifications
+          : customNotifications // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -113,18 +144,21 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
 @JsonSerializable()
 class _InfoEvent extends InfoEvent {
   const _InfoEvent(
-      {required this.relayUrl,
-      required this.walletServicePubkey,
+      {required this.walletServicePubkey,
       required final List<Method> methods,
-      final List<NotificationType>? notifications})
+      final List<NotificationType>? notifications,
+      this.clientPubkey,
+      this.walletRelayUrl,
+      final List<String>? customMethods,
+      final List<String>? customNotifications})
       : _methods = methods,
         _notifications = notifications,
+        _customMethods = customMethods,
+        _customNotifications = customNotifications,
         super._();
   factory _InfoEvent.fromJson(Map<String, dynamic> json) =>
       _$InfoEventFromJson(json);
 
-  @override
-  final Uri relayUrl;
   @override
   final String walletServicePubkey;
   final List<Method> _methods;
@@ -141,6 +175,32 @@ class _InfoEvent extends InfoEvent {
     final value = _notifications;
     if (value == null) return null;
     if (_notifications is EqualUnmodifiableListView) return _notifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+// For client-created connections in which the info event should be tagged with the client's pubkey
+  @override
+  final String? clientPubkey;
+  @override
+  final Uri? walletRelayUrl;
+  final List<String>? _customMethods;
+  @override
+  List<String>? get customMethods {
+    final value = _customMethods;
+    if (value == null) return null;
+    if (_customMethods is EqualUnmodifiableListView) return _customMethods;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _customNotifications;
+  @override
+  List<String>? get customNotifications {
+    final value = _customNotifications;
+    if (value == null) return null;
+    if (_customNotifications is EqualUnmodifiableListView)
+      return _customNotifications;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -165,27 +225,36 @@ class _InfoEvent extends InfoEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _InfoEvent &&
-            (identical(other.relayUrl, relayUrl) ||
-                other.relayUrl == relayUrl) &&
             (identical(other.walletServicePubkey, walletServicePubkey) ||
                 other.walletServicePubkey == walletServicePubkey) &&
             const DeepCollectionEquality().equals(other._methods, _methods) &&
             const DeepCollectionEquality()
-                .equals(other._notifications, _notifications));
+                .equals(other._notifications, _notifications) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
+            (identical(other.walletRelayUrl, walletRelayUrl) ||
+                other.walletRelayUrl == walletRelayUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._customMethods, _customMethods) &&
+            const DeepCollectionEquality()
+                .equals(other._customNotifications, _customNotifications));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      relayUrl,
       walletServicePubkey,
       const DeepCollectionEquality().hash(_methods),
-      const DeepCollectionEquality().hash(_notifications));
+      const DeepCollectionEquality().hash(_notifications),
+      clientPubkey,
+      walletRelayUrl,
+      const DeepCollectionEquality().hash(_customMethods),
+      const DeepCollectionEquality().hash(_customNotifications));
 
   @override
   String toString() {
-    return 'InfoEvent(relayUrl: $relayUrl, walletServicePubkey: $walletServicePubkey, methods: $methods, notifications: $notifications)';
+    return 'InfoEvent(walletServicePubkey: $walletServicePubkey, methods: $methods, notifications: $notifications, clientPubkey: $clientPubkey, walletRelayUrl: $walletRelayUrl, customMethods: $customMethods, customNotifications: $customNotifications)';
   }
 }
 
@@ -198,10 +267,13 @@ abstract mixin class _$InfoEventCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Uri relayUrl,
-      String walletServicePubkey,
+      {String walletServicePubkey,
       List<Method> methods,
-      List<NotificationType>? notifications});
+      List<NotificationType>? notifications,
+      String? clientPubkey,
+      Uri? walletRelayUrl,
+      List<String>? customMethods,
+      List<String>? customNotifications});
 }
 
 /// @nodoc
@@ -216,16 +288,15 @@ class __$InfoEventCopyWithImpl<$Res> implements _$InfoEventCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? relayUrl = null,
     Object? walletServicePubkey = null,
     Object? methods = null,
     Object? notifications = freezed,
+    Object? clientPubkey = freezed,
+    Object? walletRelayUrl = freezed,
+    Object? customMethods = freezed,
+    Object? customNotifications = freezed,
   }) {
     return _then(_InfoEvent(
-      relayUrl: null == relayUrl
-          ? _self.relayUrl
-          : relayUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
       walletServicePubkey: null == walletServicePubkey
           ? _self.walletServicePubkey
           : walletServicePubkey // ignore: cast_nullable_to_non_nullable
@@ -238,6 +309,22 @@ class __$InfoEventCopyWithImpl<$Res> implements _$InfoEventCopyWith<$Res> {
           ? _self._notifications
           : notifications // ignore: cast_nullable_to_non_nullable
               as List<NotificationType>?,
+      clientPubkey: freezed == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String?,
+      walletRelayUrl: freezed == walletRelayUrl
+          ? _self.walletRelayUrl
+          : walletRelayUrl // ignore: cast_nullable_to_non_nullable
+              as Uri?,
+      customMethods: freezed == customMethods
+          ? _self._customMethods
+          : customMethods // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      customNotifications: freezed == customNotifications
+          ? _self._customNotifications
+          : customNotifications // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
