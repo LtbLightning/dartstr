@@ -38,7 +38,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   @override
   Future<WalletConnection> createConnection({
     required nip01.KeyPair walletServiceKeyPair,
-    required Uri relayUrl,
+    required List<Uri> relays,
     required List<Method> methods,
     List<NotificationType>? notifications,
     String? lud16,
@@ -51,7 +51,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       walletServiceKeyPair: walletServiceKeyPair,
       clientPubkey: clientKeyPair.publicKey,
       clientSecret: clientKeyPair.privateKey,
-      relayUrl: relayUrl,
+      relays: relays,
       methods: methods,
       notifications: notifications,
       lud16: lud16,
@@ -60,7 +60,8 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     );
 
     // Add relay to the relay manager in case it's not already added
-    await _relayManagerService.addRelays([relayUrl.toString()]);
+    await _relayManagerService
+        .addRelays(relays.map((relay) => relay.toString()).toList());
 
     // Send info event
     await _publishInfoEvent(connection: connection);
@@ -69,8 +70,8 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     final subscription = nip01.Subscription.fromFilters([
       Nip47Filters.requests(walletServicePubkey: walletServiceKeyPair.publicKey)
     ]);
-    await _relayManagerService
-        .subscribe(subscription, relayUrls: [relayUrl.toString()]);
+    await _relayManagerService.subscribe(subscription,
+        relayUrls: relays.map((relay) => relay.toString()).toList());
     _connectionSubscriptions[connection.clientPubkey] = subscription;
 
     // Cache the connection
@@ -83,9 +84,9 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   Future<void> connect(
     WalletConnection connection,
   ) async {
-    final relays = [connection.relayUrl.toString()];
-    if (connection.clientRelayUrl != null) {
-      relays.add(connection.clientRelayUrl.toString());
+    final relays = connection.relays.map((relay) => relay.toString()).toList();
+    if (connection.clientRelays != null) {
+      relays.addAll(connection.clientRelays!.map((relay) => relay.toString()));
     }
 
     // Add relays to the relay manager in case they're not already added
@@ -99,8 +100,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       Nip47Filters.requests(
           walletServicePubkey: connection.walletServiceKeyPair.publicKey)
     ]);
-    await _relayManagerService
-        .subscribe(subscription, relayUrls: [connection.relayUrl.toString()]);
+    await _relayManagerService.subscribe(subscription, relayUrls: relays);
     _connectionSubscriptions[connection.clientPubkey] = subscription;
 
     // Cache the connection
@@ -128,9 +128,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
 
     final isPublished = await _relayManagerService.publishEvent(
       signedEvent,
-      relayUrls: [
-        connection.relayUrl.toString(),
-      ],
+      relayUrls: connection.relays.map((relay) => relay.toString()).toList(),
       timeoutSec: timeoutSec,
     );
 
@@ -160,12 +158,12 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       // Client relay url means this was a client-created connection,
       //  so the client's pubkey should be included as a tag in the event
       clientPubkey:
-          connection.clientRelayUrl != null ? connection.clientPubkey : null,
+          connection.clientRelays != null ? connection.clientPubkey : null,
       // If the wallet service prefers a different relay than the client,
       // it should also be included in the tag with the client's pubkey
-      walletRelayUrl: connection.clientRelayUrl != null &&
-              connection.clientRelayUrl != connection.relayUrl
-          ? connection.relayUrl
+      walletRelay: connection.clientRelays != null &&
+              connection.clientRelays!.contains(connection.relays.first)
+          ? connection.relays.first
           : null,
       customMethods: connection.customMethods,
       customNotifications: connection.customNotifications,
@@ -175,15 +173,15 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     final event = model.toUnsignedEvent();
     final signedEvent = event.sign(connection.walletServiceKeyPair);
 
-    // It should be published to the client's relay if it's a client-created connection
-    // else it should be published to the wallet service's relay
-    final publishingRelayUrl = connection.clientRelayUrl != null
-        ? connection.clientRelayUrl.toString()
-        : connection.relayUrl.toString();
+    // It should be published to the client's relays if it's a client-created connection
+    // else it should be published to the wallet service's relays
+    final publishingRelays = connection.clientRelays != null
+        ? connection.clientRelays!.map((relay) => relay.toString()).toList()
+        : connection.relays.map((relay) => relay.toString()).toList();
 
     final isPublished = await _relayManagerService.publishEvent(
       signedEvent,
-      relayUrls: [publishingRelayUrl],
+      relayUrls: publishingRelays,
       timeoutSec: timeoutSec,
     );
 

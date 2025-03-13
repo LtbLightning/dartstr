@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Connection {
-  Uri get relayUrl;
+  List<Uri> get relays;
 
   /// Create a copy of Connection
   /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +29,16 @@ mixin _$Connection {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Connection &&
-            (identical(other.relayUrl, relayUrl) ||
-                other.relayUrl == relayUrl));
+            const DeepCollectionEquality().equals(other.relays, relays));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, relayUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(relays));
 
   @override
   String toString() {
-    return 'Connection(relayUrl: $relayUrl)';
+    return 'Connection(relays: $relays)';
   }
 }
 
@@ -48,7 +48,7 @@ abstract mixin class $ConnectionCopyWith<$Res> {
           Connection value, $Res Function(Connection) _then) =
       _$ConnectionCopyWithImpl;
   @useResult
-  $Res call({Uri relayUrl});
+  $Res call({List<Uri> relays});
 }
 
 /// @nodoc
@@ -63,13 +63,13 @@ class _$ConnectionCopyWithImpl<$Res> implements $ConnectionCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? relayUrl = null,
+    Object? relays = null,
   }) {
     return _then(_self.copyWith(
-      relayUrl: null == relayUrl
-          ? _self.relayUrl
-          : relayUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
+      relays: null == relays
+          ? _self.relays
+          : relays // ignore: cast_nullable_to_non_nullable
+              as List<Uri>,
     ));
   }
 }
@@ -81,14 +81,16 @@ class WalletConnection extends Connection {
       {required this.walletServiceKeyPair,
       required this.clientPubkey,
       this.clientSecret,
-      this.clientRelayUrl,
-      required this.relayUrl,
+      final List<Uri>? clientRelays,
+      required final List<Uri> relays,
       required final List<Method> methods,
       final List<NotificationType>? notifications,
       this.lud16,
       final List<String>? customMethods,
       final List<String>? customNotifications})
-      : _methods = methods,
+      : _clientRelays = clientRelays,
+        _relays = relays,
+        _methods = methods,
         _notifications = notifications,
         _customMethods = customMethods,
         _customNotifications = customNotifications,
@@ -97,9 +99,23 @@ class WalletConnection extends Connection {
   final KeyPair walletServiceKeyPair;
   final String clientPubkey;
   final String? clientSecret;
-  final Uri? clientRelayUrl;
+  final List<Uri>? _clientRelays;
+  List<Uri>? get clientRelays {
+    final value = _clientRelays;
+    if (value == null) return null;
+    if (_clientRelays is EqualUnmodifiableListView) return _clientRelays;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<Uri> _relays;
   @override
-  final Uri relayUrl;
+  List<Uri> get relays {
+    if (_relays is EqualUnmodifiableListView) return _relays;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_relays);
+  }
+
   final List<Method> _methods;
   List<Method> get methods {
     if (_methods is EqualUnmodifiableListView) return _methods;
@@ -155,10 +171,9 @@ class WalletConnection extends Connection {
                 other.clientPubkey == clientPubkey) &&
             (identical(other.clientSecret, clientSecret) ||
                 other.clientSecret == clientSecret) &&
-            (identical(other.clientRelayUrl, clientRelayUrl) ||
-                other.clientRelayUrl == clientRelayUrl) &&
-            (identical(other.relayUrl, relayUrl) ||
-                other.relayUrl == relayUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._clientRelays, _clientRelays) &&
+            const DeepCollectionEquality().equals(other._relays, _relays) &&
             const DeepCollectionEquality().equals(other._methods, _methods) &&
             const DeepCollectionEquality()
                 .equals(other._notifications, _notifications) &&
@@ -175,8 +190,8 @@ class WalletConnection extends Connection {
       walletServiceKeyPair,
       clientPubkey,
       clientSecret,
-      clientRelayUrl,
-      relayUrl,
+      const DeepCollectionEquality().hash(_clientRelays),
+      const DeepCollectionEquality().hash(_relays),
       const DeepCollectionEquality().hash(_methods),
       const DeepCollectionEquality().hash(_notifications),
       lud16,
@@ -185,7 +200,7 @@ class WalletConnection extends Connection {
 
   @override
   String toString() {
-    return 'Connection.wallet(walletServiceKeyPair: $walletServiceKeyPair, clientPubkey: $clientPubkey, clientSecret: $clientSecret, clientRelayUrl: $clientRelayUrl, relayUrl: $relayUrl, methods: $methods, notifications: $notifications, lud16: $lud16, customMethods: $customMethods, customNotifications: $customNotifications)';
+    return 'Connection.wallet(walletServiceKeyPair: $walletServiceKeyPair, clientPubkey: $clientPubkey, clientSecret: $clientSecret, clientRelays: $clientRelays, relays: $relays, methods: $methods, notifications: $notifications, lud16: $lud16, customMethods: $customMethods, customNotifications: $customNotifications)';
   }
 }
 
@@ -201,8 +216,8 @@ abstract mixin class $WalletConnectionCopyWith<$Res>
       {KeyPair walletServiceKeyPair,
       String clientPubkey,
       String? clientSecret,
-      Uri? clientRelayUrl,
-      Uri relayUrl,
+      List<Uri>? clientRelays,
+      List<Uri> relays,
       List<Method> methods,
       List<NotificationType>? notifications,
       String? lud16,
@@ -228,8 +243,8 @@ class _$WalletConnectionCopyWithImpl<$Res>
     Object? walletServiceKeyPair = null,
     Object? clientPubkey = null,
     Object? clientSecret = freezed,
-    Object? clientRelayUrl = freezed,
-    Object? relayUrl = null,
+    Object? clientRelays = freezed,
+    Object? relays = null,
     Object? methods = null,
     Object? notifications = freezed,
     Object? lud16 = freezed,
@@ -249,14 +264,14 @@ class _$WalletConnectionCopyWithImpl<$Res>
           ? _self.clientSecret
           : clientSecret // ignore: cast_nullable_to_non_nullable
               as String?,
-      clientRelayUrl: freezed == clientRelayUrl
-          ? _self.clientRelayUrl
-          : clientRelayUrl // ignore: cast_nullable_to_non_nullable
-              as Uri?,
-      relayUrl: null == relayUrl
-          ? _self.relayUrl
-          : relayUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
+      clientRelays: freezed == clientRelays
+          ? _self._clientRelays
+          : clientRelays // ignore: cast_nullable_to_non_nullable
+              as List<Uri>?,
+      relays: null == relays
+          ? _self._relays
+          : relays // ignore: cast_nullable_to_non_nullable
+              as List<Uri>,
       methods: null == methods
           ? _self._methods
           : methods // ignore: cast_nullable_to_non_nullable
@@ -296,7 +311,7 @@ class _$WalletConnectionCopyWithImpl<$Res>
 class ClientConnection extends Connection {
   const ClientConnection(
       {required this.clientKeyPair,
-      required this.relayUrl,
+      required final List<Uri> relays,
       this.name,
       this.icon,
       this.returnTo,
@@ -309,15 +324,22 @@ class ClientConnection extends Connection {
       this.metadata,
       final List<String>? customRequestMethods,
       final List<String>? customNotificationTypes})
-      : _requestMethods = requestMethods,
+      : _relays = relays,
+        _requestMethods = requestMethods,
         _notificationTypes = notificationTypes,
         _customRequestMethods = customRequestMethods,
         _customNotificationTypes = customNotificationTypes,
         super._();
 
   final KeyPair clientKeyPair;
+  final List<Uri> _relays;
   @override
-  final Uri relayUrl;
+  List<Uri> get relays {
+    if (_relays is EqualUnmodifiableListView) return _relays;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_relays);
+  }
+
   final String? name;
   final Uri? icon;
   final Uri? returnTo;
@@ -380,8 +402,7 @@ class ClientConnection extends Connection {
             other is ClientConnection &&
             (identical(other.clientKeyPair, clientKeyPair) ||
                 other.clientKeyPair == clientKeyPair) &&
-            (identical(other.relayUrl, relayUrl) ||
-                other.relayUrl == relayUrl) &&
+            const DeepCollectionEquality().equals(other._relays, _relays) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.returnTo, returnTo) ||
@@ -409,7 +430,7 @@ class ClientConnection extends Connection {
   int get hashCode => Object.hash(
       runtimeType,
       clientKeyPair,
-      relayUrl,
+      const DeepCollectionEquality().hash(_relays),
       name,
       icon,
       returnTo,
@@ -425,7 +446,7 @@ class ClientConnection extends Connection {
 
   @override
   String toString() {
-    return 'Connection.client(clientKeyPair: $clientKeyPair, relayUrl: $relayUrl, name: $name, icon: $icon, returnTo: $returnTo, expiresAt: $expiresAt, maxAmountSat: $maxAmountSat, budgetRenewal: $budgetRenewal, requestMethods: $requestMethods, notificationTypes: $notificationTypes, isolated: $isolated, metadata: $metadata, customRequestMethods: $customRequestMethods, customNotificationTypes: $customNotificationTypes)';
+    return 'Connection.client(clientKeyPair: $clientKeyPair, relays: $relays, name: $name, icon: $icon, returnTo: $returnTo, expiresAt: $expiresAt, maxAmountSat: $maxAmountSat, budgetRenewal: $budgetRenewal, requestMethods: $requestMethods, notificationTypes: $notificationTypes, isolated: $isolated, metadata: $metadata, customRequestMethods: $customRequestMethods, customNotificationTypes: $customNotificationTypes)';
   }
 }
 
@@ -439,7 +460,7 @@ abstract mixin class $ClientConnectionCopyWith<$Res>
   @useResult
   $Res call(
       {KeyPair clientKeyPair,
-      Uri relayUrl,
+      List<Uri> relays,
       String? name,
       Uri? icon,
       Uri? returnTo,
@@ -470,7 +491,7 @@ class _$ClientConnectionCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? clientKeyPair = null,
-    Object? relayUrl = null,
+    Object? relays = null,
     Object? name = freezed,
     Object? icon = freezed,
     Object? returnTo = freezed,
@@ -489,10 +510,10 @@ class _$ClientConnectionCopyWithImpl<$Res>
           ? _self.clientKeyPair
           : clientKeyPair // ignore: cast_nullable_to_non_nullable
               as KeyPair,
-      relayUrl: null == relayUrl
-          ? _self.relayUrl
-          : relayUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
+      relays: null == relays
+          ? _self._relays
+          : relays // ignore: cast_nullable_to_non_nullable
+              as List<Uri>,
       name: freezed == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable

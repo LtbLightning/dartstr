@@ -13,7 +13,7 @@ sealed class InfoEvent with _$InfoEvent {
     List<NotificationType>? notifications,
     // For client-created connections in which the info event should be tagged with the client's pubkey
     String? clientPubkey,
-    Uri? walletRelayUrl,
+    Uri? walletRelay,
     List<String>? customMethods,
     List<String>? customNotifications,
   }) = _InfoEvent;

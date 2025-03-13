@@ -9,14 +9,14 @@ class InfoEventModel {
   final List<String> methods;
   final List<String> notifications;
   final String? clientPubkey;
-  final String? walletRelayUrl;
+  final String? walletRelay;
 
   const InfoEventModel({
     required this.walletServicePubkey,
     required this.methods,
     this.notifications = const [],
     this.clientPubkey,
-    this.walletRelayUrl,
+    this.walletRelay,
   });
 
   factory InfoEventModel.fromEntity(InfoEvent infoEvent) {
@@ -37,7 +37,7 @@ class InfoEventModel {
       methods: methods,
       notifications: notifications,
       clientPubkey: infoEvent.clientPubkey,
-      walletRelayUrl: infoEvent.walletRelayUrl?.toString(),
+      walletRelay: infoEvent.walletRelay.toString(),
     );
   }
 
@@ -72,7 +72,7 @@ class InfoEventModel {
       notifications: notifications,
       walletServicePubkey: event.pubkey,
       clientPubkey: clientPubkey,
-      walletRelayUrl: walletRelayUrl,
+      walletRelay: walletRelayUrl,
     );
   }
 
@@ -85,8 +85,8 @@ class InfoEventModel {
     List<String>? pTag;
     if (clientPubkey != null) {
       pTag = ['p', clientPubkey!];
-      if (walletRelayUrl != null) {
-        pTag.add(walletRelayUrl!);
+      if (walletRelay != null) {
+        pTag.add(walletRelay!);
       }
     }
 

@@ -52,8 +52,8 @@ sealed class Connection with _$Connection {
     required KeyPair walletServiceKeyPair,
     required String clientPubkey,
     String? clientSecret,
-    Uri? clientRelayUrl,
-    required Uri relayUrl,
+    List<Uri>? clientRelays,
+    required List<Uri> relays,
     required List<Method> methods,
     List<NotificationType>? notifications,
     String? lud16,
@@ -62,7 +62,7 @@ sealed class Connection with _$Connection {
   }) = WalletConnection;
   const factory Connection.client({
     required KeyPair clientKeyPair,
-    required Uri relayUrl,
+    required List<Uri> relays,
     String? name,
     Uri? icon,
     Uri? returnTo,
@@ -85,7 +85,7 @@ sealed class Connection with _$Connection {
           scheme: ConnectionType.wallet.protocol,
           host: walletConnection.walletServiceKeyPair.publicKey,
           queryParameters: {
-            'relay': walletConnection.relayUrl.toString(),
+            'relay': walletConnection.relays.map((relay) => relay.toString()),
             'secret': walletConnection.clientSecret,
             if (walletConnection.lud16 != null)
               'lud16': walletConnection.lud16!,
@@ -108,7 +108,7 @@ sealed class Connection with _$Connection {
           scheme: ConnectionType.client.protocol,
           host: clientConnection.clientKeyPair.publicKey,
           queryParameters: {
-            'relay': clientConnection.relayUrl.toString(),
+            'relay': clientConnection.relays.map((relay) => relay.toString()),
             if (clientConnection.name != null) 'name': clientConnection.name,
             if (clientConnection.icon != null)
               'icon': clientConnection.icon.toString(),

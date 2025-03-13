@@ -20,7 +20,7 @@ mixin _$InfoEvent {
   List<NotificationType>?
       get notifications; // For client-created connections in which the info event should be tagged with the client's pubkey
   String? get clientPubkey;
-  Uri? get walletRelayUrl;
+  Uri? get walletRelay;
   List<String>? get customMethods;
   List<String>? get customNotifications;
 
@@ -46,8 +46,8 @@ mixin _$InfoEvent {
                 .equals(other.notifications, notifications) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletRelayUrl, walletRelayUrl) ||
-                other.walletRelayUrl == walletRelayUrl) &&
+            (identical(other.walletRelay, walletRelay) ||
+                other.walletRelay == walletRelay) &&
             const DeepCollectionEquality()
                 .equals(other.customMethods, customMethods) &&
             const DeepCollectionEquality()
@@ -62,13 +62,13 @@ mixin _$InfoEvent {
       const DeepCollectionEquality().hash(methods),
       const DeepCollectionEquality().hash(notifications),
       clientPubkey,
-      walletRelayUrl,
+      walletRelay,
       const DeepCollectionEquality().hash(customMethods),
       const DeepCollectionEquality().hash(customNotifications));
 
   @override
   String toString() {
-    return 'InfoEvent(walletServicePubkey: $walletServicePubkey, methods: $methods, notifications: $notifications, clientPubkey: $clientPubkey, walletRelayUrl: $walletRelayUrl, customMethods: $customMethods, customNotifications: $customNotifications)';
+    return 'InfoEvent(walletServicePubkey: $walletServicePubkey, methods: $methods, notifications: $notifications, clientPubkey: $clientPubkey, walletRelay: $walletRelay, customMethods: $customMethods, customNotifications: $customNotifications)';
   }
 }
 
@@ -82,7 +82,7 @@ abstract mixin class $InfoEventCopyWith<$Res> {
       List<Method> methods,
       List<NotificationType>? notifications,
       String? clientPubkey,
-      Uri? walletRelayUrl,
+      Uri? walletRelay,
       List<String>? customMethods,
       List<String>? customNotifications});
 }
@@ -103,7 +103,7 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
     Object? methods = null,
     Object? notifications = freezed,
     Object? clientPubkey = freezed,
-    Object? walletRelayUrl = freezed,
+    Object? walletRelay = freezed,
     Object? customMethods = freezed,
     Object? customNotifications = freezed,
   }) {
@@ -124,9 +124,9 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String?,
-      walletRelayUrl: freezed == walletRelayUrl
-          ? _self.walletRelayUrl
-          : walletRelayUrl // ignore: cast_nullable_to_non_nullable
+      walletRelay: freezed == walletRelay
+          ? _self.walletRelay
+          : walletRelay // ignore: cast_nullable_to_non_nullable
               as Uri?,
       customMethods: freezed == customMethods
           ? _self.customMethods
@@ -148,7 +148,7 @@ class _InfoEvent extends InfoEvent {
       required final List<Method> methods,
       final List<NotificationType>? notifications,
       this.clientPubkey,
-      this.walletRelayUrl,
+      this.walletRelay,
       final List<String>? customMethods,
       final List<String>? customNotifications})
       : _methods = methods,
@@ -183,7 +183,7 @@ class _InfoEvent extends InfoEvent {
   @override
   final String? clientPubkey;
   @override
-  final Uri? walletRelayUrl;
+  final Uri? walletRelay;
   final List<String>? _customMethods;
   @override
   List<String>? get customMethods {
@@ -232,8 +232,8 @@ class _InfoEvent extends InfoEvent {
                 .equals(other._notifications, _notifications) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletRelayUrl, walletRelayUrl) ||
-                other.walletRelayUrl == walletRelayUrl) &&
+            (identical(other.walletRelay, walletRelay) ||
+                other.walletRelay == walletRelay) &&
             const DeepCollectionEquality()
                 .equals(other._customMethods, _customMethods) &&
             const DeepCollectionEquality()
@@ -248,13 +248,13 @@ class _InfoEvent extends InfoEvent {
       const DeepCollectionEquality().hash(_methods),
       const DeepCollectionEquality().hash(_notifications),
       clientPubkey,
-      walletRelayUrl,
+      walletRelay,
       const DeepCollectionEquality().hash(_customMethods),
       const DeepCollectionEquality().hash(_customNotifications));
 
   @override
   String toString() {
-    return 'InfoEvent(walletServicePubkey: $walletServicePubkey, methods: $methods, notifications: $notifications, clientPubkey: $clientPubkey, walletRelayUrl: $walletRelayUrl, customMethods: $customMethods, customNotifications: $customNotifications)';
+    return 'InfoEvent(walletServicePubkey: $walletServicePubkey, methods: $methods, notifications: $notifications, clientPubkey: $clientPubkey, walletRelay: $walletRelay, customMethods: $customMethods, customNotifications: $customNotifications)';
   }
 }
 
@@ -271,7 +271,7 @@ abstract mixin class _$InfoEventCopyWith<$Res>
       List<Method> methods,
       List<NotificationType>? notifications,
       String? clientPubkey,
-      Uri? walletRelayUrl,
+      Uri? walletRelay,
       List<String>? customMethods,
       List<String>? customNotifications});
 }
@@ -292,7 +292,7 @@ class __$InfoEventCopyWithImpl<$Res> implements _$InfoEventCopyWith<$Res> {
     Object? methods = null,
     Object? notifications = freezed,
     Object? clientPubkey = freezed,
-    Object? walletRelayUrl = freezed,
+    Object? walletRelay = freezed,
     Object? customMethods = freezed,
     Object? customNotifications = freezed,
   }) {
@@ -313,9 +313,9 @@ class __$InfoEventCopyWithImpl<$Res> implements _$InfoEventCopyWith<$Res> {
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String?,
-      walletRelayUrl: freezed == walletRelayUrl
-          ? _self.walletRelayUrl
-          : walletRelayUrl // ignore: cast_nullable_to_non_nullable
+      walletRelay: freezed == walletRelay
+          ? _self.walletRelay
+          : walletRelay // ignore: cast_nullable_to_non_nullable
               as Uri?,
       customMethods: freezed == customMethods
           ? _self._customMethods

@@ -15,9 +15,9 @@ _InfoEvent _$InfoEventFromJson(Map<String, dynamic> json) => _InfoEvent(
           ?.map((e) => $enumDecode(_$NotificationTypeEnumMap, e))
           .toList(),
       clientPubkey: json['clientPubkey'] as String?,
-      walletRelayUrl: json['walletRelayUrl'] == null
+      walletRelay: json['walletRelay'] == null
           ? null
-          : Uri.parse(json['walletRelayUrl'] as String),
+          : Uri.parse(json['walletRelay'] as String),
       customMethods: (json['customMethods'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -34,7 +34,7 @@ Map<String, dynamic> _$InfoEventToJson(_InfoEvent instance) =>
           ?.map((e) => _$NotificationTypeEnumMap[e]!)
           .toList(),
       'clientPubkey': instance.clientPubkey,
-      'walletRelayUrl': instance.walletRelayUrl?.toString(),
+      'walletRelay': instance.walletRelay?.toString(),
       'customMethods': instance.customMethods,
       'customNotifications': instance.customNotifications,
     };

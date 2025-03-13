@@ -32,7 +32,7 @@ void main() {
 
       final connection = await walletService.createConnection(
         walletServiceKeyPair: walletServiceKeyPair,
-        relayUrl: relayUrl,
+        relays: [relayUrl],
         methods: methods,
         notifications: notifications,
         customMethods: customMethods,
@@ -59,7 +59,7 @@ void main() {
             walletServicePubkey: walletServiceKeyPair.publicKey,
           ),
         ],
-        relayUrls: ['${connection.relayUrl}'],
+        relayUrls: connection.relays.map((relay) => relay.toString()).toList(),
       );
 
       expect(infoEvents.length, 1);

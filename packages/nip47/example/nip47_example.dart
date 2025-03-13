@@ -34,7 +34,7 @@ Future<void> main() async {
   // Add a new connection
   final connection = await walletServiceRepository.createConnection(
     walletServiceKeyPair: walletServiceKeyPair,
-    relayUrl: Uri.parse(relayUrl),
+    relays: [Uri.parse(relayUrl)],
     methods: methods,
     customMethods: customMethods,
   );

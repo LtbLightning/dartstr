@@ -6,7 +6,7 @@ abstract class WalletServiceRepository {
   Future<List<WalletConnection>> get connections;
   Future<WalletConnection> createConnection({
     required nip01.KeyPair walletServiceKeyPair,
-    required Uri relayUrl,
+    required List<Uri> relays,
     required List<Method> methods,
     List<NotificationType>? notifications,
     String? lud16,
