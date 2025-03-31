@@ -1,3 +1,5 @@
+## 2.0.0
+
 ## 1.1.5
 
  - **DOCS**: update description of nip26.
