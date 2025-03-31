@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip47` - `v0.4.0`](#nip47---v040)
+
+---
+
+#### `nip47` - `v0.4.0`
+
+ - **FIX**: multiple relays should be possible.
+
+
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip26` - `v2.0.0`](#nip26---v200)
 
 ---
