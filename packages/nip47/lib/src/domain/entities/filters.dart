@@ -7,9 +7,9 @@ extension Nip47Filters on nip01.Filters {
     int? since,
   }) =>
       nip01.Filters(
-        kinds: [EventKind.info.value],
+        kinds: [EventKind.info.kind],
         tags: {
-          'a': ['${EventKind.info.value}:$walletServicePubkey:']
+          'a': ['${EventKind.info.kind}:$walletServicePubkey:']
         },
         authors: [walletServicePubkey],
         since: since,
@@ -20,7 +20,7 @@ extension Nip47Filters on nip01.Filters {
     int? since,
   }) =>
       nip01.Filters(
-        kinds: [EventKind.request.value],
+        kinds: [EventKind.request.kind],
         tags: {
           'p': [walletServicePubkey]
         },

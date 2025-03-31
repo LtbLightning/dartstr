@@ -8,11 +8,11 @@ enum NotificationType {
   paymentSent('payment_sent'),
   custom('custom');
 
-  final String value;
+  final String plaintext;
 
-  const NotificationType(this.value);
+  const NotificationType(this.plaintext);
 
-  static NotificationType fromValue(String value) {
+  static NotificationType fromPlaintext(String value) {
     switch (value) {
       case 'payment_received':
         return paymentReceived;

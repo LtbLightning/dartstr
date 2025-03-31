@@ -31,7 +31,7 @@ void main() {
       final customNotifications = ['liquid_payment_received'];
 
       final connection = await walletService.createConnection(
-        walletServiceKeyPair: walletServiceKeyPair,
+        walletServicePrivateKey: walletServiceKeyPair.privateKey,
         relays: [relayUrl],
         methods: methods,
         notifications: notifications,

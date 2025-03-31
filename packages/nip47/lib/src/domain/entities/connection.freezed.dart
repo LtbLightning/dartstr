@@ -83,7 +83,7 @@ class WalletConnection extends Connection {
       this.clientSecret,
       final List<Uri>? clientRelays,
       required final List<Uri> relays,
-      required final List<Method> methods,
+      final List<Method>? methods,
       final List<NotificationType>? notifications,
       this.lud16,
       final List<String>? customMethods,
@@ -116,11 +116,13 @@ class WalletConnection extends Connection {
     return EqualUnmodifiableListView(_relays);
   }
 
-  final List<Method> _methods;
-  List<Method> get methods {
+  final List<Method>? _methods;
+  List<Method>? get methods {
+    final value = _methods;
+    if (value == null) return null;
     if (_methods is EqualUnmodifiableListView) return _methods;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_methods);
+    return EqualUnmodifiableListView(value);
   }
 
   final List<NotificationType>? _notifications;
@@ -218,7 +220,7 @@ abstract mixin class $WalletConnectionCopyWith<$Res>
       String? clientSecret,
       List<Uri>? clientRelays,
       List<Uri> relays,
-      List<Method> methods,
+      List<Method>? methods,
       List<NotificationType>? notifications,
       String? lud16,
       List<String>? customMethods,
@@ -245,7 +247,7 @@ class _$WalletConnectionCopyWithImpl<$Res>
     Object? clientSecret = freezed,
     Object? clientRelays = freezed,
     Object? relays = null,
-    Object? methods = null,
+    Object? methods = freezed,
     Object? notifications = freezed,
     Object? lud16 = freezed,
     Object? customMethods = freezed,
@@ -272,10 +274,10 @@ class _$WalletConnectionCopyWithImpl<$Res>
           ? _self._relays
           : relays // ignore: cast_nullable_to_non_nullable
               as List<Uri>,
-      methods: null == methods
+      methods: freezed == methods
           ? _self._methods
           : methods // ignore: cast_nullable_to_non_nullable
-              as List<Method>,
+              as List<Method>?,
       notifications: freezed == notifications
           ? _self._notifications
           : notifications // ignore: cast_nullable_to_non_nullable

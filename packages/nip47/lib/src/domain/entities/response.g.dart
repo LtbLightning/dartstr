@@ -9,7 +9,6 @@ part of 'response.dart';
 GetInfoResponse _$GetInfoResponseFromJson(Map<String, dynamic> json) =>
     GetInfoResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       info: json['info'] == null
           ? null
@@ -22,7 +21,6 @@ GetInfoResponse _$GetInfoResponseFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$GetInfoResponseToJson(GetInfoResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'info': instance.info,
       'error': _$ErrorCodeEnumMap[instance.error],
@@ -46,7 +44,6 @@ const _$ErrorCodeEnumMap = {
 GetBalanceResponse _$GetBalanceResponseFromJson(Map<String, dynamic> json) =>
     GetBalanceResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       balanceSat: json['balanceSat'] == null
           ? null
@@ -59,7 +56,6 @@ GetBalanceResponse _$GetBalanceResponseFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$GetBalanceResponseToJson(GetBalanceResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'balanceSat': instance.balanceSat?.toString(),
       'error': _$ErrorCodeEnumMap[instance.error],
@@ -70,7 +66,6 @@ Map<String, dynamic> _$GetBalanceResponseToJson(GetBalanceResponse instance) =>
 MakeInvoiceResponse _$MakeInvoiceResponseFromJson(Map<String, dynamic> json) =>
     MakeInvoiceResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       invoice: json['invoice'] == null
           ? null
@@ -84,7 +79,6 @@ Map<String, dynamic> _$MakeInvoiceResponseToJson(
         MakeInvoiceResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'invoice': instance.invoice,
       'error': _$ErrorCodeEnumMap[instance.error],
@@ -95,7 +89,6 @@ Map<String, dynamic> _$MakeInvoiceResponseToJson(
 PayInvoiceResponse _$PayInvoiceResponseFromJson(Map<String, dynamic> json) =>
     PayInvoiceResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       payResult: json['payResult'] == null
           ? null
@@ -108,7 +101,6 @@ PayInvoiceResponse _$PayInvoiceResponseFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$PayInvoiceResponseToJson(PayInvoiceResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'payResult': instance.payResult,
       'error': _$ErrorCodeEnumMap[instance.error],
@@ -120,7 +112,6 @@ MultiPayInvoiceResponse _$MultiPayInvoiceResponseFromJson(
         Map<String, dynamic> json) =>
     MultiPayInvoiceResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       invoiceId: json['invoiceId'] as String,
       payResult: json['payResult'] == null
@@ -135,7 +126,6 @@ Map<String, dynamic> _$MultiPayInvoiceResponseToJson(
         MultiPayInvoiceResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'invoiceId': instance.invoiceId,
       'payResult': instance.payResult,
@@ -147,7 +137,6 @@ Map<String, dynamic> _$MultiPayInvoiceResponseToJson(
 PayKeysendResponse _$PayKeysendResponseFromJson(Map<String, dynamic> json) =>
     PayKeysendResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       payResult: json['payResult'] == null
           ? null
@@ -160,7 +149,6 @@ PayKeysendResponse _$PayKeysendResponseFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$PayKeysendResponseToJson(PayKeysendResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'payResult': instance.payResult,
       'error': _$ErrorCodeEnumMap[instance.error],
@@ -172,7 +160,6 @@ MultiPayKeysendResponse _$MultiPayKeysendResponseFromJson(
         Map<String, dynamic> json) =>
     MultiPayKeysendResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       keysendId: json['keysendId'] as String,
       payResult: json['payResult'] == null
@@ -187,7 +174,6 @@ Map<String, dynamic> _$MultiPayKeysendResponseToJson(
         MultiPayKeysendResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'keysendId': instance.keysendId,
       'payResult': instance.payResult,
@@ -200,7 +186,6 @@ LookupInvoiceResponse _$LookupInvoiceResponseFromJson(
         Map<String, dynamic> json) =>
     LookupInvoiceResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       transaction: json['transaction'] == null
           ? null
@@ -214,7 +199,6 @@ Map<String, dynamic> _$LookupInvoiceResponseToJson(
         LookupInvoiceResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'transaction': instance.transaction,
       'error': _$ErrorCodeEnumMap[instance.error],
@@ -226,7 +210,6 @@ ListTransactionsResponse _$ListTransactionsResponseFromJson(
         Map<String, dynamic> json) =>
     ListTransactionsResponse(
       requestId: json['requestId'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       clientPubkey: json['clientPubkey'] as String,
       transactions: (json['transactions'] as List<dynamic>?)
           ?.map((e) => Transaction.fromJson(e as Map<String, dynamic>))
@@ -240,7 +223,6 @@ Map<String, dynamic> _$ListTransactionsResponseToJson(
         ListTransactionsResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
-      'walletServicePubkey': instance.walletServicePubkey,
       'clientPubkey': instance.clientPubkey,
       'transactions': instance.transactions,
       'error': _$ErrorCodeEnumMap[instance.error],
@@ -252,7 +234,6 @@ CustomResponse _$CustomResponseFromJson(Map<String, dynamic> json) =>
     CustomResponse(
       requestId: json['requestId'] as String,
       clientPubkey: json['clientPubkey'] as String,
-      walletServicePubkey: json['walletServicePubkey'] as String,
       resultType: json['resultType'] as String,
       result: json['result'] as Map<String, dynamic>?,
       error: $enumDecodeNullable(_$ErrorCodeEnumMap, json['error']),
@@ -264,7 +245,6 @@ Map<String, dynamic> _$CustomResponseToJson(CustomResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
       'clientPubkey': instance.clientPubkey,
-      'walletServicePubkey': instance.walletServicePubkey,
       'resultType': instance.resultType,
       'result': instance.result,
       'error': _$ErrorCodeEnumMap[instance.error],

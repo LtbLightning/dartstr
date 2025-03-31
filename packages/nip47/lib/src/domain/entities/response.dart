@@ -12,7 +12,6 @@ part 'response.g.dart';
 sealed class Response with _$Response {
   const factory Response.getInfo({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     InfoResult? info,
     ErrorCode? error,
@@ -20,7 +19,6 @@ sealed class Response with _$Response {
   }) = GetInfoResponse;
   const factory Response.getBalance({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     BigInt? balanceSat,
     ErrorCode? error,
@@ -28,7 +26,6 @@ sealed class Response with _$Response {
   }) = GetBalanceResponse;
   const factory Response.makeInvoice({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     Invoice? invoice,
     ErrorCode? error,
@@ -36,7 +33,6 @@ sealed class Response with _$Response {
   }) = MakeInvoiceResponse;
   const factory Response.payInvoice({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     PayResult? payResult,
     ErrorCode? error,
@@ -44,7 +40,6 @@ sealed class Response with _$Response {
   }) = PayInvoiceResponse;
   const factory Response.multiPayInvoice({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     required String invoiceId,
     PayResult? payResult,
@@ -53,7 +48,6 @@ sealed class Response with _$Response {
   }) = MultiPayInvoiceResponse;
   const factory Response.payKeysend({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     PayResult? payResult,
     ErrorCode? error,
@@ -61,7 +55,6 @@ sealed class Response with _$Response {
   }) = PayKeysendResponse;
   const factory Response.multiPayKeysend({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     required String keysendId,
     PayResult? payResult,
@@ -70,7 +63,6 @@ sealed class Response with _$Response {
   }) = MultiPayKeysendResponse;
   const factory Response.lookupInvoice({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     Transaction? transaction,
     ErrorCode? error,
@@ -78,7 +70,6 @@ sealed class Response with _$Response {
   }) = LookupInvoiceResponse;
   const factory Response.listTransactions({
     required String requestId,
-    required String walletServicePubkey,
     required String clientPubkey,
     List<Transaction>? transactions,
     ErrorCode? error,
@@ -87,7 +78,6 @@ sealed class Response with _$Response {
   const factory Response.custom({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required String resultType,
     Map<String, dynamic>? result,
     ErrorCode? error,

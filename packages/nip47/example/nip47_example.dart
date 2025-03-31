@@ -33,7 +33,7 @@ Future<void> main() async {
 
   // Add a new connection
   final connection = await walletServiceRepository.createConnection(
-    walletServiceKeyPair: walletServiceKeyPair,
+    walletServicePrivateKey: walletServiceKeyPair.privateKey,
     relays: [Uri.parse(relayUrl)],
     methods: methods,
     customMethods: customMethods,
@@ -61,7 +61,6 @@ Future<void> main() async {
           await walletServiceRepository.respond(
             Response.getInfo(
               requestId: request.id,
-              walletServicePubkey: walletServiceKeyPair.publicKey,
               clientPubkey: request.clientPubkey,
               createdAt: DateTime.now().millisecondsSinceEpoch,
               info: infoResult,

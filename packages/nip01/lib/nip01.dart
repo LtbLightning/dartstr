@@ -9,3 +9,7 @@ export 'src/domain/repositories/relay_repository.dart';
 export 'src/domain/services/relay_manager_service.dart';
 export 'src/data/services/relay_manager_service_impl.dart';
 export 'src/domain/entities/entities.dart';
+export 'src/domain/use_cases/get_profile_metadata_use_case.dart';
+export 'src/domain/use_cases/set_profile_metadata_use_case.dart';
+export 'src/domain/use_cases/add_relays_use_case.dart';
+export 'src/domain/use_cases/remove_relay_use_case.dart';

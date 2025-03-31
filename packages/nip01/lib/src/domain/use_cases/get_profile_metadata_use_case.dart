@@ -5,14 +5,19 @@ class GetProfileMetadataUseCase {
   final RelayManagerService _relays;
 
   GetProfileMetadataUseCase({
-    required RelayManagerService relays,
-  }) : _relays = relays;
+    required RelayManagerService relayManagerService,
+  }) : _relays = relayManagerService;
 
   Future<Kind0Metadata> execute(
     String userPubkey, {
     List<String>? relayUrls,
   }) async {
     try {
+      // Make sure the relays are available in the relay manager
+      if (relayUrls != null && relayUrls.isNotEmpty) {
+        await _relays.addRelays(relayUrls);
+      }
+
       final filter = Filters(authors: [userPubkey], kinds: const [0]);
 
       final events =
@@ -30,13 +35,13 @@ class GetProfileMetadataUseCase {
 
       return metadata;
     } catch (e) {
-      throw FailedToGetProfileMetadataException(e.toString());
+      throw GetProfileMetadataException(e.toString());
     }
   }
 }
 
-class FailedToGetProfileMetadataException implements Exception {
+class GetProfileMetadataException implements Exception {
   final String message;
 
-  FailedToGetProfileMetadataException(this.message);
+  GetProfileMetadataException(this.message);
 }

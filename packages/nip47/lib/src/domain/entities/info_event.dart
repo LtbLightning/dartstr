@@ -9,7 +9,7 @@ part 'info_event.g.dart';
 sealed class InfoEvent with _$InfoEvent {
   const factory InfoEvent({
     required String walletServicePubkey,
-    required List<Method> methods,
+    List<Method>? methods,
     List<NotificationType>? notifications,
     // For client-created connections in which the info event should be tagged with the client's pubkey
     String? clientPubkey,

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InfoEvent {
   String get walletServicePubkey;
-  List<Method> get methods;
+  List<Method>? get methods;
   List<NotificationType>?
       get notifications; // For client-created connections in which the info event should be tagged with the client's pubkey
   String? get clientPubkey;
@@ -79,7 +79,7 @@ abstract mixin class $InfoEventCopyWith<$Res> {
   @useResult
   $Res call(
       {String walletServicePubkey,
-      List<Method> methods,
+      List<Method>? methods,
       List<NotificationType>? notifications,
       String? clientPubkey,
       Uri? walletRelay,
@@ -100,7 +100,7 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
   @override
   $Res call({
     Object? walletServicePubkey = null,
-    Object? methods = null,
+    Object? methods = freezed,
     Object? notifications = freezed,
     Object? clientPubkey = freezed,
     Object? walletRelay = freezed,
@@ -112,10 +112,10 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
           ? _self.walletServicePubkey
           : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
-      methods: null == methods
+      methods: freezed == methods
           ? _self.methods
           : methods // ignore: cast_nullable_to_non_nullable
-              as List<Method>,
+              as List<Method>?,
       notifications: freezed == notifications
           ? _self.notifications
           : notifications // ignore: cast_nullable_to_non_nullable
@@ -145,7 +145,7 @@ class _$InfoEventCopyWithImpl<$Res> implements $InfoEventCopyWith<$Res> {
 class _InfoEvent extends InfoEvent {
   const _InfoEvent(
       {required this.walletServicePubkey,
-      required final List<Method> methods,
+      final List<Method>? methods,
       final List<NotificationType>? notifications,
       this.clientPubkey,
       this.walletRelay,
@@ -161,12 +161,14 @@ class _InfoEvent extends InfoEvent {
 
   @override
   final String walletServicePubkey;
-  final List<Method> _methods;
+  final List<Method>? _methods;
   @override
-  List<Method> get methods {
+  List<Method>? get methods {
+    final value = _methods;
+    if (value == null) return null;
     if (_methods is EqualUnmodifiableListView) return _methods;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_methods);
+    return EqualUnmodifiableListView(value);
   }
 
   final List<NotificationType>? _notifications;
@@ -268,7 +270,7 @@ abstract mixin class _$InfoEventCopyWith<$Res>
   @useResult
   $Res call(
       {String walletServicePubkey,
-      List<Method> methods,
+      List<Method>? methods,
       List<NotificationType>? notifications,
       String? clientPubkey,
       Uri? walletRelay,
@@ -289,7 +291,7 @@ class __$InfoEventCopyWithImpl<$Res> implements _$InfoEventCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? walletServicePubkey = null,
-    Object? methods = null,
+    Object? methods = freezed,
     Object? notifications = freezed,
     Object? clientPubkey = freezed,
     Object? walletRelay = freezed,
@@ -301,10 +303,10 @@ class __$InfoEventCopyWithImpl<$Res> implements _$InfoEventCopyWith<$Res> {
           ? _self.walletServicePubkey
           : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
-      methods: null == methods
+      methods: freezed == methods
           ? _self._methods
           : methods // ignore: cast_nullable_to_non_nullable
-              as List<Method>,
+              as List<Method>?,
       notifications: freezed == notifications
           ? _self._notifications
           : notifications // ignore: cast_nullable_to_non_nullable

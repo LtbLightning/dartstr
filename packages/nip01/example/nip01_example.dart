@@ -24,7 +24,7 @@ void main() async {
     throw Exception('Failed to publish event');
   }
 
-  final setProfile = SetProfileMetadataUseCase(relays: pool);
+  final setProfile = SetProfileMetadataUseCase(relayManagerService: pool);
   final isProfileSet = await setProfile.execute(
     userKeyPair: keyPair,
     metadata: Kind0Metadata(name: 'Alice'),

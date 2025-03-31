@@ -54,7 +54,7 @@ sealed class Connection with _$Connection {
     String? clientSecret,
     List<Uri>? clientRelays,
     required List<Uri> relays,
-    required List<Method> methods,
+    List<Method>? methods,
     List<NotificationType>? notifications,
     String? lud16,
     List<String>? customMethods,
@@ -99,7 +99,7 @@ sealed class Connection with _$Connection {
           requestMethods?.addAll(clientConnection.customRequestMethods!);
         }
         final notificationTypes = clientConnection.notificationTypes
-            ?.map((type) => type.value)
+            ?.map((type) => type.plaintext)
             .toList();
         if (clientConnection.customNotificationTypes != null) {
           notificationTypes?.addAll(clientConnection.customNotificationTypes!);

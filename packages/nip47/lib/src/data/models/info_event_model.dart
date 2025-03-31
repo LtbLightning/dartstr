@@ -21,12 +21,12 @@ class InfoEventModel {
 
   factory InfoEventModel.fromEntity(InfoEvent infoEvent) {
     final methods =
-        infoEvent.methods.map((method) => method.plaintext).toList();
+        infoEvent.methods?.map((method) => method.plaintext).toList() ?? [];
     if (infoEvent.customMethods != null) {
       methods.addAll(infoEvent.customMethods!);
     }
     final notifications = infoEvent.notifications
-            ?.map((notification) => notification.value)
+            ?.map((notification) => notification.plaintext)
             .toList() ??
         [];
     if (infoEvent.customNotifications != null) {
@@ -80,7 +80,7 @@ class InfoEventModel {
     final supportedCommands = methods;
     final replaceableEventTag = [
       'a',
-      '${EventKind.info.value}:$walletServicePubkey:',
+      '${EventKind.info.kind}:$walletServicePubkey:',
     ];
     List<String>? pTag;
     if (clientPubkey != null) {
@@ -104,7 +104,7 @@ class InfoEventModel {
     final event = nip01.UnsignedEvent(
       pubkey: walletServicePubkey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      kind: EventKind.info.value,
+      kind: EventKind.info.kind,
       // The info event should be a replaceable event, so add 'a' tag.
       tags: [
         replaceableEventTag,

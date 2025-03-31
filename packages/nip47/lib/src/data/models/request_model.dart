@@ -96,7 +96,7 @@ class RequestModel {
     final event = nip01.UnsignedEvent(
       pubkey: clientKeyPair.publicKey,
       createdAt: createdAt,
-      kind: EventKind.request.value,
+      kind: EventKind.request.kind,
       tags: [
         ['p', walletServicePubkey],
         if (expiration != null) ['expiration', '$expiration'],

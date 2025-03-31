@@ -44,7 +44,6 @@ Response _$ResponseFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Response {
   String get requestId;
-  String get walletServicePubkey;
   String get clientPubkey;
   ErrorCode? get error;
   int get createdAt;
@@ -66,8 +65,6 @@ mixin _$Response {
             other is Response &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.error, error) || other.error == error) &&
@@ -77,12 +74,12 @@ mixin _$Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, error, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, requestId, clientPubkey, error, createdAt);
 
   @override
   String toString() {
-    return 'Response(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, error: $error, createdAt: $createdAt)';
+    return 'Response(requestId: $requestId, clientPubkey: $clientPubkey, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -92,11 +89,7 @@ abstract mixin class $ResponseCopyWith<$Res> {
       _$ResponseCopyWithImpl;
   @useResult
   $Res call(
-      {String requestId,
-      String walletServicePubkey,
-      String clientPubkey,
-      ErrorCode? error,
-      int createdAt});
+      {String requestId, String clientPubkey, ErrorCode? error, int createdAt});
 }
 
 /// @nodoc
@@ -112,7 +105,6 @@ class _$ResponseCopyWithImpl<$Res> implements $ResponseCopyWith<$Res> {
   @override
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? error = freezed,
     Object? createdAt = null,
@@ -121,10 +113,6 @@ class _$ResponseCopyWithImpl<$Res> implements $ResponseCopyWith<$Res> {
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -147,7 +135,6 @@ class _$ResponseCopyWithImpl<$Res> implements $ResponseCopyWith<$Res> {
 class GetInfoResponse implements Response {
   const GetInfoResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       this.info,
       this.error,
@@ -159,8 +146,6 @@ class GetInfoResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final InfoResult? info;
@@ -194,8 +179,6 @@ class GetInfoResponse implements Response {
             other is GetInfoResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.info, info) || other.info == info) &&
@@ -206,12 +189,12 @@ class GetInfoResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, info, error, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, requestId, clientPubkey, info, error, createdAt);
 
   @override
   String toString() {
-    return 'Response.getInfo(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, info: $info, error: $error, createdAt: $createdAt)';
+    return 'Response.getInfo(requestId: $requestId, clientPubkey: $clientPubkey, info: $info, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -225,7 +208,6 @@ abstract mixin class $GetInfoResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       InfoResult? info,
       ErrorCode? error,
@@ -248,7 +230,6 @@ class _$GetInfoResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? info = freezed,
     Object? error = freezed,
@@ -258,10 +239,6 @@ class _$GetInfoResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -302,7 +279,6 @@ class _$GetInfoResponseCopyWithImpl<$Res>
 class GetBalanceResponse implements Response {
   const GetBalanceResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       this.balanceSat,
       this.error,
@@ -314,8 +290,6 @@ class GetBalanceResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final BigInt? balanceSat;
@@ -349,8 +323,6 @@ class GetBalanceResponse implements Response {
             other is GetBalanceResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.balanceSat, balanceSat) ||
@@ -362,12 +334,12 @@ class GetBalanceResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, balanceSat, error, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, requestId, clientPubkey, balanceSat, error, createdAt);
 
   @override
   String toString() {
-    return 'Response.getBalance(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, balanceSat: $balanceSat, error: $error, createdAt: $createdAt)';
+    return 'Response.getBalance(requestId: $requestId, clientPubkey: $clientPubkey, balanceSat: $balanceSat, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -381,7 +353,6 @@ abstract mixin class $GetBalanceResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       BigInt? balanceSat,
       ErrorCode? error,
@@ -402,7 +373,6 @@ class _$GetBalanceResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? balanceSat = freezed,
     Object? error = freezed,
@@ -412,10 +382,6 @@ class _$GetBalanceResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -442,7 +408,6 @@ class _$GetBalanceResponseCopyWithImpl<$Res>
 class MakeInvoiceResponse implements Response {
   const MakeInvoiceResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       this.invoice,
       this.error,
@@ -454,8 +419,6 @@ class MakeInvoiceResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final Invoice? invoice;
@@ -489,8 +452,6 @@ class MakeInvoiceResponse implements Response {
             other is MakeInvoiceResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
@@ -501,12 +462,12 @@ class MakeInvoiceResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, invoice, error, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, requestId, clientPubkey, invoice, error, createdAt);
 
   @override
   String toString() {
-    return 'Response.makeInvoice(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, invoice: $invoice, error: $error, createdAt: $createdAt)';
+    return 'Response.makeInvoice(requestId: $requestId, clientPubkey: $clientPubkey, invoice: $invoice, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -520,7 +481,6 @@ abstract mixin class $MakeInvoiceResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       Invoice? invoice,
       ErrorCode? error,
@@ -543,7 +503,6 @@ class _$MakeInvoiceResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? invoice = freezed,
     Object? error = freezed,
@@ -553,10 +512,6 @@ class _$MakeInvoiceResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -597,7 +552,6 @@ class _$MakeInvoiceResponseCopyWithImpl<$Res>
 class PayInvoiceResponse implements Response {
   const PayInvoiceResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       this.payResult,
       this.error,
@@ -609,8 +563,6 @@ class PayInvoiceResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final PayResult? payResult;
@@ -644,8 +596,6 @@ class PayInvoiceResponse implements Response {
             other is PayInvoiceResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.payResult, payResult) ||
@@ -657,12 +607,12 @@ class PayInvoiceResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, payResult, error, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, requestId, clientPubkey, payResult, error, createdAt);
 
   @override
   String toString() {
-    return 'Response.payInvoice(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, payResult: $payResult, error: $error, createdAt: $createdAt)';
+    return 'Response.payInvoice(requestId: $requestId, clientPubkey: $clientPubkey, payResult: $payResult, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -676,7 +626,6 @@ abstract mixin class $PayInvoiceResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       PayResult? payResult,
       ErrorCode? error,
@@ -699,7 +648,6 @@ class _$PayInvoiceResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? payResult = freezed,
     Object? error = freezed,
@@ -709,10 +657,6 @@ class _$PayInvoiceResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -753,7 +697,6 @@ class _$PayInvoiceResponseCopyWithImpl<$Res>
 class MultiPayInvoiceResponse implements Response {
   const MultiPayInvoiceResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       required this.invoiceId,
       this.payResult,
@@ -766,8 +709,6 @@ class MultiPayInvoiceResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final String invoiceId;
@@ -803,8 +744,6 @@ class MultiPayInvoiceResponse implements Response {
             other is MultiPayInvoiceResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.invoiceId, invoiceId) ||
@@ -818,12 +757,12 @@ class MultiPayInvoiceResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, invoiceId, payResult, error, createdAt);
+  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
+      invoiceId, payResult, error, createdAt);
 
   @override
   String toString() {
-    return 'Response.multiPayInvoice(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, invoiceId: $invoiceId, payResult: $payResult, error: $error, createdAt: $createdAt)';
+    return 'Response.multiPayInvoice(requestId: $requestId, clientPubkey: $clientPubkey, invoiceId: $invoiceId, payResult: $payResult, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -837,7 +776,6 @@ abstract mixin class $MultiPayInvoiceResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       String invoiceId,
       PayResult? payResult,
@@ -861,7 +799,6 @@ class _$MultiPayInvoiceResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? invoiceId = null,
     Object? payResult = freezed,
@@ -872,10 +809,6 @@ class _$MultiPayInvoiceResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -920,7 +853,6 @@ class _$MultiPayInvoiceResponseCopyWithImpl<$Res>
 class PayKeysendResponse implements Response {
   const PayKeysendResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       this.payResult,
       this.error,
@@ -932,8 +864,6 @@ class PayKeysendResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final PayResult? payResult;
@@ -967,8 +897,6 @@ class PayKeysendResponse implements Response {
             other is PayKeysendResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.payResult, payResult) ||
@@ -980,12 +908,12 @@ class PayKeysendResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, payResult, error, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, requestId, clientPubkey, payResult, error, createdAt);
 
   @override
   String toString() {
-    return 'Response.payKeysend(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, payResult: $payResult, error: $error, createdAt: $createdAt)';
+    return 'Response.payKeysend(requestId: $requestId, clientPubkey: $clientPubkey, payResult: $payResult, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -999,7 +927,6 @@ abstract mixin class $PayKeysendResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       PayResult? payResult,
       ErrorCode? error,
@@ -1022,7 +949,6 @@ class _$PayKeysendResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? payResult = freezed,
     Object? error = freezed,
@@ -1032,10 +958,6 @@ class _$PayKeysendResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -1076,7 +998,6 @@ class _$PayKeysendResponseCopyWithImpl<$Res>
 class MultiPayKeysendResponse implements Response {
   const MultiPayKeysendResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       required this.keysendId,
       this.payResult,
@@ -1089,8 +1010,6 @@ class MultiPayKeysendResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final String keysendId;
@@ -1126,8 +1045,6 @@ class MultiPayKeysendResponse implements Response {
             other is MultiPayKeysendResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.keysendId, keysendId) ||
@@ -1141,12 +1058,12 @@ class MultiPayKeysendResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, keysendId, payResult, error, createdAt);
+  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
+      keysendId, payResult, error, createdAt);
 
   @override
   String toString() {
-    return 'Response.multiPayKeysend(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, keysendId: $keysendId, payResult: $payResult, error: $error, createdAt: $createdAt)';
+    return 'Response.multiPayKeysend(requestId: $requestId, clientPubkey: $clientPubkey, keysendId: $keysendId, payResult: $payResult, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -1160,7 +1077,6 @@ abstract mixin class $MultiPayKeysendResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       String keysendId,
       PayResult? payResult,
@@ -1184,7 +1100,6 @@ class _$MultiPayKeysendResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? keysendId = null,
     Object? payResult = freezed,
@@ -1195,10 +1110,6 @@ class _$MultiPayKeysendResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -1243,7 +1154,6 @@ class _$MultiPayKeysendResponseCopyWithImpl<$Res>
 class LookupInvoiceResponse implements Response {
   const LookupInvoiceResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       this.transaction,
       this.error,
@@ -1255,8 +1165,6 @@ class LookupInvoiceResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final Transaction? transaction;
@@ -1291,8 +1199,6 @@ class LookupInvoiceResponse implements Response {
             other is LookupInvoiceResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.transaction, transaction) ||
@@ -1304,12 +1210,12 @@ class LookupInvoiceResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, walletServicePubkey,
-      clientPubkey, transaction, error, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, requestId, clientPubkey, transaction, error, createdAt);
 
   @override
   String toString() {
-    return 'Response.lookupInvoice(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, transaction: $transaction, error: $error, createdAt: $createdAt)';
+    return 'Response.lookupInvoice(requestId: $requestId, clientPubkey: $clientPubkey, transaction: $transaction, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -1323,7 +1229,6 @@ abstract mixin class $LookupInvoiceResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       Transaction? transaction,
       ErrorCode? error,
@@ -1346,7 +1251,6 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? transaction = freezed,
     Object? error = freezed,
@@ -1356,10 +1260,6 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -1400,7 +1300,6 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
 class ListTransactionsResponse implements Response {
   const ListTransactionsResponse(
       {required this.requestId,
-      required this.walletServicePubkey,
       required this.clientPubkey,
       final List<Transaction>? transactions,
       this.error,
@@ -1413,8 +1312,6 @@ class ListTransactionsResponse implements Response {
 
   @override
   final String requestId;
-  @override
-  final String walletServicePubkey;
   @override
   final String clientPubkey;
   final List<Transaction>? _transactions;
@@ -1457,8 +1354,6 @@ class ListTransactionsResponse implements Response {
             other is ListTransactionsResponse &&
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             const DeepCollectionEquality()
@@ -1470,18 +1365,12 @@ class ListTransactionsResponse implements Response {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      requestId,
-      walletServicePubkey,
-      clientPubkey,
-      const DeepCollectionEquality().hash(_transactions),
-      error,
-      createdAt);
+  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
+      const DeepCollectionEquality().hash(_transactions), error, createdAt);
 
   @override
   String toString() {
-    return 'Response.listTransactions(requestId: $requestId, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, transactions: $transactions, error: $error, createdAt: $createdAt)';
+    return 'Response.listTransactions(requestId: $requestId, clientPubkey: $clientPubkey, transactions: $transactions, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -1495,7 +1384,6 @@ abstract mixin class $ListTransactionsResponseCopyWith<$Res>
   @useResult
   $Res call(
       {String requestId,
-      String walletServicePubkey,
       String clientPubkey,
       List<Transaction>? transactions,
       ErrorCode? error,
@@ -1516,7 +1404,6 @@ class _$ListTransactionsResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? requestId = null,
-    Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? transactions = freezed,
     Object? error = freezed,
@@ -1526,10 +1413,6 @@ class _$ListTransactionsResponseCopyWithImpl<$Res>
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
@@ -1557,7 +1440,6 @@ class CustomResponse implements Response {
   const CustomResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.resultType,
       final Map<String, dynamic>? result,
       this.error,
@@ -1572,8 +1454,6 @@ class CustomResponse implements Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   final String resultType;
   final Map<String, dynamic>? _result;
   Map<String, dynamic>? get result {
@@ -1616,8 +1496,6 @@ class CustomResponse implements Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.resultType, resultType) ||
                 other.resultType == resultType) &&
             const DeepCollectionEquality().equals(other._result, _result) &&
@@ -1632,7 +1510,6 @@ class CustomResponse implements Response {
       runtimeType,
       requestId,
       clientPubkey,
-      walletServicePubkey,
       resultType,
       const DeepCollectionEquality().hash(_result),
       error,
@@ -1640,7 +1517,7 @@ class CustomResponse implements Response {
 
   @override
   String toString() {
-    return 'Response.custom(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, resultType: $resultType, result: $result, error: $error, createdAt: $createdAt)';
+    return 'Response.custom(requestId: $requestId, clientPubkey: $clientPubkey, resultType: $resultType, result: $result, error: $error, createdAt: $createdAt)';
   }
 }
 
@@ -1655,7 +1532,6 @@ abstract mixin class $CustomResponseCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String resultType,
       Map<String, dynamic>? result,
       ErrorCode? error,
@@ -1677,7 +1553,6 @@ class _$CustomResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? resultType = null,
     Object? result = freezed,
     Object? error = freezed,
@@ -1691,10 +1566,6 @@ class _$CustomResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       resultType: null == resultType
           ? _self.resultType

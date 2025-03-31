@@ -8,8 +8,8 @@ part of 'info_event.dart';
 
 _InfoEvent _$InfoEventFromJson(Map<String, dynamic> json) => _InfoEvent(
       walletServicePubkey: json['walletServicePubkey'] as String,
-      methods: (json['methods'] as List<dynamic>)
-          .map((e) => $enumDecode(_$MethodEnumMap, e))
+      methods: (json['methods'] as List<dynamic>?)
+          ?.map((e) => $enumDecode(_$MethodEnumMap, e))
           .toList(),
       notifications: (json['notifications'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$NotificationTypeEnumMap, e))
@@ -29,7 +29,7 @@ _InfoEvent _$InfoEventFromJson(Map<String, dynamic> json) => _InfoEvent(
 Map<String, dynamic> _$InfoEventToJson(_InfoEvent instance) =>
     <String, dynamic>{
       'walletServicePubkey': instance.walletServicePubkey,
-      'methods': instance.methods.map((e) => _$MethodEnumMap[e]!).toList(),
+      'methods': instance.methods?.map((e) => _$MethodEnumMap[e]!).toList(),
       'notifications': instance.notifications
           ?.map((e) => _$NotificationTypeEnumMap[e]!)
           .toList(),

@@ -21,7 +21,7 @@ class NotificationModel {
       case PaymentReceivedNotification notification:
         return NotificationModel(
           connectionPubkey: notification.connectionPubkey,
-          notificationType: NotificationType.paymentReceived.value,
+          notificationType: NotificationType.paymentReceived.plaintext,
           notification: {
             "type": "incoming",
             "invoice": notification.invoice, // encoded invoice
@@ -47,7 +47,7 @@ class NotificationModel {
       case PaymentSentNotification notification:
         return NotificationModel(
           connectionPubkey: notification.connectionPubkey,
-          notificationType: NotificationType.paymentSent.value,
+          notificationType: NotificationType.paymentSent.plaintext,
           notification: {
             "type": "outgoing",
             "invoice": notification.invoice, // encoded invoice
@@ -97,7 +97,7 @@ class NotificationModel {
   }
 
   Notification toEntity() {
-    final type = NotificationType.fromValue(notificationType);
+    final type = NotificationType.fromPlaintext(notificationType);
     switch (type) {
       case NotificationType.paymentReceived:
         return PaymentReceivedNotification(
@@ -156,7 +156,7 @@ class NotificationModel {
     final event = nip01.UnsignedEvent(
       pubkey: walletServiceKeyPair.publicKey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      kind: EventKind.response.value,
+      kind: EventKind.response.kind,
       tags: [
         ['p', connectionPubkey],
       ],

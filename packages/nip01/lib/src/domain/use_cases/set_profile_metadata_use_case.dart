@@ -5,17 +5,22 @@ class SetProfileMetadataUseCase {
   final RelayManagerService _relays;
 
   SetProfileMetadataUseCase({
-    required RelayManagerService relays,
-  }) : _relays = relays;
+    required RelayManagerService relayManagerService,
+  }) : _relays = relayManagerService;
 
   Future<bool> execute({
     required KeyPair userKeyPair,
     required Kind0Metadata metadata,
     List<String>? relayUrls,
     int successTreshold = 1,
-    int timeoutSec = 5,
+    int timeoutSec = 10,
   }) async {
     try {
+      // Make sure the relays are available in the relay manager
+      if (relayUrls != null && relayUrls.isNotEmpty) {
+        await _relays.addRelays(relayUrls);
+      }
+
       final event = Event.unsigned(
         pubkey: userKeyPair.publicKey,
         createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,

@@ -9,7 +9,6 @@ import 'package:nip47/src/nip47_base.dart';
 
 class ResponseModel {
   final String requestId;
-  final String walletServicePubkey;
   final String clientPubkey;
   final String resultType;
   final Map<String, dynamic>? result;
@@ -21,7 +20,6 @@ class ResponseModel {
 
   const ResponseModel({
     required this.requestId,
-    required this.walletServicePubkey,
     required this.clientPubkey,
     required this.resultType,
     this.result,
@@ -52,7 +50,6 @@ class ResponseModel {
 
     return ResponseModel(
       requestId: event.tags.firstWhere((tag) => tag[0] == 'e')[1],
-      walletServicePubkey: walletServicePubkey,
       clientPubkey: clientPubkey,
       resultType: contentMap['result_type'],
       result: contentMap['result'],
@@ -74,7 +71,7 @@ class ResponseModel {
         if (response.info?.notifications != null) {
           supportedCommands?.add('notifications');
           notifications = response.info!.notifications!
-              .map((notification) => notification.value)
+              .map((notification) => notification.plaintext)
               .toList();
           if (response.info?.customNotifications != null) {
             notifications.addAll(response.info!.customNotifications!);
@@ -82,7 +79,6 @@ class ResponseModel {
         }
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.getInfo.plaintext,
           result: response.info != null
@@ -104,7 +100,6 @@ class ResponseModel {
       case GetBalanceResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.getBalance.plaintext,
           result: response.balanceSat != null
@@ -118,7 +113,6 @@ class ResponseModel {
       case MakeInvoiceResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.makeInvoice.plaintext,
           result: response.invoice != null
@@ -144,7 +138,6 @@ class ResponseModel {
       case PayInvoiceResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.payInvoice.plaintext,
           result: response.payResult != null
@@ -161,7 +154,6 @@ class ResponseModel {
       case MultiPayInvoiceResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.multiPayInvoice.plaintext,
           result: response.payResult != null
@@ -179,7 +171,6 @@ class ResponseModel {
       case PayKeysendResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.payKeysend.plaintext,
           result: response.payResult != null
@@ -196,7 +187,6 @@ class ResponseModel {
       case MultiPayKeysendResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.multiPayKeysend.plaintext,
           result: response.payResult != null
@@ -214,7 +204,6 @@ class ResponseModel {
       case LookupInvoiceResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.lookupInvoice.plaintext,
           result: response.transaction != null
@@ -241,7 +230,6 @@ class ResponseModel {
       case ListTransactionsResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: Method.listTransactions.plaintext,
           result: response.transactions != null
@@ -272,7 +260,6 @@ class ResponseModel {
       case CustomResponse response:
         return ResponseModel(
           requestId: response.requestId,
-          walletServicePubkey: response.walletServicePubkey,
           clientPubkey: response.clientPubkey,
           resultType: response.resultType,
           result: response.result,
@@ -312,7 +299,7 @@ class ResponseModel {
     final event = nip01.UnsignedEvent(
       pubkey: walletServiceKeyPair.publicKey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      kind: EventKind.response.value,
+      kind: EventKind.response.kind,
       tags: [
         ['e', requestId],
         ['p', clientPubkey],

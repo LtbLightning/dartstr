@@ -1,8 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nip47/src/domain/entities/multi_pay_invoice_request_invoice.dart';
-import 'package:nip47/src/domain/entities/multi_pay_keysend_request_keysend.dart';
-import 'package:nip47/src/domain/entities/tlv_record.dart';
-import 'package:nip47/src/domain/entities/transaction.dart';
+import 'package:nip47/nip47.dart';
 
 part 'request.freezed.dart';
 part 'request.g.dart';
@@ -105,4 +102,29 @@ sealed class Request with _$Request {
 
   factory Request.fromJson(Map<String, dynamic> json) =>
       _$RequestFromJson(json);
+
+  String get method {
+    switch (this) {
+      case GetInfoRequest _:
+        return Method.getInfo.plaintext;
+      case GetBalanceRequest _:
+        return Method.getBalance.plaintext;
+      case MakeInvoiceRequest _:
+        return Method.makeInvoice.plaintext;
+      case PayInvoiceRequest _:
+        return Method.payInvoice.plaintext;
+      case MultiPayInvoiceRequest _:
+        return Method.multiPayInvoice.plaintext;
+      case PayKeysendRequest _:
+        return Method.payKeysend.plaintext;
+      case MultiPayKeysendRequest _:
+        return Method.multiPayKeysend.plaintext;
+      case LookupInvoiceRequest _:
+        return Method.lookupInvoice.plaintext;
+      case ListTransactionsRequest _:
+        return Method.listTransactions.plaintext;
+      case CustomRequest customRequest:
+        return customRequest.method;
+    }
+  }
 }

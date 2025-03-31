@@ -15,12 +15,12 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   final Map<String, WalletConnection> _connections = {};
   final StreamController<Request> _requestsController;
 
-  WalletServiceRepositoryImpl(
-      {required nip01.RelayManagerService relayManagerService})
-      : _relayManagerService = relayManagerService,
+  WalletServiceRepositoryImpl({
+    required nip01.RelayManagerService relayManagerService,
+  })  : _relayManagerService = relayManagerService,
         _requestsController = StreamController<Request>.broadcast() {
     _eventSubscription = _relayManagerService.eventsStream.where((event) {
-      return event.kind == EventKind.request.value;
+      return event.kind == EventKind.request.kind;
     }).listen((request) async {
       await _handleRequest(request);
     });
@@ -37,7 +37,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
 
   @override
   Future<WalletConnection> createConnection({
-    required nip01.KeyPair walletServiceKeyPair,
+    required String walletServicePrivateKey,
     required List<Uri> relays,
     required List<Method> methods,
     List<NotificationType>? notifications,
@@ -45,6 +45,8 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     List<String>? customMethods,
     List<String>? customNotifications,
   }) async {
+    final walletServiceKeyPair =
+        nip01.KeyPair.fromPrivateKey(privateKey: walletServicePrivateKey);
     final clientKeyPair = nip01.KeyPair.generate();
 
     final connection = WalletConnection(
@@ -202,7 +204,14 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       walletServicePrivateKey: connection.walletServiceKeyPair.privateKey,
     );
 
-    // TODO: Validate request
+    if (model.expiration != null) {
+      final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      if (model.expiration! < now) {
+        throw RequestException('Request expired');
+      }
+    }
+
+    // TODO: check if the request method is permitted for the connection
 
     final entity = model.toEntity();
 
