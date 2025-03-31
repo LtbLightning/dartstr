@@ -1,3 +1,7 @@
+## 0.1.0
+
+ - nip01 bump and update
+
 ## 0.0.4+3
 
  - Update a dependency to the latest release.

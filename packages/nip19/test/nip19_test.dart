@@ -33,7 +33,7 @@ void main() {
 
     test('Nsec to Key Pair derivation', () {
       for (final testCase in testCases) {
-        final keyPair = KeyPair.fromNsec(testCase['nsec'] as String);
+        final keyPair = Nip19KeyPair.fromNsec(testCase['nsec'] as String);
 
         expect(keyPair.privateKey, testCase['privateKey']);
         expect(keyPair.publicKey, testCase['publicKey']);
@@ -45,41 +45,43 @@ void main() {
 
     test('Nsec getter', () {
       for (final testCase in testCases) {
-        final keyPair = KeyPair(privateKey: testCase['privateKey'] as String);
+        final keyPair = nip01.KeyPair.fromPrivateKey(
+            privateKey: testCase['privateKey'] as String);
 
         expect(keyPair.nsec, testCase['nsec']);
         // negative test
-        expect(keyPair.nsec, isNot(KeyPair.generate().nsec));
+        expect(keyPair.nsec, isNot(nip01.KeyPair.generate().nsec));
       }
     });
 
     test('Npub getter', () {
       for (final testCase in testCases) {
-        final keyPair = KeyPair(privateKey: testCase['privateKey'] as String);
+        final keyPair = nip01.KeyPair.fromPrivateKey(
+            privateKey: testCase['privateKey'] as String);
 
         expect(keyPair.npub, testCase['npub']);
         // negative test
-        expect(keyPair.npub, isNot(KeyPair.generate().npub));
+        expect(keyPair.npub, isNot(nip01.KeyPair.generate().npub));
       }
     });
 
     test('Npub to Public Key', () {
       for (final testCase in testCases) {
-        final pubkey = KeyPair.npubToPublicKey(testCase['npub'] as String);
+        final pubkey = Nip19.npubToHex(testCase['npub'] as String);
 
         expect(pubkey, testCase['publicKey']);
         // negative test
-        expect(pubkey, isNot(KeyPair.generate().publicKey));
+        expect(pubkey, isNot(nip01.KeyPair.generate().publicKey));
       }
     });
 
     test('Npub from Public Key', () {
       for (final testCase in testCases) {
-        final npub = KeyPair.npubFromPublicKey(testCase['publicKey'] as String);
+        final npub = Nip19.npubFromHex(testCase['publicKey'] as String);
 
         expect(npub, testCase['npub']);
         // negative test
-        expect(npub, isNot(KeyPair.generate().npub));
+        expect(npub, isNot(nip01.KeyPair.generate().npub));
       }
     });
   });

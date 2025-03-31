@@ -3,6 +3,148 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip47` - `v0.4.0`](#nip47---v040)
+
+---
+
+#### `nip47` - `v0.4.0`
+
+ - **FIX**: multiple relays should be possible.
+
+
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip26` - `v2.0.0`](#nip26---v200)
+
+---
+
+#### `nip26` - `v2.0.0`
+
+
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip24` - `v0.1.0`](#nip24---v010)
+
+---
+
+#### `nip24` - `v0.1.0`
+
+
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip19` - `v0.1.0`](#nip19---v010)
+
+---
+
+#### `nip19` - `v0.1.0`
+
+ - nip01 bump and update
+
+
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip06` - `v0.1.0`](#nip06---v010)
+
+---
+
+#### `nip06` - `v0.1.0`
+
+
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip04` - `v0.1.0`](#nip04---v010)
+
+---
+
+#### `nip04` - `v0.1.0`
+
+ - **REFACTOR**: nip01 with Clean Architecture.
+
+
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip01` - `v0.2.0`](#nip01---v020)
+
+---
+
+#### `nip01` - `v0.2.0`
+
+ - **REFACTOR**: nip01 with Clean Architecture.
+ - **REFACTOR**: nip01 to clean architecture.
+
+
 ## 2025-01-24
 
 ### Changes

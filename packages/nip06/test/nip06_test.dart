@@ -1,3 +1,4 @@
+import 'package:nip01/nip01.dart';
 import 'package:nip06/nip06.dart';
 import 'package:test/test.dart';
 
@@ -28,7 +29,8 @@ void main() {
 
     test('Mnemonic to Key Pair derivation', () {
       for (final testCase in testCases) {
-        final keyPair = KeyPair.fromMnemonic(testCase['mnemonic'] as String);
+        final keyPair =
+            Nip06KeyPair.fromMnemonic(testCase['mnemonic'] as String);
 
         expect(keyPair.privateKey, testCase['privateKey']);
         expect(keyPair.publicKey, testCase['publicKey']);

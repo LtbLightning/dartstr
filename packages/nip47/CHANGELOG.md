@@ -1,3 +1,7 @@
+## 0.4.0
+
+ - **FIX**: multiple relays should be possible.
+
 ## 0.3.0+2
 
  - **FIX**: list transactions transactions mapping.

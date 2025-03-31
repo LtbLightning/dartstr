@@ -1,0 +1,135 @@
+import 'dart:convert';
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:nip01/nip01.dart';
+import 'package:nip47/src/domain/entities/method.dart';
+import 'package:nip47/src/domain/entities/notification.dart';
+
+part 'connection.freezed.dart';
+
+enum ConnectionType {
+  wallet('nostr+walletconnect'),
+  client('nostr+walletauth');
+
+  final String protocol;
+
+  const ConnectionType(this.protocol);
+
+  static ConnectionType fromProtocol(String protocol) {
+    switch (protocol) {
+      case 'nostr+walletconnect':
+        return wallet;
+      case 'nostr+walletauth':
+        return client;
+      default:
+        throw ArgumentError('Invalid protocol: $protocol');
+    }
+  }
+}
+
+enum BudgetRenewal {
+  never('never'),
+  daily('daily'),
+  weekly('weekly'),
+  monthly('monthly'),
+  yearly('yearly');
+
+  final String plaintext;
+
+  const BudgetRenewal(this.plaintext);
+
+  static BudgetRenewal fromPlaintext(String plaintext) {
+    return BudgetRenewal.values.firstWhere(
+      (renewal) => renewal.plaintext == plaintext,
+      orElse: () => BudgetRenewal.never,
+    );
+  }
+}
+
+@freezed
+sealed class Connection with _$Connection {
+  const factory Connection.wallet({
+    required KeyPair walletServiceKeyPair,
+    required String clientPubkey,
+    String? clientSecret,
+    List<Uri>? clientRelays,
+    required List<Uri> relays,
+    List<Method>? methods,
+    List<NotificationType>? notifications,
+    String? lud16,
+    List<String>? customMethods,
+    List<String>? customNotifications,
+  }) = WalletConnection;
+  const factory Connection.client({
+    required KeyPair clientKeyPair,
+    required List<Uri> relays,
+    String? name,
+    Uri? icon,
+    Uri? returnTo,
+    int? expiresAt,
+    BigInt? maxAmountSat,
+    BudgetRenewal? budgetRenewal,
+    List<Method>? requestMethods,
+    List<NotificationType>? notificationTypes,
+    bool? isolated,
+    Object? metadata,
+    List<String>? customRequestMethods,
+    List<String>? customNotificationTypes,
+  }) = ClientConnection;
+  const Connection._();
+
+  Uri get uri {
+    switch (this) {
+      case WalletConnection walletConnection:
+        return Uri(
+          scheme: ConnectionType.wallet.protocol,
+          host: walletConnection.walletServiceKeyPair.publicKey,
+          queryParameters: {
+            'relay': walletConnection.relays.map((relay) => relay.toString()),
+            'secret': walletConnection.clientSecret,
+            if (walletConnection.lud16 != null)
+              'lud16': walletConnection.lud16!,
+          },
+        );
+      case ClientConnection clientConnection:
+        final requestMethods = clientConnection.requestMethods
+            ?.map((method) => method.plaintext)
+            .toList();
+        if (clientConnection.customRequestMethods != null) {
+          requestMethods?.addAll(clientConnection.customRequestMethods!);
+        }
+        final notificationTypes = clientConnection.notificationTypes
+            ?.map((type) => type.plaintext)
+            .toList();
+        if (clientConnection.customNotificationTypes != null) {
+          notificationTypes?.addAll(clientConnection.customNotificationTypes!);
+        }
+        return Uri(
+          scheme: ConnectionType.client.protocol,
+          host: clientConnection.clientKeyPair.publicKey,
+          queryParameters: {
+            'relay': clientConnection.relays.map((relay) => relay.toString()),
+            if (clientConnection.name != null) 'name': clientConnection.name,
+            if (clientConnection.icon != null)
+              'icon': clientConnection.icon.toString(),
+            if (clientConnection.returnTo != null)
+              'return_to': clientConnection.returnTo.toString(),
+            if (clientConnection.expiresAt != null)
+              'expires_at': clientConnection.expiresAt.toString(),
+            if (clientConnection.maxAmountSat != null)
+              'max_amount': clientConnection.maxAmountSat! * BigInt.from(1000),
+            if (clientConnection.budgetRenewal != null)
+              'budget_renewal': clientConnection.budgetRenewal!.plaintext,
+            if (clientConnection.requestMethods != null)
+              'request_methods': requestMethods?.join(' '),
+            if (clientConnection.notificationTypes != null)
+              'notification_types': notificationTypes?.join(' '),
+            if (clientConnection.isolated != null)
+              'isolated': clientConnection.isolated.toString(),
+            if (clientConnection.metadata != null)
+              'metadata': jsonEncode(clientConnection.metadata),
+          },
+        );
+    }
+  }
+}

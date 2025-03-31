@@ -2,21 +2,26 @@ import 'dart:convert';
 
 import 'package:nip01/nip01.dart';
 
-class Kind0ExtraMetadata extends Kind0Metadata {
+class Kind0ExtraMetadata {
+  final Kind0Metadata kind0metadata;
   final String? displayName;
   final String? website;
   final String? banner;
   final bool bot;
 
-  const Kind0ExtraMetadata({
-    required super.name,
-    super.about,
-    super.picture,
+  Kind0ExtraMetadata({
+    required String name,
+    String? about,
+    String? picture,
     this.displayName,
     this.website,
     this.banner,
     this.bot = false,
-  });
+  }) : kind0metadata = Kind0Metadata(
+          name: name,
+          about: about,
+          picture: picture,
+        );
 
   factory Kind0ExtraMetadata.fromContent(String content) {
     final metadata = jsonDecode(content);
@@ -32,12 +37,11 @@ class Kind0ExtraMetadata extends Kind0Metadata {
     );
   }
 
-  @override
   String get content {
     final metadata = {
-      'name': name,
-      'about': about,
-      'picture': picture,
+      'name': kind0metadata.name,
+      'about': kind0metadata.about,
+      'picture': kind0metadata.picture,
       'display_name': displayName,
       'website': website,
       'banner': banner,
@@ -47,12 +51,7 @@ class Kind0ExtraMetadata extends Kind0Metadata {
     return jsonEncode(metadata);
   }
 
-  @override
-  List<Object?> get props => [
-        ...super.props,
-        displayName,
-        website,
-        banner,
-        bot,
-      ];
+  String get name => kind0metadata.name;
+  String? get about => kind0metadata.about;
+  String? get picture => kind0metadata.picture;
 }

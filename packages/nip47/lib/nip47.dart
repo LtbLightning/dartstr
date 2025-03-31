@@ -5,19 +5,7 @@ library;
 
 export 'src/nip47_base.dart';
 
-export 'src/data/models/connection.dart';
-export 'src/data/models/filters.dart';
-export 'src/data/models/info_event.dart';
-export 'src/data/models/request.dart';
-export 'src/data/models/response.dart';
-export 'src/data/models/tlv_record.dart';
-export 'src/data/models/transaction.dart';
-
-export 'src/enums/bitcoin_network.dart';
-export 'src/enums/error_code.dart';
-export 'src/enums/event_kind.dart';
-export 'src/data/models/method.dart';
-export 'src/enums/transaction_type.dart';
-export 'src/enums/notification_type.dart';
-
-export 'src/constants.dart';
+export 'src/domain/entities/entities.dart';
+export 'src/domain/repositories/client_repository.dart';
+export 'src/domain/repositories/wallet_service_repository.dart';
+export 'src/data/repositories/wallet_service_repository_impl.dart';

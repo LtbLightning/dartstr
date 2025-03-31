@@ -44,7 +44,7 @@ class Delegatee {
     required String content,
   }) {
     List<List<String>> tagsWithDelegationTag = [...tags, _delegationTag.tag];
-    final event = Event(
+    final event = Event.unsigned(
       pubkey: _keyPair.publicKey,
       createdAt: createdAt,
       kind: kind,
