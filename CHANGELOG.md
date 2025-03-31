@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip01` - `v0.2.0`](#nip01---v020)
+
+---
+
+#### `nip01` - `v0.2.0`
+
+ - **REFACTOR**: nip01 with Clean Architecture.
+ - **REFACTOR**: nip01 to clean architecture.
+
+
 ## 2025-01-24
 
 ### Changes
