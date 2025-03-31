@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip19` - `v0.1.0`](#nip19---v010)
+
+---
+
+#### `nip19` - `v0.1.0`
+
+ - nip01 bump and update
+
+
+## 2025-03-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip06` - `v0.1.0`](#nip06---v010)
 
 ---
