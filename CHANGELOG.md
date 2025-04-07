@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-04-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip47` - `v0.4.0+1`](#nip47---v0401)
+
+---
+
+#### `nip47` - `v0.4.0+1`
+
+ - **FIX**: wrong kind for nip47 notification.
+
+
 ## 2025-03-31
 
 ### Changes

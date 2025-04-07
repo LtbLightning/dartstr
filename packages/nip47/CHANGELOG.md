@@ -1,3 +1,7 @@
+## 0.4.0+1
+
+ - **FIX**: wrong kind for nip47 notification.
+
 ## 0.4.0
 
  - **FIX**: multiple relays should be possible.
