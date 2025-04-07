@@ -66,7 +66,7 @@ sealed class Notification extends Equatable {
     final partialEvent = nip01.Event(
       pubkey: walletServiceKeyPair.publicKey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      kind: EventKind.response.value,
+      kind: EventKind.notification.value,
       tags: [
         ['p', connectionPubkey],
       ],
