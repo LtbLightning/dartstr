@@ -156,7 +156,7 @@ class NotificationModel {
     final event = nip01.UnsignedEvent(
       pubkey: walletServiceKeyPair.publicKey,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      kind: EventKind.response.kind,
+      kind: EventKind.notification.kind,
       tags: [
         ['p', connectionPubkey],
       ],
