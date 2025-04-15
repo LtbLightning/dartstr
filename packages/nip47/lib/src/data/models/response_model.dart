@@ -103,7 +103,7 @@ class ResponseModel {
           clientPubkey: response.clientPubkey,
           resultType: Method.getBalance.plaintext,
           result: response.balanceSat != null
-              ? {'balance': response.balanceSat! * BigInt.from(1000)}
+              ? {'balance': (response.balanceSat! * BigInt.from(1000)).toInt()}
               : null,
           errorCode: response.error?.value,
           errorMessage: response.error?.message,
@@ -123,9 +123,11 @@ class ResponseModel {
                   'description_hash': response.invoice!.descriptionHash,
                   'preimage': response.invoice!.preimage,
                   'payment_hash': response.invoice!.paymentHash,
-                  'amount': response.invoice!.amountSat * BigInt.from(1000),
+                  'amount':
+                      (response.invoice!.amountSat * BigInt.from(1000)).toInt(),
                   'fees_paid':
-                      response.invoice!.feesPaidSat * BigInt.from(1000),
+                      (response.invoice!.feesPaidSat * BigInt.from(1000))
+                          .toInt(),
                   'created_at': response.invoice!.createdAt,
                   'expires_at': response.invoice!.expiresAt,
                   'metadata': response.invoice!.metadata,
@@ -144,7 +146,8 @@ class ResponseModel {
               ? {
                   'preimage': response.payResult!.preimage,
                   'fees_paid':
-                      response.payResult!.feesPaidSat! * BigInt.from(1000),
+                      (response.payResult!.feesPaidSat! * BigInt.from(1000))
+                          .toInt(),
                 }
               : null,
           errorCode: response.error?.value,
@@ -160,7 +163,8 @@ class ResponseModel {
               ? {
                   'preimage': response.payResult!.preimage,
                   'fees_paid':
-                      response.payResult!.feesPaidSat! * BigInt.from(1000),
+                      (response.payResult!.feesPaidSat! * BigInt.from(1000))
+                          .toInt(),
                 }
               : null,
           errorCode: response.error?.value,
@@ -177,7 +181,8 @@ class ResponseModel {
               ? {
                   'preimage': response.payResult!.preimage,
                   'fees_paid':
-                      response.payResult!.feesPaidSat! * BigInt.from(1000),
+                      (response.payResult!.feesPaidSat! * BigInt.from(1000))
+                          .toInt(),
                 }
               : null,
           errorCode: response.error?.value,
@@ -193,7 +198,8 @@ class ResponseModel {
               ? {
                   'preimage': response.payResult!.preimage,
                   'fees_paid':
-                      response.payResult!.feesPaidSat! * BigInt.from(1000),
+                      (response.payResult!.feesPaidSat! * BigInt.from(1000))
+                          .toInt(),
                 }
               : null,
           errorCode: response.error?.value,
@@ -214,9 +220,12 @@ class ResponseModel {
                   'description_hash': response.transaction!.descriptionHash,
                   'preimage': response.transaction!.preimage,
                   'payment_hash': response.transaction!.paymentHash,
-                  'amount': response.transaction!.amountSat * BigInt.from(1000),
+                  'amount':
+                      (response.transaction!.amountSat * BigInt.from(1000))
+                          .toInt(),
                   'fees_paid':
-                      response.transaction!.feesPaidSat * BigInt.from(1000),
+                      (response.transaction!.feesPaidSat * BigInt.from(1000))
+                          .toInt(),
                   'created_at': response.transaction!.createdAt,
                   'expires_at': response.transaction!.expiresAt,
                   'settled_at': response.transaction!.settledAt,
@@ -242,9 +251,12 @@ class ResponseModel {
                             'description_hash': transaction.descriptionHash,
                             'preimage': transaction.preimage,
                             'payment_hash': transaction.paymentHash,
-                            'amount': transaction.amountSat * BigInt.from(1000),
+                            'amount':
+                                (transaction.amountSat * BigInt.from(1000))
+                                    .toInt(),
                             'fees_paid':
-                                transaction.feesPaidSat * BigInt.from(1000),
+                                (transaction.feesPaidSat * BigInt.from(1000))
+                                    .toInt(),
                             'created_at': transaction.createdAt,
                             'expires_at': transaction.expiresAt,
                             'settled_at': transaction.settledAt,

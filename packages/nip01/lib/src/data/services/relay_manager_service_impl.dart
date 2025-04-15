@@ -22,27 +22,22 @@ class RelayManagerServiceImpl implements RelayManagerService {
   List<Relay> get relays => _relays.values.map((repo) => repo.relay).toList();
 
   @override
-  Stream<List<Relay>> get relaysStream =>
-      _relaysStreamController.stream.asBroadcastStream();
+  Stream<List<Relay>> get relaysStream => _relaysStreamController.stream;
 
   @override
-  Stream<SignedEvent> get eventsStream =>
-      _eventsStreamController.stream.asBroadcastStream();
+  Stream<SignedEvent> get eventsStream => _eventsStreamController.stream;
 
   @override
   Future<List<Stream<Relay>>> addRelays(List<String> urls) async {
-    // Remove any urls that are already added
-    urls.removeWhere((url) => _relays.containsKey(url));
-
     final relayStreams = <Stream<Relay>>[];
 
-    for (final url in urls) {
+    urls.where((url) => !_relays.containsKey(url)).forEach((url) {
       final dataSource = WebSocketDataSourceImpl(url: url);
       final repository = RelayRepositoryImpl(dataSource);
 
       _relays[url] = repository;
       relayStreams.add(repository.relayStream);
-    }
+    });
 
     // Make sure the events of the newly added relays are included in the merged
     //  streams.
@@ -87,14 +82,17 @@ class RelayManagerServiceImpl implements RelayManagerService {
       return false;
     }
 
-    final publishEvents = repositories.map(
-      (repo) => repo.publishEvent(
-        event,
-        timeoutSec: timeoutSec,
+    final publishEvents = await Future.wait(
+      repositories.map(
+        (repo) => repo.publishEvent(
+          event,
+          timeoutSec: timeoutSec,
+        ),
       ),
     );
-    final results = await Future.wait(publishEvents);
-    final successCount = results.where((isPublished) => isPublished).length;
+
+    final successCount =
+        publishEvents.where((isPublished) => isPublished).length;
 
     return successCount >= successTreshold;
   }
@@ -137,10 +135,12 @@ class RelayManagerServiceImpl implements RelayManagerService {
       return Stream.empty();
     }
 
-    final subscribeStreams = repositories.map(
-      (repo) => repo.subscribe(
-        subscription,
-        onEose: onEose,
+    final subscribeStreams = await Future.wait(
+      repositories.map(
+        (repo) async => await repo.subscribe(
+          subscription,
+          onEose: onEose,
+        ),
       ),
     );
 

@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/src/data/models/info_event_model.dart';
+import 'package:nip47/src/data/models/notification_model.dart';
 import 'package:nip47/src/data/models/request_model.dart';
 import 'package:nip47/src/data/models/response_model.dart';
 import 'package:nip47/src/domain/entities/entities.dart';
@@ -27,8 +29,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   }
 
   @override
-  Stream<Request> get requests =>
-      _requestsController.stream.asBroadcastStream();
+  Stream<Request> get requests => _requestsController.stream;
 
   @override
   Future<List<WalletConnection>> get connections async {
@@ -110,9 +111,28 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   }
 
   @override
-  Future<void> notify(Notification notification) {
-    // TODO: implement notify
-    throw UnimplementedError();
+  Future<void> notify(Notification notification, {int timeoutSec = 10}) async {
+    final connection = _connections[notification.connectionPubkey];
+
+    if (connection == null) {
+      throw NotificationException('Connection not found');
+    }
+
+    final model = NotificationModel.fromEntity(notification);
+    final event = model.toEvent(
+      walletServiceKeyPair: connection.walletServiceKeyPair,
+    );
+    final signedEvent = event.sign(connection.walletServiceKeyPair);
+
+    final isPublished = await _relayManagerService.publishEvent(
+      signedEvent,
+      relayUrls: connection.relays.map((relay) => relay.toString()).toList(),
+      timeoutSec: timeoutSec,
+    );
+
+    if (!isPublished) {
+      throw NotificationException('Failed to publish notification');
+    }
   }
 
   @override

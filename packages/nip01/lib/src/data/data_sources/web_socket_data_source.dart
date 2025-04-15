@@ -47,12 +47,10 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
   }
 
   @override
-  Stream<RelayMessageModel> get messages =>
-      _messageBroadcast.stream.asBroadcastStream();
+  Stream<RelayMessageModel> get messages => _messageBroadcast.stream;
 
   @override
-  Stream<WebSocketState> get states =>
-      _stateBroadcast.stream.asBroadcastStream();
+  Stream<WebSocketState> get states => _stateBroadcast.stream;
 
   @override
   WebSocketState get state => _state;
@@ -123,25 +121,30 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
 
   Future<void> _connect() async {
     await _lock.synchronized(() {
-      _changeState(WebSocketState.connecting);
+      try {
+        _changeState(WebSocketState.connecting);
 
-      _channel = WebSocketChannel.connect(Uri.parse(url));
+        _channel = WebSocketChannel.connect(Uri.parse(url));
 
-      _subscription = _channel!.stream.listen(
-        (message) {
-          log('Received message: $message from relay $_url');
-          final relayMessage = RelayMessageModel.fromString(message);
-          _messageBroadcast.add(relayMessage);
-        },
-        onError: (error) async {
-          await _disconnect();
-        },
-        onDone: () async {
-          await _disconnect();
-        },
-      );
+        _subscription = _channel!.stream.listen(
+          (message) {
+            log('Received message: $message from relay $_url');
+            final relayMessage = RelayMessageModel.fromString(message);
+            _messageBroadcast.add(relayMessage);
+          },
+          onError: (error) async {
+            await _disconnect();
+          },
+          onDone: () async {
+            await _disconnect();
+          },
+        );
 
-      _changeState(WebSocketState.connected);
+        _changeState(WebSocketState.connected);
+      } catch (e) {
+        log('Error connecting to WebSocket: $e');
+        _changeState(WebSocketState.disconnected);
+      }
     });
   }
 

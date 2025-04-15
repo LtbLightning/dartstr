@@ -14,7 +14,7 @@ abstract class RelayRepository {
     SignedEvent event, {
     int timeoutSec = 10,
   });
-  Stream<SignedEvent> subscribe(
+  Future<Stream<SignedEvent>> subscribe(
     Subscription subscription, {
     void Function(List<Event>)? onEose,
   });

@@ -1,6 +1,5 @@
 import 'package:dartstr_utils/dartstr_utils.dart';
 import 'package:nip01/nip01.dart';
-import 'package:nip01/src/domain/use_cases/set_profile_metadata_use_case.dart';
 
 void main() async {
   final keyPair = KeyPair.generate();

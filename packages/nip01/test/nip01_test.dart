@@ -1,4 +1,5 @@
 import 'package:nip01/nip01.dart';
+import 'package:nip01/src/data/data_sources/web_socket_data_source.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -57,3 +58,5 @@ void main() {
     });
   });
 }
+
+class InvalidUrlException {}

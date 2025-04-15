@@ -93,9 +93,10 @@ class RelayRepositoryImpl implements RelayRepository {
   }) async {
     log('Publishing event: $event to relay ${_dataSource.url}');
 
+    if (!await _ensureReady()) return false;
+
     // Verify the event signature
     final isValid = event.verify();
-
     if (!isValid) {
       log('Event signature is invalid');
       return false;
@@ -122,10 +123,11 @@ class RelayRepositoryImpl implements RelayRepository {
   }
 
   @override
-  Stream<SignedEvent> subscribe(
+  Future<Stream<SignedEvent>> subscribe(
     Subscription subscription, {
     void Function(List<SignedEvent>)? onEose,
-  }) {
+  }) async {
+    log('Subscribing to relay ${_dataSource.url} with subscription: $subscription');
     // Add the subscription to cache so it can be re-subscribed when the relay
     //  reconnects
     _subscriptions[subscription.id] = subscription;
@@ -148,6 +150,15 @@ class RelayRepositoryImpl implements RelayRepository {
     // Now that the controller is setup to stream events,
     //  send the subscription message to start receiving them
     final message = ClientMessageModel.subscription(subscription);
+
+    final isReady = await _ensureReady();
+    if (!isReady) {
+      log('Relay ${_dataSource.url} not ready');
+      controller.close();
+      return controller.stream;
+    }
+
+    log('Subscribing to relay ${_dataSource.url} with message: $message');
     _dataSource.sendMessage(message);
 
     return controller.stream;
@@ -158,6 +169,8 @@ class RelayRepositoryImpl implements RelayRepository {
     List<Filters> filters,
   ) async {
     log('Requesting stored events with filters: $filters from relay ${_dataSource.url}');
+
+    if (!await _ensureReady()) return [];
 
     // Create a subscription with random id and the filters
     final subscriptionId = SecretGenerator.secretHex(64);
@@ -189,6 +202,8 @@ class RelayRepositoryImpl implements RelayRepository {
     int timeoutSec = 10,
   }) async {
     log('Closing subscription $subscriptionId at relay ${_dataSource.url}');
+
+    if (!await _ensureReady()) return;
 
     // Register a completer for the close response of the relay
     final completer = Completer();
@@ -310,5 +325,15 @@ class RelayRepositoryImpl implements RelayRepository {
 
     // Clean up
     _eventAcceptedCompleters.remove(eventId);
+  }
+
+  Future<bool> _ensureReady() async {
+    try {
+      await _dataSource.ready;
+      return true;
+    } catch (e) {
+      log('Relay ${_dataSource.url} not ready: $e');
+      return false;
+    }
   }
 }
