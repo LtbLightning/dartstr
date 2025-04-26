@@ -1,6 +1,6 @@
 name: nip26
 description: A Dart library for Nostr NIP-26 Delegated Event Signing.
-version: 2.0.0
+version: 2.0.1
 repository: https://github.com/kumulynja/dartstr/tree/main/packages/nip26
 
 environment:
@@ -12,7 +12,7 @@ dependencies:
   convert: ^3.1.2
   crypto: ^3.0.6
   equatable: ^2.0.5
-  nip01: ^0.2.0
+  nip01: ^0.2.0+1
   # path: ^1.8.0
 
 dev_dependencies:

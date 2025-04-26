@@ -1,3 +1,7 @@
+## 0.2.0+1
+
+ - **FIX**: bugs.
+
 ## 0.2.0
 
  - **REFACTOR**: nip01 with Clean Architecture.

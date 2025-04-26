@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-04-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip01` - `v0.2.0+1`](#nip01---v0201)
+ - [`nip47` - `v0.4.0+2`](#nip47---v0402)
+ - [`nip06` - `v0.1.0+1`](#nip06---v0101)
+ - [`nip24` - `v0.1.0+1`](#nip24---v0101)
+ - [`nip26` - `v2.0.1`](#nip26---v201)
+ - [`nip19` - `v0.1.0+1`](#nip19---v0101)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `nip06` - `v0.1.0+1`
+ - `nip24` - `v0.1.0+1`
+ - `nip26` - `v2.0.1`
+ - `nip19` - `v0.1.0+1`
+
+---
+
+#### `nip01` - `v0.2.0+1`
+
+ - **FIX**: bugs.
+
+#### `nip47` - `v0.4.0+2`
+
+ - **FIX**: bugs.
+
+
 ## 2025-04-08
 
 ### Changes

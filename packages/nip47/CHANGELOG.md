@@ -1,3 +1,7 @@
+## 0.4.0+2
+
+ - **FIX**: bugs.
+
 ## 0.4.0+1
 
  - **FIX**: wrong kind for nip47 notification.
