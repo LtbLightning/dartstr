@@ -17,7 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$MultiPayInvoiceRequestInvoice {
   String? get id;
   String get invoice;
-  BigInt? get amountSat;
+  int? get amountSat;
 
   /// Create a copy of MultiPayInvoiceRequestInvoice
   /// with the given fields replaced by the non-null parameter values.
@@ -59,7 +59,7 @@ abstract mixin class $MultiPayInvoiceRequestInvoiceCopyWith<$Res> {
           $Res Function(MultiPayInvoiceRequestInvoice) _then) =
       _$MultiPayInvoiceRequestInvoiceCopyWithImpl;
   @useResult
-  $Res call({String? id, String invoice, BigInt? amountSat});
+  $Res call({String? id, String invoice, int? amountSat});
 }
 
 /// @nodoc
@@ -91,7 +91,7 @@ class _$MultiPayInvoiceRequestInvoiceCopyWithImpl<$Res>
       amountSat: freezed == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt?,
+              as int?,
     ));
   }
 }
@@ -110,7 +110,7 @@ class _MultiPayInvoiceRequestInvoice extends MultiPayInvoiceRequestInvoice {
   @override
   final String invoice;
   @override
-  final BigInt? amountSat;
+  final int? amountSat;
 
   /// Create a copy of MultiPayInvoiceRequestInvoice
   /// with the given fields replaced by the non-null parameter values.
@@ -158,7 +158,7 @@ abstract mixin class _$MultiPayInvoiceRequestInvoiceCopyWith<$Res>
       __$MultiPayInvoiceRequestInvoiceCopyWithImpl;
   @override
   @useResult
-  $Res call({String? id, String invoice, BigInt? amountSat});
+  $Res call({String? id, String invoice, int? amountSat});
 }
 
 /// @nodoc
@@ -190,7 +190,7 @@ class __$MultiPayInvoiceRequestInvoiceCopyWithImpl<$Res>
       amountSat: freezed == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt?,
+              as int?,
     ));
   }
 }

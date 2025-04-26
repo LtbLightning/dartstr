@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PayResult {
   String get preimage;
-  BigInt? get feesPaidSat;
+  int? get feesPaidSat;
 
   /// Create a copy of PayResult
   /// with the given fields replaced by the non-null parameter values.
@@ -54,7 +54,7 @@ abstract mixin class $PayResultCopyWith<$Res> {
   factory $PayResultCopyWith(PayResult value, $Res Function(PayResult) _then) =
       _$PayResultCopyWithImpl;
   @useResult
-  $Res call({String preimage, BigInt? feesPaidSat});
+  $Res call({String preimage, int? feesPaidSat});
 }
 
 /// @nodoc
@@ -80,7 +80,7 @@ class _$PayResultCopyWithImpl<$Res> implements $PayResultCopyWith<$Res> {
       feesPaidSat: freezed == feesPaidSat
           ? _self.feesPaidSat
           : feesPaidSat // ignore: cast_nullable_to_non_nullable
-              as BigInt?,
+              as int?,
     ));
   }
 }
@@ -95,7 +95,7 @@ class _PayResult extends PayResult {
   @override
   final String preimage;
   @override
-  final BigInt? feesPaidSat;
+  final int? feesPaidSat;
 
   /// Create a copy of PayResult
   /// with the given fields replaced by the non-null parameter values.
@@ -141,7 +141,7 @@ abstract mixin class _$PayResultCopyWith<$Res>
       __$PayResultCopyWithImpl;
   @override
   @useResult
-  $Res call({String preimage, BigInt? feesPaidSat});
+  $Res call({String preimage, int? feesPaidSat});
 }
 
 /// @nodoc
@@ -167,7 +167,7 @@ class __$PayResultCopyWithImpl<$Res> implements _$PayResultCopyWith<$Res> {
       feesPaidSat: freezed == feesPaidSat
           ? _self.feesPaidSat
           : feesPaidSat // ignore: cast_nullable_to_non_nullable
-              as BigInt?,
+              as int?,
     ));
   }
 }

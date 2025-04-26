@@ -11,7 +11,7 @@ _MultiPayKeysendRequestKeysend _$MultiPayKeysendRequestKeysendFromJson(
     _MultiPayKeysendRequestKeysend(
       id: json['id'] as String?,
       pubkey: json['pubkey'] as String,
-      amountSat: BigInt.parse(json['amountSat'] as String),
+      amountSat: (json['amountSat'] as num).toInt(),
       preimage: json['preimage'] as String?,
       tlvRecords: (json['tlvRecords'] as List<dynamic>?)
           ?.map((e) => TlvRecord.fromJson(e as Map<String, dynamic>))
@@ -23,7 +23,7 @@ Map<String, dynamic> _$MultiPayKeysendRequestKeysendToJson(
     <String, dynamic>{
       'id': instance.id,
       'pubkey': instance.pubkey,
-      'amountSat': instance.amountSat.toString(),
+      'amountSat': instance.amountSat,
       'preimage': instance.preimage,
       'tlvRecords': instance.tlvRecords,
     };

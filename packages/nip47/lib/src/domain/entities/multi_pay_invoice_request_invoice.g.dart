@@ -11,9 +11,7 @@ _MultiPayInvoiceRequestInvoice _$MultiPayInvoiceRequestInvoiceFromJson(
     _MultiPayInvoiceRequestInvoice(
       id: json['id'] as String?,
       invoice: json['invoice'] as String,
-      amountSat: json['amountSat'] == null
-          ? null
-          : BigInt.parse(json['amountSat'] as String),
+      amountSat: (json['amountSat'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$MultiPayInvoiceRequestInvoiceToJson(
@@ -21,5 +19,5 @@ Map<String, dynamic> _$MultiPayInvoiceRequestInvoiceToJson(
     <String, dynamic>{
       'id': instance.id,
       'invoice': instance.invoice,
-      'amountSat': instance.amountSat?.toString(),
+      'amountSat': instance.amountSat,
     };

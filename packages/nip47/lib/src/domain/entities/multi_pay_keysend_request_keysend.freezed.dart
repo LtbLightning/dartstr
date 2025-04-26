@@ -17,7 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$MultiPayKeysendRequestKeysend {
   String? get id;
   String get pubkey;
-  BigInt get amountSat;
+  int get amountSat;
   String? get preimage;
   List<TlvRecord>? get tlvRecords;
 
@@ -69,7 +69,7 @@ abstract mixin class $MultiPayKeysendRequestKeysendCopyWith<$Res> {
   $Res call(
       {String? id,
       String pubkey,
-      BigInt amountSat,
+      int amountSat,
       String? preimage,
       List<TlvRecord>? tlvRecords});
 }
@@ -105,7 +105,7 @@ class _$MultiPayKeysendRequestKeysendCopyWithImpl<$Res>
       amountSat: null == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       preimage: freezed == preimage
           ? _self.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -137,7 +137,7 @@ class _MultiPayKeysendRequestKeysend extends MultiPayKeysendRequestKeysend {
   @override
   final String pubkey;
   @override
-  final BigInt amountSat;
+  final int amountSat;
   @override
   final String? preimage;
   final List<TlvRecord>? _tlvRecords;
@@ -204,7 +204,7 @@ abstract mixin class _$MultiPayKeysendRequestKeysendCopyWith<$Res>
   $Res call(
       {String? id,
       String pubkey,
-      BigInt amountSat,
+      int amountSat,
       String? preimage,
       List<TlvRecord>? tlvRecords});
 }
@@ -240,7 +240,7 @@ class __$MultiPayKeysendRequestKeysendCopyWithImpl<$Res>
       amountSat: null == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       preimage: freezed == preimage
           ? _self.preimage
           : preimage // ignore: cast_nullable_to_non_nullable

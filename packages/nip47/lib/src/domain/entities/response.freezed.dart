@@ -292,7 +292,7 @@ class GetBalanceResponse implements Response {
   final String requestId;
   @override
   final String clientPubkey;
-  final BigInt? balanceSat;
+  final int? balanceSat;
   @override
   final ErrorCode? error;
   @override
@@ -354,7 +354,7 @@ abstract mixin class $GetBalanceResponseCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      BigInt? balanceSat,
+      int? balanceSat,
       ErrorCode? error,
       int createdAt});
 }
@@ -390,7 +390,7 @@ class _$GetBalanceResponseCopyWithImpl<$Res>
       balanceSat: freezed == balanceSat
           ? _self.balanceSat
           : balanceSat // ignore: cast_nullable_to_non_nullable
-              as BigInt?,
+              as int?,
       error: freezed == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable

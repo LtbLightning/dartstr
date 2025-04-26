@@ -429,7 +429,7 @@ class MakeInvoiceRequest extends Request {
   final String clientPubkey;
   @override
   final String walletServicePubkey;
-  final BigInt amountSat;
+  final int amountSat;
   final String? description;
   final String? descriptionHash;
   final int? expiry;
@@ -511,7 +511,7 @@ abstract mixin class $MakeInvoiceRequestCopyWith<$Res>
       {String id,
       String clientPubkey,
       String walletServicePubkey,
-      BigInt amountSat,
+      int amountSat,
       String? description,
       String? descriptionHash,
       int? expiry,
@@ -558,7 +558,7 @@ class _$MakeInvoiceRequestCopyWithImpl<$Res>
       amountSat: null == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       description: freezed == description
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -607,7 +607,7 @@ class PayInvoiceRequest extends Request {
   @override
   final String walletServicePubkey;
   final String invoice;
-  final BigInt? amountSat;
+  final int? amountSat;
   @override
   final int createdAt;
   @override
@@ -674,7 +674,7 @@ abstract mixin class $PayInvoiceRequestCopyWith<$Res>
       String clientPubkey,
       String walletServicePubkey,
       String invoice,
-      BigInt? amountSat,
+      int? amountSat,
       int createdAt,
       int? expiresAt});
 }
@@ -720,7 +720,7 @@ class _$PayInvoiceRequestCopyWithImpl<$Res>
       amountSat: freezed == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt?,
+              as int?,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -913,7 +913,7 @@ class PayKeysendRequest extends Request {
   final String clientPubkey;
   @override
   final String walletServicePubkey;
-  final BigInt amountSat;
+  final int amountSat;
   final String pubkey;
   final String? preimage;
   final List<TlvRecord>? _tlvRecords;
@@ -1003,7 +1003,7 @@ abstract mixin class $PayKeysendRequestCopyWith<$Res>
       {String id,
       String clientPubkey,
       String walletServicePubkey,
-      BigInt amountSat,
+      int amountSat,
       String pubkey,
       String? preimage,
       List<TlvRecord>? tlvRecords,
@@ -1050,7 +1050,7 @@ class _$PayKeysendRequestCopyWithImpl<$Res>
       amountSat: null == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       pubkey: null == pubkey
           ? _self.pubkey
           : pubkey // ignore: cast_nullable_to_non_nullable

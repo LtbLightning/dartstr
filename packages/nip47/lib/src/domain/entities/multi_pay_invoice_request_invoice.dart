@@ -9,7 +9,7 @@ sealed class MultiPayInvoiceRequestInvoice
   const factory MultiPayInvoiceRequestInvoice({
     String? id,
     required String invoice,
-    BigInt? amountSat,
+    int? amountSat,
   }) = _MultiPayInvoiceRequestInvoice;
   const MultiPayInvoiceRequestInvoice._();
 

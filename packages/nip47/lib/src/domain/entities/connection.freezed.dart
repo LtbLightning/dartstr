@@ -346,7 +346,7 @@ class ClientConnection extends Connection {
   final Uri? icon;
   final Uri? returnTo;
   final int? expiresAt;
-  final BigInt? maxAmountSat;
+  final int? maxAmountSat;
   final BudgetRenewal? budgetRenewal;
   final List<Method>? _requestMethods;
   List<Method>? get requestMethods {
@@ -467,7 +467,7 @@ abstract mixin class $ClientConnectionCopyWith<$Res>
       Uri? icon,
       Uri? returnTo,
       int? expiresAt,
-      BigInt? maxAmountSat,
+      int? maxAmountSat,
       BudgetRenewal? budgetRenewal,
       List<Method>? requestMethods,
       List<NotificationType>? notificationTypes,
@@ -535,7 +535,7 @@ class _$ClientConnectionCopyWithImpl<$Res>
       maxAmountSat: freezed == maxAmountSat
           ? _self.maxAmountSat
           : maxAmountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt?,
+              as int?,
       budgetRenewal: freezed == budgetRenewal
           ? _self.budgetRenewal
           : budgetRenewal // ignore: cast_nullable_to_non_nullable

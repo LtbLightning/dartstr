@@ -8,13 +8,11 @@ part of 'pay_result.dart';
 
 _PayResult _$PayResultFromJson(Map<String, dynamic> json) => _PayResult(
       preimage: json['preimage'] as String,
-      feesPaidSat: json['feesPaidSat'] == null
-          ? null
-          : BigInt.parse(json['feesPaidSat'] as String),
+      feesPaidSat: (json['feesPaidSat'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$PayResultToJson(_PayResult instance) =>
     <String, dynamic>{
       'preimage': instance.preimage,
-      'feesPaidSat': instance.feesPaidSat?.toString(),
+      'feesPaidSat': instance.feesPaidSat,
     };

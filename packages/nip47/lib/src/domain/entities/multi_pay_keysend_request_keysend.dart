@@ -10,7 +10,7 @@ sealed class MultiPayKeysendRequestKeysend
   const factory MultiPayKeysendRequestKeysend({
     String? id,
     required String pubkey,
-    required BigInt amountSat,
+    required int amountSat,
     String? preimage,
     List<TlvRecord>? tlvRecords,
   }) = _MultiPayKeysendRequestKeysend;

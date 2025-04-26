@@ -7,7 +7,7 @@ part 'pay_result.g.dart';
 sealed class PayResult with _$PayResult {
   const factory PayResult({
     required String preimage,
-    BigInt? feesPaidSat,
+    int? feesPaidSat,
   }) = _PayResult;
   const PayResult._();
 

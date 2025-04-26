@@ -136,7 +136,7 @@ class RequestModel {
           walletServicePubkey: request.walletServicePubkey,
           method: Method.makeInvoice.plaintext,
           params: {
-            'amount': request.amountSat * BigInt.from(1000),
+            'amount': request.amountSat * 1000,
             if (request.description != null) 'description': request.description,
             if (request.descriptionHash != null)
               'description_hash': request.descriptionHash,
@@ -153,9 +153,8 @@ class RequestModel {
           method: Method.payInvoice.plaintext,
           params: {
             'invoice': request.invoice,
-            'amount': request.amountSat == null
-                ? null
-                : request.amountSat! * BigInt.from(1000),
+            'amount':
+                request.amountSat == null ? null : request.amountSat! * 1000,
           },
           createdAt: entity.createdAt,
           expiration: entity.expiresAt,
@@ -172,7 +171,7 @@ class RequestModel {
                       if (invoice.id != null) 'id': invoice.id,
                       'invoice': invoice.invoice,
                       if (invoice.amountSat != null)
-                        'amount': invoice.amountSat! * BigInt.from(1000),
+                        'amount': invoice.amountSat! * 1000,
                     })
                 .toList(),
           },
@@ -187,7 +186,7 @@ class RequestModel {
           walletServicePubkey: request.walletServicePubkey,
           method: Method.payKeysend.plaintext,
           params: {
-            'amount': request.amountSat * BigInt.from(1000),
+            'amount': request.amountSat * 1000,
             'pubkey': request.pubkey,
             if (request.preimage != null) 'preimage': request.preimage,
             if (request.tlvRecords != null)
@@ -212,7 +211,7 @@ class RequestModel {
                 .map((keysend) => {
                       if (keysend.id != null) 'id': keysend.id,
                       'pubkey': keysend.pubkey,
-                      'amount': keysend.amountSat * BigInt.from(1000),
+                      'amount': keysend.amountSat * 1000,
                       if (keysend.preimage != null)
                         'preimage': keysend.preimage,
                       if (keysend.tlvRecords != null)
@@ -296,7 +295,7 @@ class RequestModel {
           id: id,
           clientPubkey: clientPubkey,
           walletServicePubkey: walletServicePubkey,
-          amountSat: BigInt.from((params['amount'] as int) ~/ 1000),
+          amountSat: (params['amount'] as int) ~/ 1000,
           description: params['description'] as String?,
           descriptionHash: params['description_hash'] as String?,
           expiry: params['expiry'] as int?,
@@ -311,7 +310,7 @@ class RequestModel {
           invoice: params['invoice'] as String,
           amountSat: params['amount'] == null
               ? null
-              : BigInt.from((params['amount'] as int) ~/ 1000),
+              : (params['amount'] as int) ~/ 1000,
           createdAt: createdAt,
           expiresAt: expiration,
         );
@@ -326,7 +325,7 @@ class RequestModel {
                     invoice: invoice['invoice'] as String,
                     amountSat: invoice['amount'] == null
                         ? null
-                        : BigInt.from((invoice['amount'] as int) ~/ 1000),
+                        : (invoice['amount'] as int) ~/ 1000,
                   ))
               .toList(),
           createdAt: createdAt,
@@ -337,7 +336,7 @@ class RequestModel {
           id: id,
           clientPubkey: clientPubkey,
           walletServicePubkey: walletServicePubkey,
-          amountSat: BigInt.from((params['amount'] as int) ~/ 1000),
+          amountSat: (params['amount'] as int) ~/ 1000,
           pubkey: params['pubkey'] as String,
           preimage: params['preimage'] as String?,
           tlvRecords: (params['tlv_records'] as List?)
@@ -358,7 +357,7 @@ class RequestModel {
               .map((keysend) => MultiPayKeysendRequestKeysend(
                     id: keysend['id'] as String?,
                     pubkey: keysend['pubkey'] as String,
-                    amountSat: BigInt.from((keysend['amount'] as int) ~/ 1000),
+                    amountSat: (keysend['amount'] as int) ~/ 1000,
                     preimage: keysend['preimage'] as String?,
                     tlvRecords: (keysend['tlv_records'] as List?)
                         ?.map((record) => TlvRecord(
@@ -390,7 +389,7 @@ class RequestModel {
           until: params['until'] as int?,
           limit: params['limit'] as int?,
           offset: params['offset'] as int?,
-          unpaid: params['unpaid'] as bool,
+          unpaid: params['unpaid'] as bool?,
           type: params['type'] == null
               ? null
               : TransactionType.fromValue(params['type'] as String),

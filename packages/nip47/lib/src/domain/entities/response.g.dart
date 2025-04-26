@@ -45,9 +45,7 @@ GetBalanceResponse _$GetBalanceResponseFromJson(Map<String, dynamic> json) =>
     GetBalanceResponse(
       requestId: json['requestId'] as String,
       clientPubkey: json['clientPubkey'] as String,
-      balanceSat: json['balanceSat'] == null
-          ? null
-          : BigInt.parse(json['balanceSat'] as String),
+      balanceSat: (json['balanceSat'] as num?)?.toInt(),
       error: $enumDecodeNullable(_$ErrorCodeEnumMap, json['error']),
       createdAt: (json['createdAt'] as num).toInt(),
       $type: json['runtimeType'] as String?,
@@ -57,7 +55,7 @@ Map<String, dynamic> _$GetBalanceResponseToJson(GetBalanceResponse instance) =>
     <String, dynamic>{
       'requestId': instance.requestId,
       'clientPubkey': instance.clientPubkey,
-      'balanceSat': instance.balanceSat?.toString(),
+      'balanceSat': instance.balanceSat,
       'error': _$ErrorCodeEnumMap[instance.error],
       'createdAt': instance.createdAt,
       'runtimeType': instance.$type,

@@ -213,29 +213,41 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   }
 
   Future<void> _handleRequest(nip01.SignedEvent request) async {
-    final connection = _connections[request.pubkey];
+    try {
+      final connection = _connections[request.pubkey];
 
-    if (connection == null) {
-      throw RequestException('Connection not found');
-    }
-
-    final model = RequestModel.fromEvent(
-      request,
-      walletServicePrivateKey: connection.walletServiceKeyPair.privateKey,
-    );
-
-    if (model.expiration != null) {
-      final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      if (model.expiration! < now) {
-        throw RequestException('Request expired');
+      if (connection == null) {
+        throw RequestException('Connection not found');
       }
+
+      final model = RequestModel.fromEvent(
+        request,
+        walletServicePrivateKey: connection.walletServiceKeyPair.privateKey,
+      );
+
+      if (model.expiration != null) {
+        final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+        if (model.expiration! < now) {
+          throw RequestException('Request expired');
+        }
+      }
+
+      // Check if the request method is permitted for the connection
+      final permittedMethods = {
+        ...(connection.methods?.map((method) => method.plaintext) ?? []),
+        ...(connection.customMethods ?? []),
+      };
+
+      if (!permittedMethods.contains(model.method)) {
+        throw RequestException('Request method not permitted');
+      }
+
+      final entity = model.toEntity();
+
+      _requestsController.add(entity);
+    } catch (e) {
+      log('Error handling request: $e');
     }
-
-    // TODO: check if the request method is permitted for the connection
-
-    final entity = model.toEntity();
-
-    _requestsController.add(entity);
   }
 
   @override

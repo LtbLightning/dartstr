@@ -20,7 +20,7 @@ sealed class Response with _$Response {
   const factory Response.getBalance({
     required String requestId,
     required String clientPubkey,
-    BigInt? balanceSat,
+    int? balanceSat,
     ErrorCode? error,
     required int createdAt,
   }) = GetBalanceResponse;

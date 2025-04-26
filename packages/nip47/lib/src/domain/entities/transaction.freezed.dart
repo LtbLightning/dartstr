@@ -21,8 +21,8 @@ mixin _$Transaction {
   String? get descriptionHash;
   String? get preimage;
   String get paymentHash;
-  BigInt get amountSat;
-  BigInt get feesPaidSat;
+  int get amountSat;
+  int get feesPaidSat;
   int get createdAt;
   int? get expiresAt;
   int? get settledAt;
@@ -102,8 +102,8 @@ abstract mixin class $TransactionCopyWith<$Res> {
       String? descriptionHash,
       String? preimage,
       String paymentHash,
-      BigInt amountSat,
-      BigInt feesPaidSat,
+      int amountSat,
+      int feesPaidSat,
       int createdAt,
       int? expiresAt,
       int? settledAt,
@@ -163,11 +163,11 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
       amountSat: null == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       feesPaidSat: null == feesPaidSat
           ? _self.feesPaidSat
           : feesPaidSat // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -222,9 +222,9 @@ class _Transaction extends Transaction {
   @override
   final String paymentHash;
   @override
-  final BigInt amountSat;
+  final int amountSat;
   @override
-  final BigInt feesPaidSat;
+  final int feesPaidSat;
   @override
   final int createdAt;
   @override
@@ -323,8 +323,8 @@ abstract mixin class _$TransactionCopyWith<$Res>
       String? descriptionHash,
       String? preimage,
       String paymentHash,
-      BigInt amountSat,
-      BigInt feesPaidSat,
+      int amountSat,
+      int feesPaidSat,
       int createdAt,
       int? expiresAt,
       int? settledAt,
@@ -384,11 +384,11 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
       amountSat: null == amountSat
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       feesPaidSat: null == feesPaidSat
           ? _self.feesPaidSat
           : feesPaidSat // ignore: cast_nullable_to_non_nullable
-              as BigInt,
+              as int,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable

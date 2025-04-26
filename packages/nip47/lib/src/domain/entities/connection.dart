@@ -67,7 +67,7 @@ sealed class Connection with _$Connection {
     Uri? icon,
     Uri? returnTo,
     int? expiresAt,
-    BigInt? maxAmountSat,
+    int? maxAmountSat,
     BudgetRenewal? budgetRenewal,
     List<Method>? requestMethods,
     List<NotificationType>? notificationTypes,
@@ -117,7 +117,7 @@ sealed class Connection with _$Connection {
             if (clientConnection.expiresAt != null)
               'expires_at': clientConnection.expiresAt.toString(),
             if (clientConnection.maxAmountSat != null)
-              'max_amount': clientConnection.maxAmountSat! * BigInt.from(1000),
+              'max_amount': clientConnection.maxAmountSat! * 1000,
             if (clientConnection.budgetRenewal != null)
               'budget_renewal': clientConnection.budgetRenewal!.plaintext,
             if (clientConnection.requestMethods != null)
