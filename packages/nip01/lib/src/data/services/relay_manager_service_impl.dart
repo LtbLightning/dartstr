@@ -8,14 +8,15 @@ import 'package:nip01/src/domain/repositories/relay_repository.dart';
 import 'package:nip01/src/domain/services/relay_manager_service.dart';
 
 class RelayManagerServiceImpl implements RelayManagerService {
-  final Map<String, RelayRepository> _relays = {};
+  final Map<String, RelayRepository> _relays;
   late final StreamController<List<Relay>> _relaysStreamController;
   late final StreamController<SignedEvent> _eventsStreamController;
   StreamSubscription<List<Relay>>? _relaysStreamSubscription;
   StreamSubscription<SignedEvent>? _eventsStreamSubscription;
 
   RelayManagerServiceImpl()
-      : _relaysStreamController = StreamController<List<Relay>>.broadcast(),
+      : _relays = {},
+        _relaysStreamController = StreamController<List<Relay>>.broadcast(),
         _eventsStreamController = StreamController<SignedEvent>.broadcast();
 
   @override

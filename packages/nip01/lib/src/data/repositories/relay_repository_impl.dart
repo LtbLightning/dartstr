@@ -52,6 +52,7 @@ class RelayRepositoryImpl implements RelayRepository {
         if (state == WebSocketState.connected) {
           // Re-subscribe to all subscriptions when reconnected
           for (final subscription in _subscriptions.values) {
+            log('Re-subscribing to subscription: $subscription');
             final message = ClientMessageModel.subscription(subscription);
             _dataSource.sendMessage(message);
           }

@@ -17,6 +17,7 @@ dependencies:
   synchronized: ^3.3.0+3
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
+  collection: ^1.19.1
   # path: ^1.8.0
 
 dev_dependencies:

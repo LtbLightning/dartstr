@@ -45,11 +45,7 @@ sealed class ClientMessageModel with _$ClientMessageModel {
       ClientMessage.req.value,
       subscription.id,
       if (subscription.filters != null)
-        ...subscription.filters!.map((f) {
-          final filterJson = f.toJson();
-          filterJson.remove('runtimeType');
-          return filterJson;
-        }),
+        ...subscription.filters!.map((f) => f.toJson()),
     ]));
   }
   factory ClientMessageModel.close(String subscriptionId) => ClientMessageModel(

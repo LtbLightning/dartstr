@@ -272,8 +272,8 @@ class RequestModel {
   }
 
   Request toEntity() {
-    final method = Method.fromPlaintext(this.method);
-    switch (method) {
+    final nwcMethod = Method.fromPlaintext(method);
+    switch (nwcMethod) {
       case Method.getInfo:
         return GetInfoRequest(
           id: id,
@@ -401,7 +401,7 @@ class RequestModel {
           id: id,
           clientPubkey: clientPubkey,
           walletServicePubkey: walletServicePubkey,
-          method: method.plaintext,
+          method: method,
           params: params,
           createdAt: createdAt,
           expiresAt: expiration,

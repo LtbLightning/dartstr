@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:nip01/nip01.dart';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/nip47.dart';
@@ -5,6 +7,9 @@ import 'package:nip47/nip47.dart';
 Future<void> main() async {
   // Generate a key pair for the wallet
   final walletServiceKeyPair = KeyPair.generate();
+  log('Wallet service pubkey: ${walletServiceKeyPair.publicKey}');
+  final walletServiceKeyPair2 = KeyPair.generate();
+  log('Wallet service pubkey2: ${walletServiceKeyPair2.publicKey}');
 
   final relayManager = nip01.RelayManagerServiceImpl();
 
@@ -38,8 +43,17 @@ Future<void> main() async {
     methods: methods,
     customMethods: customMethods,
   );
-
+  log('Connection created: ${connection.clientPubkey}');
   print('Connection URI: ${connection.uri}');
+
+  final connection2 = await walletServiceRepository.createConnection(
+    walletServicePrivateKey: walletServiceKeyPair2.privateKey,
+    relays: [Uri.parse(relayUrl)],
+    methods: methods,
+    customMethods: customMethods,
+  );
+  log('Connection created2: ${connection2.clientPubkey}');
+  log('Connection2 URI: ${connection2.uri}');
 
   // Listen for nwc requests
   final sub = walletServiceRepository.requests.listen((request) async {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:dartstr_utils/dartstr_utils.dart';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/src/data/models/info_event_model.dart';
 import 'package:nip47/src/data/models/notification_model.dart';
@@ -13,9 +14,9 @@ import 'package:nip47/src/nip47_base.dart';
 class WalletServiceRepositoryImpl implements WalletServiceRepository {
   final nip01.RelayManagerService _relayManagerService;
   late StreamSubscription<nip01.SignedEvent> _eventSubscription;
-  final Map<String, nip01.Subscription> _connectionSubscriptions = {};
   final Map<String, WalletConnection> _connections = {};
   final StreamController<Request> _requestsController;
+  final String _subscriptionId = SecretGenerator.secretHex(64);
 
   WalletServiceRepositoryImpl({
     required nip01.RelayManagerService relayManagerService,
@@ -24,6 +25,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     _eventSubscription = _relayManagerService.eventsStream.where((event) {
       return event.kind == EventKind.request.kind;
     }).listen((request) async {
+      log('Received request: ${request.id} from ${request.pubkey}');
       await _handleRequest(request);
     });
   }
@@ -49,6 +51,8 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     final walletServiceKeyPair =
         nip01.KeyPair.fromPrivateKey(privateKey: walletServicePrivateKey);
     final clientKeyPair = nip01.KeyPair.generate();
+    log('Wallet service pubkey: ${walletServiceKeyPair.publicKey}');
+    log('Client pubkey: ${clientKeyPair.publicKey}');
 
     final connection = WalletConnection(
       walletServiceKeyPair: walletServiceKeyPair,
@@ -62,71 +66,78 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       customNotifications: customNotifications,
     );
 
-    // Add relay to the relay manager in case it's not already added
     await _relayManagerService
         .addRelays(relays.map((relay) => relay.toString()).toList());
 
-    // Send info event
-    await _publishInfoEvent(connection: connection);
-
-    // Subscribe to requests for the wallet service on the relay
-    final subscription = nip01.Subscription.fromFilters([
-      Nip47Filters.requests(walletServicePubkey: walletServiceKeyPair.publicKey)
-    ]);
-    await _relayManagerService.subscribe(subscription,
-        relayUrls: relays.map((relay) => relay.toString()).toList());
-    _connectionSubscriptions[connection.clientPubkey] = subscription;
-
-    // Cache the connection
     _connections[connection.clientPubkey] = connection;
+
+    await _subscribeAllConnections();
+
+    try {
+      await _publishInfoEvent(connection: connection);
+    } catch (e) {
+      log('Error publishing info event: $e');
+    }
 
     return connection;
   }
 
   @override
-  Future<void> connect(
-    WalletConnection connection,
-  ) async {
-    final relays = connection.relays.map((relay) => relay.toString()).toList();
+  Future<void> connect(WalletConnection connection) async {
+    final relays = connection.relays.map((r) => r.toString()).toList();
     if (connection.clientRelays != null) {
-      relays.addAll(connection.clientRelays!.map((relay) => relay.toString()));
+      relays.addAll(connection.clientRelays!.map((r) => r.toString()));
     }
 
-    // Add relays to the relay manager in case they're not already added
     await _relayManagerService.addRelays(relays);
-
-    // Send info event
-    await _publishInfoEvent(connection: connection);
-
-    // Subscribe to requests for the wallet service on the relay
-    final subscription = nip01.Subscription.fromFilters([
-      Nip47Filters.requests(
-          walletServicePubkey: connection.walletServiceKeyPair.publicKey)
-    ]);
-    await _relayManagerService.subscribe(subscription, relayUrls: relays);
-    _connectionSubscriptions[connection.clientPubkey] = subscription;
-
-    // Cache the connection
     _connections[connection.clientPubkey] = connection;
+    await _subscribeAllConnections();
+
+    try {
+      await _publishInfoEvent(connection: connection);
+    } catch (e) {
+      log('Error publishing info event: $e');
+    }
+  }
+
+  Future<void> _subscribeAllConnections() async {
+    final pubkeys = _connections.values
+        .map((c) => c.walletServiceKeyPair.publicKey)
+        .toSet()
+        .toList();
+
+    final filter = nip01.Filters(
+      kinds: [EventKind.request.kind],
+      tags: {'p': pubkeys},
+    );
+
+    final allRelays = _connections.values
+        .expand((c) => [...c.relays, ...?c.clientRelays])
+        .map((uri) => uri.toString())
+        .toSet()
+        .toList();
+
+    final subscription = nip01.Subscription(
+      id: _subscriptionId,
+      filters: [filter],
+    );
+
+    await _relayManagerService.subscribe(subscription, relayUrls: allRelays);
   }
 
   @override
   Future<void> notify(Notification notification, {int timeoutSec = 10}) async {
     final connection = _connections[notification.connectionPubkey];
-
-    if (connection == null) {
-      throw NotificationException('Connection not found');
-    }
+    if (connection == null) throw NotificationException('Connection not found');
 
     final model = NotificationModel.fromEntity(notification);
-    final event = model.toEvent(
-      walletServiceKeyPair: connection.walletServiceKeyPair,
-    );
+    final event =
+        model.toEvent(walletServiceKeyPair: connection.walletServiceKeyPair);
     final signedEvent = event.sign(connection.walletServiceKeyPair);
 
     final isPublished = await _relayManagerService.publishEvent(
       signedEvent,
-      relayUrls: connection.relays.map((relay) => relay.toString()).toList(),
+      relayUrls: connection.relays.map((r) => r.toString()).toList(),
       timeoutSec: timeoutSec,
     );
 
@@ -138,10 +149,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   @override
   Future<void> respond(Response response, {int timeoutSec = 10}) async {
     final connection = _connections[response.clientPubkey];
-
-    if (connection == null) {
-      throw ResponseException('Connection not found');
-    }
+    if (connection == null) throw ResponseException('Connection not found');
 
     final model = ResponseModel.fromEntity(response);
     final event =
@@ -150,7 +158,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
 
     final isPublished = await _relayManagerService.publishEvent(
       signedEvent,
-      relayUrls: connection.relays.map((relay) => relay.toString()).toList(),
+      relayUrls: connection.relays.map((r) => r.toString()).toList(),
       timeoutSec: timeoutSec,
     );
 
@@ -163,10 +171,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   Future<void> dispose() async {
     await _eventSubscription.cancel();
     await _requestsController.close();
-
-    for (final subscription in _connectionSubscriptions.values) {
-      await _relayManagerService.unsubscribe(subscription.id);
-    }
+    await _relayManagerService.unsubscribe(_subscriptionId);
   }
 
   Future<void> _publishInfoEvent({
@@ -177,12 +182,8 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       walletServicePubkey: connection.walletServiceKeyPair.publicKey,
       methods: connection.methods,
       notifications: connection.notifications,
-      // Client relay url means this was a client-created connection,
-      //  so the client's pubkey should be included as a tag in the event
       clientPubkey:
           connection.clientRelays != null ? connection.clientPubkey : null,
-      // If the wallet service prefers a different relay than the client,
-      // it should also be included in the tag with the client's pubkey
       walletRelay: connection.clientRelays != null &&
               connection.clientRelays!.contains(connection.relays.first)
           ? connection.relays.first
@@ -195,11 +196,9 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     final event = model.toUnsignedEvent();
     final signedEvent = event.sign(connection.walletServiceKeyPair);
 
-    // It should be published to the client's relays if it's a client-created connection
-    // else it should be published to the wallet service's relays
     final publishingRelays = connection.clientRelays != null
-        ? connection.clientRelays!.map((relay) => relay.toString()).toList()
-        : connection.relays.map((relay) => relay.toString()).toList();
+        ? connection.clientRelays!.map((r) => r.toString()).toList()
+        : connection.relays.map((r) => r.toString()).toList();
 
     final isPublished = await _relayManagerService.publishEvent(
       signedEvent,
@@ -215,10 +214,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   Future<void> _handleRequest(nip01.SignedEvent request) async {
     try {
       final connection = _connections[request.pubkey];
-
-      if (connection == null) {
-        throw RequestException('Connection not found');
-      }
+      if (connection == null) throw RequestException('Connection not found');
 
       final model = RequestModel.fromEvent(
         request,
@@ -232,18 +228,15 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
         }
       }
 
-      // Check if the request method is permitted for the connection
       final permittedMethods = {
-        ...(connection.methods?.map((method) => method.plaintext) ?? []),
+        ...(connection.methods?.map((m) => m.plaintext) ?? []),
         ...(connection.customMethods ?? []),
       };
-
       if (!permittedMethods.contains(model.method)) {
         throw RequestException('Request method not permitted');
       }
 
       final entity = model.toEntity();
-
       _requestsController.add(entity);
     } catch (e) {
       log('Error handling request: $e');
@@ -253,34 +246,26 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   @override
   Future<void> disconnect(WalletConnection connection) async {
     _connections.remove(connection.clientPubkey);
-    final subscription =
-        _connectionSubscriptions.remove(connection.clientPubkey);
-    if (subscription != null) {
-      return _relayManagerService.unsubscribe(subscription.id);
-    }
+    await _subscribeAllConnections();
   }
 }
 
 class InfoEventException implements Exception {
   final String message;
-
   InfoEventException(this.message);
 }
 
 class ResponseException implements Exception {
   final String message;
-
   ResponseException(this.message);
 }
 
 class RequestException implements Exception {
   final String message;
-
   RequestException(this.message);
 }
 
 class NotificationException implements Exception {
   final String message;
-
   NotificationException(this.message);
 }

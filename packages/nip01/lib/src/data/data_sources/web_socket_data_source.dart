@@ -128,7 +128,7 @@ class WebSocketDataSourceImpl implements WebSocketDataSource {
 
         _subscription = _channel!.stream.listen(
           (message) {
-            log('Received message: $message from relay $_url');
+            log('[WebsocketDatasourceImpl] Received message: $message from relay $_url');
             final relayMessage = RelayMessageModel.fromString(message);
             _messageBroadcast.add(relayMessage);
           },
