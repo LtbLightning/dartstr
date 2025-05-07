@@ -206,8 +206,8 @@ class RelayManagerServiceImpl implements RelayManagerService {
     // Cancel the previous events subscription if it exists
     await _eventsStreamSubscription?.cancel();
     // Start streaming a merged stream of all relay event streams
-    _eventsStreamSubscription =
-        StreamGroup.merge(_relays.values.map((repo) => repo.eventStream))
-            .listen(_eventsStreamController.add);
+    _eventsStreamSubscription = StreamGroup.merge(
+            _relays.values.map((repo) => repo.eventStream.distinct()))
+        .listen(_eventsStreamController.add);
   }
 }

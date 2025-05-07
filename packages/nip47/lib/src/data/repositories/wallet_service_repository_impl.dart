@@ -17,6 +17,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   final Map<String, WalletConnection> _connections = {};
   final StreamController<Request> _requestsController;
   final String _subscriptionId = SecretGenerator.secretHex(64);
+  final Set<String> _seenRequests = {};
 
   WalletServiceRepositoryImpl({
     required nip01.RelayManagerService relayManagerService,
@@ -26,7 +27,13 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       return event.kind == EventKind.request.kind;
     }).listen((request) async {
       log('Received request: ${request.id} from ${request.pubkey}');
+      if (_seenRequests.contains(request.id)) {
+        log('Request ${request.id} already seen, ignoring.');
+        return;
+      }
       await _handleRequest(request);
+      _seenRequests.add(request.id);
+      log('Added request ${request.id} to seen requests.');
     });
   }
 
@@ -101,6 +108,10 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   }
 
   Future<void> _subscribeAllConnections() async {
+    await _relayManagerService.unsubscribe(_subscriptionId);
+
+    if (_connections.isEmpty) return;
+
     final pubkeys = _connections.values
         .map((c) => c.walletServiceKeyPair.publicKey)
         .toSet()
