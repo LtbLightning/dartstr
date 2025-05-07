@@ -168,10 +168,24 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   }
 
   @override
+  Future<void> disconnect(WalletConnection connection) async {
+    _connections.remove(connection.clientPubkey);
+
+    // If no connections left, fully unsubscribe
+    if (_connections.isEmpty) {
+      await _relayManagerService.unsubscribe(_subscriptionId);
+    } else {
+      // Re-subscribe with updated filters
+      await _subscribeAllConnections();
+    }
+  }
+
+  @override
   Future<void> dispose() async {
     await _eventSubscription.cancel();
     await _requestsController.close();
     await _relayManagerService.unsubscribe(_subscriptionId);
+    _connections.clear();
   }
 
   Future<void> _publishInfoEvent({
@@ -214,7 +228,7 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
   Future<void> _handleRequest(nip01.SignedEvent request) async {
     try {
       final connection = _connections[request.pubkey];
-      if (connection == null) throw RequestException('Connection not found');
+      if (connection == null) return;
 
       final model = RequestModel.fromEvent(
         request,
@@ -224,7 +238,11 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
       if (model.expiration != null) {
         final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
         if (model.expiration! < now) {
-          throw RequestException('Request expired');
+          await _sendErrorResponse(
+            request: model,
+            error: ErrorCode.other,
+          );
+          return;
         }
       }
 
@@ -233,7 +251,8 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
         ...(connection.customMethods ?? []),
       };
       if (!permittedMethods.contains(model.method)) {
-        throw RequestException('Request method not permitted');
+        await _sendErrorResponse(request: model, error: ErrorCode.restricted);
+        return;
       }
 
       final entity = model.toEntity();
@@ -243,10 +262,100 @@ class WalletServiceRepositoryImpl implements WalletServiceRepository {
     }
   }
 
-  @override
-  Future<void> disconnect(WalletConnection connection) async {
-    _connections.remove(connection.clientPubkey);
-    await _subscribeAllConnections();
+  Future<void> _sendErrorResponse({
+    required RequestModel request,
+    required ErrorCode error,
+  }) async {
+    try {
+      final method = Method.fromPlaintext(request.method);
+      final createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      Response response;
+
+      switch (method) {
+        case Method.getInfo:
+          response = Response.getInfo(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.payInvoice:
+          response = Response.payInvoice(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.multiPayInvoice:
+          request as MultiPayInvoiceRequest;
+          response = Response.multiPayInvoice(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            invoiceId: '',
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.payKeysend:
+          response = Response.payKeysend(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.multiPayKeysend:
+          request as MultiPayKeysendRequest;
+          response = Response.multiPayKeysend(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            keysendId: '',
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.makeInvoice:
+          response = Response.makeInvoice(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.lookupInvoice:
+          request as LookupInvoiceRequest;
+          response = Response.lookupInvoice(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.listTransactions:
+          request as ListTransactionsRequest;
+          response = Response.listTransactions(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.getBalance:
+          response = Response.getBalance(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            error: error,
+            createdAt: createdAt,
+          );
+        case Method.custom:
+          request as CustomRequest;
+          response = Response.custom(
+            requestId: request.id,
+            clientPubkey: request.clientPubkey,
+            resultType: request.method,
+            error: error,
+            createdAt: createdAt,
+          );
+      }
+
+      await respond(response);
+    } catch (e) {
+      log('Error sending error response for request ${request.id}: $e');
+    }
   }
 }
 
