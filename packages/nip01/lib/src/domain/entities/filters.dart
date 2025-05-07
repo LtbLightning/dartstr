@@ -1,5 +1,3 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 class Filters {
   final List<String>? ids;
   final List<String>? authors;
