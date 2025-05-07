@@ -15,6 +15,25 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip47` - `v0.4.0+3`](#nip47---v0403)
+
+---
+
+#### `nip47` - `v0.4.0+3`
+
+
+## 2025-05-07
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip01` - `v0.2.0+2`](#nip01---v0202)
 
 ---
