@@ -1,30 +1,40 @@
-import 'package:nip01/src/domain/entities/entities.dart';
-import 'package:nip01/src/domain/services/relay_manager_service.dart';
+import 'package:nip01/nip01.dart';
+import 'package:nip01/src/domain/repositories/event_repository.dart';
 
 class GetProfileMetadataUseCase {
-  final RelayManagerService _relays;
+  final EventRepository _eventRepository;
+  final RelayRepository _relayRepository;
 
   GetProfileMetadataUseCase({
-    required RelayManagerService relayManagerService,
-  }) : _relays = relayManagerService;
+    required EventRepository eventRepository,
+    required RelayRepository relayRepository,
+  })  : _eventRepository = eventRepository,
+        _relayRepository = relayRepository;
 
   Future<Kind0Metadata> execute(
     String userPubkey, {
     List<String>? relayUrls,
+    int timeoutSec = 10,
   }) async {
     try {
-      // Make sure the relays are available in the relay manager
-      if (relayUrls != null && relayUrls.isNotEmpty) {
-        await _relays.addRelays(relayUrls);
+      for (final relayUrl in relayUrls ?? []) {
+        await _relayRepository.addRelay(relayUrl);
+      }
+
+      if (_relayRepository.relays.isEmpty) {
+        throw GetProfileMetadataException('No relays added');
       }
 
       final filter = Filters(authors: [userPubkey], kinds: const [0]);
 
-      final events =
-          await _relays.getStoredEvents([filter], relayUrls: relayUrls);
+      final events = await _eventRepository.getEvents(
+        [filter],
+        relayUrls: relayUrls,
+        timeoutSeconds: timeoutSec,
+      );
 
       if (events.isEmpty) {
-        throw Exception('No metadata found for $userPubkey');
+        throw GetProfileMetadataException('No metadata found for $userPubkey');
       }
 
       final latestEvent = events.reduce(

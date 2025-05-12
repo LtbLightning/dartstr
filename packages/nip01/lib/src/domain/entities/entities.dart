@@ -1,7 +1,12 @@
-export 'event.dart';
+export 'closed_message.dart';
+export 'eose_message.dart';
 export 'event_kind.dart';
+export 'event_message.dart';
+export 'event.dart';
 export 'filters.dart';
 export 'key_pair.dart';
 export 'kind_0_metadata.dart';
+export 'notice_message.dart';
+export 'ok_message.dart';
 export 'relay.dart';
 export 'subscription.dart';

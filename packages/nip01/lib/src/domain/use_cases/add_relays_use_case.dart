@@ -1,16 +1,35 @@
+import 'dart:developer';
+
 import 'package:nip01/nip01.dart';
 
 class AddRelaysUseCase {
-  final RelayManagerService _relayManager;
+  final RelayRepository _relayRepository;
 
   AddRelaysUseCase({
-    required RelayManagerService relayManagerService,
-  }) : _relayManager = relayManagerService;
+    required RelayRepository relayRepository,
+  }) : _relayRepository = relayRepository;
 
-  Future<List<Stream<Relay>>> execute(List<String> relayUrls) async {
+  Future<List<Uri>> execute(List<Uri> relayUrls) async {
     try {
-      final streams = await _relayManager.addRelays(relayUrls);
-      return streams;
+      if (relayUrls.isEmpty) {
+        throw AddRelaysException('Relay URLs cannot be empty');
+      }
+
+      final relayAdditionResults = await Future.wait(
+        relayUrls.map(
+          (url) async {
+            try {
+              await _relayRepository.addRelay(url.toString());
+              return url;
+            } catch (e) {
+              log('Failed to add relay: $url, error: $e');
+              return null;
+            }
+          },
+        ),
+      );
+
+      return relayAdditionResults.whereType<Uri>().toList();
     } catch (e) {
       throw AddRelaysException(e.toString());
     }

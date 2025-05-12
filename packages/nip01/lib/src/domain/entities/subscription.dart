@@ -8,14 +8,8 @@ part 'subscription.freezed.dart';
 sealed class Subscription with _$Subscription {
   const factory Subscription({
     required String id,
-    List<Filters>? filters,
+    required List<Filters> filters,
+    List<String>? relayUrls,
   }) = _Subscription;
   const Subscription._();
-
-  factory Subscription.fromFilters(List<Filters> filters) {
-    return Subscription(
-      id: SecretGenerator.secretHex(64),
-      filters: filters,
-    );
-  }
 }

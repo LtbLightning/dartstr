@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'event.dart';
+part of 'event_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,7 +14,7 @@ part of 'event.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$Event {
+mixin _$EventModel {
   String get id;
   String get pubkey;
   int get createdAt;
@@ -23,18 +23,21 @@ mixin _$Event {
   String get content;
   String get sig;
 
-  /// Create a copy of Event
+  /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $EventCopyWith<Event> get copyWith =>
-      _$EventCopyWithImpl<Event>(this as Event, _$identity);
+  $EventModelCopyWith<EventModel> get copyWith =>
+      _$EventModelCopyWithImpl<EventModel>(this as EventModel, _$identity);
+
+  /// Serializes this EventModel to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is Event &&
+            other is EventModel &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.pubkey, pubkey) || other.pubkey == pubkey) &&
             (identical(other.createdAt, createdAt) ||
@@ -45,20 +48,22 @@ mixin _$Event {
             (identical(other.sig, sig) || other.sig == sig));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, pubkey, createdAt, kind,
       const DeepCollectionEquality().hash(tags), content, sig);
 
   @override
   String toString() {
-    return 'Event(id: $id, pubkey: $pubkey, createdAt: $createdAt, kind: $kind, tags: $tags, content: $content, sig: $sig)';
+    return 'EventModel(id: $id, pubkey: $pubkey, createdAt: $createdAt, kind: $kind, tags: $tags, content: $content, sig: $sig)';
   }
 }
 
 /// @nodoc
-abstract mixin class $EventCopyWith<$Res> {
-  factory $EventCopyWith(Event value, $Res Function(Event) _then) =
-      _$EventCopyWithImpl;
+abstract mixin class $EventModelCopyWith<$Res> {
+  factory $EventModelCopyWith(
+          EventModel value, $Res Function(EventModel) _then) =
+      _$EventModelCopyWithImpl;
   @useResult
   $Res call(
       {String id,
@@ -71,13 +76,13 @@ abstract mixin class $EventCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
-  _$EventCopyWithImpl(this._self, this._then);
+class _$EventModelCopyWithImpl<$Res> implements $EventModelCopyWith<$Res> {
+  _$EventModelCopyWithImpl(this._self, this._then);
 
-  final Event _self;
-  final $Res Function(Event) _then;
+  final EventModel _self;
+  final $Res Function(EventModel) _then;
 
-  /// Create a copy of Event
+  /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -125,8 +130,9 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
 
 /// @nodoc
 
-class _Event extends Event {
-  const _Event(
+@JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
+class _EventModel extends EventModel {
+  const _EventModel(
       {required this.id,
       required this.pubkey,
       required this.createdAt,
@@ -136,6 +142,8 @@ class _Event extends Event {
       required this.sig})
       : _tags = tags,
         super._();
+  factory _EventModel.fromJson(Map<String, dynamic> json) =>
+      _$EventModelFromJson(json);
 
   @override
   final String id;
@@ -159,19 +167,26 @@ class _Event extends Event {
   @override
   final String sig;
 
-  /// Create a copy of Event
+  /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$EventCopyWith<_Event> get copyWith =>
-      __$EventCopyWithImpl<_Event>(this, _$identity);
+  _$EventModelCopyWith<_EventModel> get copyWith =>
+      __$EventModelCopyWithImpl<_EventModel>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$EventModelToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Event &&
+            other is _EventModel &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.pubkey, pubkey) || other.pubkey == pubkey) &&
             (identical(other.createdAt, createdAt) ||
@@ -182,20 +197,23 @@ class _Event extends Event {
             (identical(other.sig, sig) || other.sig == sig));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, pubkey, createdAt, kind,
       const DeepCollectionEquality().hash(_tags), content, sig);
 
   @override
   String toString() {
-    return 'Event(id: $id, pubkey: $pubkey, createdAt: $createdAt, kind: $kind, tags: $tags, content: $content, sig: $sig)';
+    return 'EventModel(id: $id, pubkey: $pubkey, createdAt: $createdAt, kind: $kind, tags: $tags, content: $content, sig: $sig)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
-  factory _$EventCopyWith(_Event value, $Res Function(_Event) _then) =
-      __$EventCopyWithImpl;
+abstract mixin class _$EventModelCopyWith<$Res>
+    implements $EventModelCopyWith<$Res> {
+  factory _$EventModelCopyWith(
+          _EventModel value, $Res Function(_EventModel) _then) =
+      __$EventModelCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -209,13 +227,13 @@ abstract mixin class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$EventCopyWithImpl<$Res> implements _$EventCopyWith<$Res> {
-  __$EventCopyWithImpl(this._self, this._then);
+class __$EventModelCopyWithImpl<$Res> implements _$EventModelCopyWith<$Res> {
+  __$EventModelCopyWithImpl(this._self, this._then);
 
-  final _Event _self;
-  final $Res Function(_Event) _then;
+  final _EventModel _self;
+  final $Res Function(_EventModel) _then;
 
-  /// Create a copy of Event
+  /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -228,7 +246,7 @@ class __$EventCopyWithImpl<$Res> implements _$EventCopyWith<$Res> {
     Object? content = null,
     Object? sig = null,
   }) {
-    return _then(_Event(
+    return _then(_EventModel(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable

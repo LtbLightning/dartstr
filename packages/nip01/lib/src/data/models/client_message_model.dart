@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nip01/src/domain/entities/entities.dart';
+import 'package:nip01/src/data/models/event_model.dart';
+import 'package:nip01/src/data/models/filters_model.dart';
 
 part 'client_message_model.freezed.dart';
 
@@ -30,7 +31,7 @@ sealed class ClientMessageModel with _$ClientMessageModel {
   }) = _ClientMessageModel;
   const ClientMessageModel._();
 
-  factory ClientMessageModel.event(SignedEvent event) {
+  factory ClientMessageModel.event(EventModel event) {
     final eventJson = event.toJson();
     eventJson.remove('runtimeType');
     return ClientMessageModel(
@@ -39,13 +40,15 @@ sealed class ClientMessageModel with _$ClientMessageModel {
       eventJson,
     ]));
   }
-  factory ClientMessageModel.subscription(Subscription subscription) {
+  factory ClientMessageModel.subscription({
+    required String subscriptionId,
+    required List<FiltersModel> filters,
+  }) {
     return ClientMessageModel(
         data: jsonEncode([
       ClientMessage.req.value,
-      subscription.id,
-      if (subscription.filters != null)
-        ...subscription.filters!.map((f) => f.toJson()),
+      subscriptionId,
+      if (filters.isNotEmpty) ...filters.map((f) => f.toJson()),
     ]));
   }
   factory ClientMessageModel.close(String subscriptionId) => ClientMessageModel(

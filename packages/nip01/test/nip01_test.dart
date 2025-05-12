@@ -1,5 +1,5 @@
 import 'package:nip01/nip01.dart';
-import 'package:nip01/src/data/data_sources/web_socket_data_source.dart';
+import 'package:nip01/src/data/models/event_model.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -8,8 +8,8 @@ void main() {
       privateKey:
           '5ee1c8000ab28edd64d74a7d951ac2dd559814887b1b9e1ac7c5f89e96125c12',
     );
-    final testEvent = Event.unsigned(
-      pubkey: testKeyPair.publicKey,
+    final testEvent = Event.create(
+      keyPair: testKeyPair,
       createdAt: 1672175320,
       kind: EventKind.textNote.value,
       tags: [],
@@ -40,21 +40,12 @@ void main() {
       test(
         'Successful event signing',
         () {
-          final signedEvent = testEvent.sign(testKeyPair);
-          expect(signedEvent.sig.isNotEmpty, true);
-          expect(signedEvent.verify(), true);
+          final eventModel = EventModel.fromEvent(testEvent);
+
+          expect(testEvent.sig.isNotEmpty, true);
+          expect(eventModel.isValid, true);
         },
       );
-
-      test('wrong key event signing', () {
-        final wrongKeyPair = KeyPair.generate();
-        expect(
-          () => testEvent.sign(wrongKeyPair),
-          throwsA(
-            isA<EventSigningException>(),
-          ),
-        );
-      });
     });
   });
 }

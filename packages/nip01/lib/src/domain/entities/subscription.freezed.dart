@@ -16,7 +16,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Subscription {
   String get id;
-  List<Filters>? get filters;
+  List<Filters> get filters;
+  List<String>? get relayUrls;
 
   /// Create a copy of Subscription
   /// with the given fields replaced by the non-null parameter values.
@@ -32,16 +33,20 @@ mixin _$Subscription {
         (other.runtimeType == runtimeType &&
             other is Subscription &&
             (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other.filters, filters));
+            const DeepCollectionEquality().equals(other.filters, filters) &&
+            const DeepCollectionEquality().equals(other.relayUrls, relayUrls));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, const DeepCollectionEquality().hash(filters));
+      runtimeType,
+      id,
+      const DeepCollectionEquality().hash(filters),
+      const DeepCollectionEquality().hash(relayUrls));
 
   @override
   String toString() {
-    return 'Subscription(id: $id, filters: $filters)';
+    return 'Subscription(id: $id, filters: $filters, relayUrls: $relayUrls)';
   }
 }
 
@@ -51,7 +56,7 @@ abstract mixin class $SubscriptionCopyWith<$Res> {
           Subscription value, $Res Function(Subscription) _then) =
       _$SubscriptionCopyWithImpl;
   @useResult
-  $Res call({String id, List<Filters>? filters});
+  $Res call({String id, List<Filters> filters, List<String>? relayUrls});
 }
 
 /// @nodoc
@@ -67,17 +72,22 @@ class _$SubscriptionCopyWithImpl<$Res> implements $SubscriptionCopyWith<$Res> {
   @override
   $Res call({
     Object? id = null,
-    Object? filters = freezed,
+    Object? filters = null,
+    Object? relayUrls = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      filters: freezed == filters
+      filters: null == filters
           ? _self.filters
           : filters // ignore: cast_nullable_to_non_nullable
-              as List<Filters>?,
+              as List<Filters>,
+      relayUrls: freezed == relayUrls
+          ? _self.relayUrls
+          : relayUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -85,18 +95,30 @@ class _$SubscriptionCopyWithImpl<$Res> implements $SubscriptionCopyWith<$Res> {
 /// @nodoc
 
 class _Subscription extends Subscription {
-  const _Subscription({required this.id, final List<Filters>? filters})
+  const _Subscription(
+      {required this.id,
+      required final List<Filters> filters,
+      final List<String>? relayUrls})
       : _filters = filters,
+        _relayUrls = relayUrls,
         super._();
 
   @override
   final String id;
-  final List<Filters>? _filters;
+  final List<Filters> _filters;
   @override
-  List<Filters>? get filters {
-    final value = _filters;
-    if (value == null) return null;
+  List<Filters> get filters {
     if (_filters is EqualUnmodifiableListView) return _filters;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_filters);
+  }
+
+  final List<String>? _relayUrls;
+  @override
+  List<String>? get relayUrls {
+    final value = _relayUrls;
+    if (value == null) return null;
+    if (_relayUrls is EqualUnmodifiableListView) return _relayUrls;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -115,16 +137,21 @@ class _Subscription extends Subscription {
         (other.runtimeType == runtimeType &&
             other is _Subscription &&
             (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other._filters, _filters));
+            const DeepCollectionEquality().equals(other._filters, _filters) &&
+            const DeepCollectionEquality()
+                .equals(other._relayUrls, _relayUrls));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, const DeepCollectionEquality().hash(_filters));
+      runtimeType,
+      id,
+      const DeepCollectionEquality().hash(_filters),
+      const DeepCollectionEquality().hash(_relayUrls));
 
   @override
   String toString() {
-    return 'Subscription(id: $id, filters: $filters)';
+    return 'Subscription(id: $id, filters: $filters, relayUrls: $relayUrls)';
   }
 }
 
@@ -136,7 +163,7 @@ abstract mixin class _$SubscriptionCopyWith<$Res>
       __$SubscriptionCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, List<Filters>? filters});
+  $Res call({String id, List<Filters> filters, List<String>? relayUrls});
 }
 
 /// @nodoc
@@ -153,17 +180,22 @@ class __$SubscriptionCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? id = null,
-    Object? filters = freezed,
+    Object? filters = null,
+    Object? relayUrls = freezed,
   }) {
     return _then(_Subscription(
       id: null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      filters: freezed == filters
+      filters: null == filters
           ? _self._filters
           : filters // ignore: cast_nullable_to_non_nullable
-              as List<Filters>?,
+              as List<Filters>,
+      relayUrls: freezed == relayUrls
+          ? _self._relayUrls
+          : relayUrls // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }

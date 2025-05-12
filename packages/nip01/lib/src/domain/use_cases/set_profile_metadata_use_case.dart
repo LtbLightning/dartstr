@@ -1,43 +1,47 @@
 import 'package:nip01/src/domain/entities/entities.dart';
-import 'package:nip01/src/domain/services/relay_manager_service.dart';
+import 'package:nip01/src/domain/repositories/event_repository.dart';
+import 'package:nip01/src/domain/repositories/relay_repository.dart';
 
 class SetProfileMetadataUseCase {
-  final RelayManagerService _relays;
+  final EventRepository _eventRepository;
+  final RelayRepository _relayRepository;
 
   SetProfileMetadataUseCase({
-    required RelayManagerService relayManagerService,
-  }) : _relays = relayManagerService;
+    required EventRepository eventRepository,
+    required RelayRepository relayRepository,
+  })  : _eventRepository = eventRepository,
+        _relayRepository = relayRepository;
 
-  Future<bool> execute({
+  Future<List<String>> execute({
     required KeyPair userKeyPair,
     required Kind0Metadata metadata,
     List<String>? relayUrls,
-    int successTreshold = 1,
     int timeoutSec = 10,
   }) async {
     try {
       // Make sure the relays are available in the relay manager
-      if (relayUrls != null && relayUrls.isNotEmpty) {
-        await _relays.addRelays(relayUrls);
+      for (final relayUrl in relayUrls ?? []) {
+        await _relayRepository.addRelay(relayUrl);
       }
 
-      final event = Event.unsigned(
-        pubkey: userKeyPair.publicKey,
+      if (_relayRepository.relays.isEmpty) {
+        throw FailedToSetProfileMetadataException('No relays added');
+      }
+
+      final event = Event.create(
+        keyPair: userKeyPair,
         createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
         kind: 0,
         content: metadata.content,
-      ).sign(userKeyPair);
+      );
 
-      final success = await _relays.publishEvent(
+      final relaysAcceptedBy = await _eventRepository.publishEvent(
         event,
         relayUrls: relayUrls,
-        timeoutSec: timeoutSec,
+        timeoutSeconds: timeoutSec,
       );
-      if (!success) {
-        throw Exception('Success treshold not reached');
-      }
 
-      return success;
+      return relaysAcceptedBy;
     } catch (e) {
       throw FailedToSetProfileMetadataException(e.toString());
     }
