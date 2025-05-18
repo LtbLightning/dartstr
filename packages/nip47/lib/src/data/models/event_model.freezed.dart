@@ -15,9 +15,10 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$EventModel {
-  String get id;
-  String get clientPubkey;
+  String? get id;
+  String? get clientPubkey;
   DateTime get createdAt;
+  String? get relay;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -35,15 +36,17 @@ mixin _$EventModel {
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.relay, relay) || other.relay == relay));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, clientPubkey, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, id, clientPubkey, createdAt, relay);
 
   @override
   String toString() {
-    return 'EventModel(id: $id, clientPubkey: $clientPubkey, createdAt: $createdAt)';
+    return 'EventModel(id: $id, clientPubkey: $clientPubkey, createdAt: $createdAt, relay: $relay)';
   }
 }
 
@@ -53,7 +56,8 @@ abstract mixin class $EventModelCopyWith<$Res> {
           EventModel value, $Res Function(EventModel) _then) =
       _$EventModelCopyWithImpl;
   @useResult
-  $Res call({String id, String clientPubkey, DateTime createdAt});
+  $Res call(
+      {String? id, String clientPubkey, DateTime createdAt, String? relay});
 }
 
 /// @nodoc
@@ -68,23 +72,28 @@ class _$EventModelCopyWithImpl<$Res> implements $EventModelCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? clientPubkey = null,
     Object? createdAt = null,
+    Object? relay = freezed,
   }) {
     return _then(_self.copyWith(
-      id: null == id
+      id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       clientPubkey: null == clientPubkey
-          ? _self.clientPubkey
+          ? _self.clientPubkey!
           : clientPubkey // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      relay: freezed == relay
+          ? _self.relay
+          : relay // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -93,18 +102,19 @@ class _$EventModelCopyWithImpl<$Res> implements $EventModelCopyWith<$Res> {
 
 class RequestEventModel extends EventModel {
   const RequestEventModel(
-      {required this.id,
+      {this.id,
       required this.clientPubkey,
       required this.walletServicePubkey,
       required this.method,
       required final Map<String, dynamic> params,
       required this.createdAt,
-      this.expiresAt})
+      this.expiresAt,
+      this.relay})
       : _params = params,
         super._();
 
   @override
-  final String id;
+  final String? id;
   @override
   final String clientPubkey;
   final String walletServicePubkey;
@@ -119,6 +129,8 @@ class RequestEventModel extends EventModel {
   @override
   final DateTime createdAt;
   final DateTime? expiresAt;
+  @override
+  final String? relay;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -143,7 +155,8 @@ class RequestEventModel extends EventModel {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.expiresAt, expiresAt) ||
-                other.expiresAt == expiresAt));
+                other.expiresAt == expiresAt) &&
+            (identical(other.relay, relay) || other.relay == relay));
   }
 
   @override
@@ -155,11 +168,12 @@ class RequestEventModel extends EventModel {
       method,
       const DeepCollectionEquality().hash(_params),
       createdAt,
-      expiresAt);
+      expiresAt,
+      relay);
 
   @override
   String toString() {
-    return 'EventModel.request(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, method: $method, params: $params, createdAt: $createdAt, expiresAt: $expiresAt)';
+    return 'EventModel.request(id: $id, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, method: $method, params: $params, createdAt: $createdAt, expiresAt: $expiresAt, relay: $relay)';
   }
 }
 
@@ -172,13 +186,14 @@ abstract mixin class $RequestEventModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       String clientPubkey,
       String walletServicePubkey,
       String method,
       Map<String, dynamic> params,
       DateTime createdAt,
-      DateTime? expiresAt});
+      DateTime? expiresAt,
+      String? relay});
 }
 
 /// @nodoc
@@ -194,19 +209,20 @@ class _$RequestEventModelCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? clientPubkey = null,
     Object? walletServicePubkey = null,
     Object? method = null,
     Object? params = null,
     Object? createdAt = null,
     Object? expiresAt = freezed,
+    Object? relay = freezed,
   }) {
     return _then(RequestEventModel(
-      id: null == id
+      id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
@@ -231,6 +247,10 @@ class _$RequestEventModelCopyWithImpl<$Res>
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      relay: freezed == relay
+          ? _self.relay
+          : relay // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -239,7 +259,7 @@ class _$RequestEventModelCopyWithImpl<$Res>
 
 class ResponseEventModel extends EventModel {
   const ResponseEventModel(
-      {required this.id,
+      {this.id,
       required this.requestId,
       required this.clientPubkey,
       required this.resultType,
@@ -247,12 +267,13 @@ class ResponseEventModel extends EventModel {
       this.errorCode,
       this.errorMessage,
       this.multiId,
-      required this.createdAt})
+      required this.createdAt,
+      this.relay})
       : _result = result,
         super._();
 
   @override
-  final String id;
+  final String? id;
   final String requestId;
   @override
   final String clientPubkey;
@@ -272,6 +293,8 @@ class ResponseEventModel extends EventModel {
   final String? multiId;
   @override
   final DateTime createdAt;
+  @override
+  final String? relay;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -300,7 +323,8 @@ class ResponseEventModel extends EventModel {
                 other.errorMessage == errorMessage) &&
             (identical(other.multiId, multiId) || other.multiId == multiId) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.relay, relay) || other.relay == relay));
   }
 
   @override
@@ -314,11 +338,12 @@ class ResponseEventModel extends EventModel {
       errorCode,
       errorMessage,
       multiId,
-      createdAt);
+      createdAt,
+      relay);
 
   @override
   String toString() {
-    return 'EventModel.response(id: $id, requestId: $requestId, clientPubkey: $clientPubkey, resultType: $resultType, result: $result, errorCode: $errorCode, errorMessage: $errorMessage, multiId: $multiId, createdAt: $createdAt)';
+    return 'EventModel.response(id: $id, requestId: $requestId, clientPubkey: $clientPubkey, resultType: $resultType, result: $result, errorCode: $errorCode, errorMessage: $errorMessage, multiId: $multiId, createdAt: $createdAt, relay: $relay)';
   }
 }
 
@@ -331,7 +356,7 @@ abstract mixin class $ResponseEventModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       String requestId,
       String clientPubkey,
       String resultType,
@@ -339,7 +364,8 @@ abstract mixin class $ResponseEventModelCopyWith<$Res>
       String? errorCode,
       String? errorMessage,
       String? multiId,
-      DateTime createdAt});
+      DateTime createdAt,
+      String? relay});
 }
 
 /// @nodoc
@@ -355,7 +381,7 @@ class _$ResponseEventModelCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? requestId = null,
     Object? clientPubkey = null,
     Object? resultType = null,
@@ -364,12 +390,13 @@ class _$ResponseEventModelCopyWithImpl<$Res>
     Object? errorMessage = freezed,
     Object? multiId = freezed,
     Object? createdAt = null,
+    Object? relay = freezed,
   }) {
     return _then(ResponseEventModel(
-      id: null == id
+      id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       requestId: null == requestId
           ? _self.requestId
           : requestId // ignore: cast_nullable_to_non_nullable
@@ -402,6 +429,177 @@ class _$ResponseEventModelCopyWithImpl<$Res>
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      relay: freezed == relay
+          ? _self.relay
+          : relay // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class InfoEventModel extends EventModel {
+  const InfoEventModel(
+      {this.id,
+      required this.walletServicePubkey,
+      required final List<String> methods,
+      required this.createdAt,
+      final List<String>? notifications,
+      this.clientPubkey,
+      this.walletRelay,
+      this.relay})
+      : _methods = methods,
+        _notifications = notifications,
+        super._();
+
+  @override
+  final String? id;
+  final String walletServicePubkey;
+  final List<String> _methods;
+  List<String> get methods {
+    if (_methods is EqualUnmodifiableListView) return _methods;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_methods);
+  }
+
+  @override
+  final DateTime createdAt;
+  final List<String>? _notifications;
+  List<String>? get notifications {
+    final value = _notifications;
+    if (value == null) return null;
+    if (_notifications is EqualUnmodifiableListView) return _notifications;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? clientPubkey;
+  final String? walletRelay;
+  @override
+  final String? relay;
+
+  /// Create a copy of EventModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $InfoEventModelCopyWith<InfoEventModel> get copyWith =>
+      _$InfoEventModelCopyWithImpl<InfoEventModel>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is InfoEventModel &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
+            const DeepCollectionEquality().equals(other._methods, _methods) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            const DeepCollectionEquality()
+                .equals(other._notifications, _notifications) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
+            (identical(other.walletRelay, walletRelay) ||
+                other.walletRelay == walletRelay) &&
+            (identical(other.relay, relay) || other.relay == relay));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      walletServicePubkey,
+      const DeepCollectionEquality().hash(_methods),
+      createdAt,
+      const DeepCollectionEquality().hash(_notifications),
+      clientPubkey,
+      walletRelay,
+      relay);
+
+  @override
+  String toString() {
+    return 'EventModel.info(id: $id, walletServicePubkey: $walletServicePubkey, methods: $methods, createdAt: $createdAt, notifications: $notifications, clientPubkey: $clientPubkey, walletRelay: $walletRelay, relay: $relay)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $InfoEventModelCopyWith<$Res>
+    implements $EventModelCopyWith<$Res> {
+  factory $InfoEventModelCopyWith(
+          InfoEventModel value, $Res Function(InfoEventModel) _then) =
+      _$InfoEventModelCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String? id,
+      String walletServicePubkey,
+      List<String> methods,
+      DateTime createdAt,
+      List<String>? notifications,
+      String? clientPubkey,
+      String? walletRelay,
+      String? relay});
+}
+
+/// @nodoc
+class _$InfoEventModelCopyWithImpl<$Res>
+    implements $InfoEventModelCopyWith<$Res> {
+  _$InfoEventModelCopyWithImpl(this._self, this._then);
+
+  final InfoEventModel _self;
+  final $Res Function(InfoEventModel) _then;
+
+  /// Create a copy of EventModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = freezed,
+    Object? walletServicePubkey = null,
+    Object? methods = null,
+    Object? createdAt = null,
+    Object? notifications = freezed,
+    Object? clientPubkey = freezed,
+    Object? walletRelay = freezed,
+    Object? relay = freezed,
+  }) {
+    return _then(InfoEventModel(
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      methods: null == methods
+          ? _self._methods
+          : methods // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      notifications: freezed == notifications
+          ? _self._notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      clientPubkey: freezed == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String?,
+      walletRelay: freezed == walletRelay
+          ? _self.walletRelay
+          : walletRelay // ignore: cast_nullable_to_non_nullable
+              as String?,
+      relay: freezed == relay
+          ? _self.relay
+          : relay // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }

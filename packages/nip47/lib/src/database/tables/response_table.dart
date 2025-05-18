@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:nip47/src/database/tables/request_table.dart';
 
 @DataClassName('ResponseTable')
 class Responses extends Table {
@@ -6,11 +7,11 @@ class Responses extends Table {
 
   @override
   Set<Column<Object>> get primaryKey => {id};
-  TextColumn get requestId =>
-      text().customConstraint('NOT NULL REFERENCES requests(id)')();
+  TextColumn get requestId => text().references(Requests, #id)();
+  TextColumn get resultType => text()();
   TextColumn get result => text().nullable()();
   TextColumn get errorCode => text().nullable()();
   TextColumn get errorMessage => text().nullable()();
   TextColumn get multiId => text().nullable()();
-  DateTimeColumn get createdAt => dateTime().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
 }

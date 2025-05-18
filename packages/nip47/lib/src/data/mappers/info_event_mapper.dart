@@ -1,25 +1,11 @@
 import 'dart:developer';
 
 import 'package:nip01/nip01.dart' as nip01;
-import 'package:nip47/src/domain/entities/entities.dart';
-import 'package:nip47/src/nip47_base.dart';
+import 'package:nip47/nip47.dart';
+import 'package:nip47/src/data/models/event_model.dart';
 
-class InfoEventModel {
-  final String walletServicePubkey;
-  final List<String> methods;
-  final List<String> notifications;
-  final String? clientPubkey;
-  final String? walletRelay;
-
-  const InfoEventModel({
-    required this.walletServicePubkey,
-    required this.methods,
-    this.notifications = const [],
-    this.clientPubkey,
-    this.walletRelay,
-  });
-
-  factory InfoEventModel.fromEntity(InfoEvent infoEvent) {
+class InfoEventMapper {
+  static InfoEventModel modelFromEntity(InfoEvent infoEvent) {
     final methods =
         infoEvent.methods?.map((method) => method.plaintext).toList() ?? [];
     if (infoEvent.customMethods != null) {
@@ -33,6 +19,9 @@ class InfoEventModel {
       notifications.addAll(infoEvent.customNotifications!);
     }
     return InfoEventModel(
+      id: infoEvent.id,
+      relay: infoEvent.relay,
+      createdAt: infoEvent.createdAt,
       walletServicePubkey: infoEvent.walletServicePubkey,
       methods: methods,
       notifications: notifications,
@@ -41,14 +30,14 @@ class InfoEventModel {
     );
   }
 
-  factory InfoEventModel.fromEvent(nip01.SignedEvent event) {
-    final contentElements = event.content.split(' ');
+  static InfoEventModel modelFromEvent(nip01.EventMessage event) {
+    final contentElements = event.event.content.split(' ');
     bool supportsNotifications = contentElements.contains('notifications');
     final methods =
         contentElements.where((element) => element != 'notifications').toList();
 
     final notifications = supportsNotifications
-        ? event.tags
+        ? event.event.tags
             .firstWhere((tag) => tag.first == 'notifications')[1]
             .split(' ')
         : <String>[];
@@ -60,7 +49,7 @@ class InfoEventModel {
     String? walletRelayUrl;
     String? clientPubkey;
     try {
-      pTag = event.tags.firstWhere((tag) => tag.first == 'p');
+      pTag = event.event.tags.firstWhere((tag) => tag.first == 'p');
       clientPubkey = pTag[1];
       walletRelayUrl = pTag.length > 2 ? pTag[2] : null;
     } catch (e) {
@@ -68,43 +57,50 @@ class InfoEventModel {
     }
 
     return InfoEventModel(
+      id: event.event.id,
+      relay: event.relayUrl,
+      createdAt:
+          DateTime.fromMillisecondsSinceEpoch(event.event.createdAt * 1000),
       methods: methods,
       notifications: notifications,
-      walletServicePubkey: event.pubkey,
+      walletServicePubkey: event.event.pubkey,
       clientPubkey: clientPubkey,
       walletRelay: walletRelayUrl,
     );
   }
 
-  nip01.UnsignedEvent toUnsignedEvent() {
-    final supportedCommands = methods;
+  static nip01.Event modelToEvent(
+    InfoEventModel model, {
+    required nip01.KeyPair walletServiceKeyPair,
+  }) {
+    final supportedCommands = model.methods;
     final replaceableEventTag = [
       'a',
-      '${EventKind.info.kind}:$walletServicePubkey:',
+      '${EventKind.info.kind}:${walletServiceKeyPair.publicKey}:',
     ];
     List<String>? pTag;
-    if (clientPubkey != null) {
-      pTag = ['p', clientPubkey!];
-      if (walletRelay != null) {
-        pTag.add(walletRelay!);
+    if (model.clientPubkey != null) {
+      pTag = ['p', model.clientPubkey!];
+      if (model.walletRelay != null) {
+        pTag.add(model.walletRelay!);
       }
     }
 
     // Check for notification support.
     List<String>? notificationsTag;
-    if (notifications.isNotEmpty) {
+    if (model.notifications != null && model.notifications!.isNotEmpty) {
       // NIP-47 spec: The content should be a plaintext string with the supported commands, space-separated.
       // If the node supports notifications, the string should also contain 'notifications'.
       supportedCommands.add('notifications');
-      notificationsTag = ['notifications', notifications.join(' ')];
+      notificationsTag = ['notifications', model.notifications!.join(' ')];
     }
 
     String content = supportedCommands.join(' ');
 
-    final event = nip01.UnsignedEvent(
-      pubkey: walletServicePubkey,
+    final event = nip01.Event.create(
+      keyPair: walletServiceKeyPair,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      kind: EventKind.info.kind,
+      kind: model.kind,
       // The info event should be a replaceable event, so add 'a' tag.
       tags: [
         replaceableEventTag,

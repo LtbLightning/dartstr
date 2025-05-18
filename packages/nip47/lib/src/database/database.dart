@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:nip47/src/database/tables/client_connection_table.dart';
+import 'package:nip47/src/database/tables/wallet_connection_table.dart';
 import 'package:nip47/src/database/tables/request_table.dart';
 import 'package:nip47/src/database/tables/response_table.dart';
 import 'package:nip47/src/database/type_converters/string_list_type_converter.dart';
@@ -10,7 +10,7 @@ import 'package:nip47/src/database/type_converters/string_list_type_converter.da
 part 'database.g.dart';
 
 @DriftDatabase(tables: [
-  ClientConnections,
+  WalletConnections,
   Requests,
   Responses,
 ])
@@ -23,6 +23,17 @@ class Nip47Database extends _$Nip47Database {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(beforeOpen: (details) async {
+      if (details.wasCreated) {
+        // ...
+      }
+      // Needed to enable foreign keys for SQLite and references in Drift
+      await customStatement('PRAGMA foreign_keys = ON');
+    });
+  }
 
   static QueryExecutor _openConnection() {
     return NativeDatabase.createInBackground(File('dartstr_nip47.db'));

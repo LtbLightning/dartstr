@@ -45,7 +45,7 @@ class SqliteLocalRequestDataSource implements LocalRequestDataSource {
     String? clientPubkey,
   }) async {
     final results = await _database.managers.requests
-        .filter((f) => f.clientPubkey(clientPubkey))
+        .filter((f) => f.clientPubkey.clientPubkey(clientPubkey))
         .get();
     return results.map((result) => RequestMapper.tableToModel(result)).toList();
   }
@@ -53,7 +53,7 @@ class SqliteLocalRequestDataSource implements LocalRequestDataSource {
   @override
   Future<void> removeClientConnectionRequests(String clientPubkey) {
     return _database.managers.requests
-        .filter((f) => f.clientPubkey(clientPubkey))
+        .filter((f) => f.clientPubkey.clientPubkey(clientPubkey))
         .delete();
   }
 }

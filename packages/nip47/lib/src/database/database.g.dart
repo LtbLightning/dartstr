@@ -3,12 +3,12 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
-class $ClientConnectionsTable extends ClientConnections
-    with TableInfo<$ClientConnectionsTable, ClientConnectionTable> {
+class $WalletConnectionsTable extends WalletConnections
+    with TableInfo<$WalletConnectionsTable, WalletConnectionTable> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ClientConnectionsTable(this.attachedDatabase, [this._alias]);
+  $WalletConnectionsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _clientPubkeyMeta =
       const VerificationMeta('clientPubkey');
   @override
@@ -18,14 +18,8 @@ class $ClientConnectionsTable extends ClientConnections
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _walletServiceAccountIndexMeta =
-      const VerificationMeta('walletServiceAccountIndex');
-  @override
-  late final GeneratedColumn<int> walletServiceAccountIndex =
-      GeneratedColumn<int>('wallet_service_account_index', aliasedName, false,
-          type: DriftSqlType.int, requiredDuringInsert: true);
+      'name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _walletServicePubkeyMeta =
       const VerificationMeta('walletServicePubkey');
   @override
@@ -37,13 +31,13 @@ class $ClientConnectionsTable extends ClientConnections
       GeneratedColumn<String>('relays', aliasedName, false,
               type: DriftSqlType.string, requiredDuringInsert: true)
           .withConverter<List<String>>(
-              $ClientConnectionsTable.$converterrelays);
+              $WalletConnectionsTable.$converterrelays);
   @override
   late final GeneratedColumnWithTypeConverter<List<String>?, String>
       clientRelays = GeneratedColumn<String>('client_relays', aliasedName, true,
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>(
-              $ClientConnectionsTable.$converterclientRelaysn);
+              $WalletConnectionsTable.$converterclientRelaysn);
   static const VerificationMeta _budgetRenewalMeta =
       const VerificationMeta('budgetRenewal');
   @override
@@ -54,8 +48,8 @@ class $ClientConnectionsTable extends ClientConnections
       const VerificationMeta('budgetRenewedAt');
   @override
   late final GeneratedColumn<int> budgetRenewedAt = GeneratedColumn<int>(
-      'budget_renewed_at', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      'budget_renewed_at', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _maxAmountSatMeta =
       const VerificationMeta('maxAmountSat');
   @override
@@ -79,44 +73,44 @@ class $ClientConnectionsTable extends ClientConnections
       GeneratedColumn<String>('methods', aliasedName, true,
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>(
-              $ClientConnectionsTable.$convertermethodsn);
+              $WalletConnectionsTable.$convertermethodsn);
   @override
   late final GeneratedColumnWithTypeConverter<List<String>?, String>
       customMethods = GeneratedColumn<String>(
               'custom_methods', aliasedName, true,
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>(
-              $ClientConnectionsTable.$convertercustomMethodsn);
+              $WalletConnectionsTable.$convertercustomMethodsn);
   @override
   late final GeneratedColumnWithTypeConverter<List<String>?, String>
       notifications = GeneratedColumn<String>(
               'notifications', aliasedName, true,
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>(
-              $ClientConnectionsTable.$converternotificationsn);
+              $WalletConnectionsTable.$converternotificationsn);
   @override
   late final GeneratedColumnWithTypeConverter<List<String>?, String>
       customNotifications = GeneratedColumn<String>(
               'custom_notifications', aliasedName, true,
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>(
-              $ClientConnectionsTable.$convertercustomNotificationsn);
+              $WalletConnectionsTable.$convertercustomNotificationsn);
   static const VerificationMeta _isolatedMeta =
       const VerificationMeta('isolated');
   @override
   late final GeneratedColumn<bool> isolated = GeneratedColumn<bool>(
-      'isolated', aliasedName, false,
+      'isolated', aliasedName, true,
       type: DriftSqlType.bool,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("isolated" IN (0, 1))'));
   static const VerificationMeta _isFrozenMeta =
       const VerificationMeta('isFrozen');
   @override
   late final GeneratedColumn<bool> isFrozen = GeneratedColumn<bool>(
-      'is_frozen', aliasedName, false,
+      'is_frozen', aliasedName, true,
       type: DriftSqlType.bool,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("is_frozen" IN (0, 1))'));
   @override
@@ -124,18 +118,22 @@ class $ClientConnectionsTable extends ClientConnections
       categories = GeneratedColumn<String>('categories', aliasedName, true,
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>(
-              $ClientConnectionsTable.$convertercategoriesn);
+              $WalletConnectionsTable.$convertercategoriesn);
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lud16Meta = const VerificationMeta('lud16');
+  @override
+  late final GeneratedColumn<String> lud16 = GeneratedColumn<String>(
+      'lud16', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         clientPubkey,
         name,
-        walletServiceAccountIndex,
         walletServicePubkey,
         relays,
         clientRelays,
@@ -151,16 +149,17 @@ class $ClientConnectionsTable extends ClientConnections
         isolated,
         isFrozen,
         categories,
-        createdAt
+        createdAt,
+        lud16
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'client_connections';
+  static const String $name = 'wallet_connections';
   @override
   VerificationContext validateIntegrity(
-      Insertable<ClientConnectionTable> instance,
+      Insertable<WalletConnectionTable> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -175,17 +174,6 @@ class $ClientConnectionsTable extends ClientConnections
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('wallet_service_account_index')) {
-      context.handle(
-          _walletServiceAccountIndexMeta,
-          walletServiceAccountIndex.isAcceptableOrUnknown(
-              data['wallet_service_account_index']!,
-              _walletServiceAccountIndexMeta));
-    } else if (isInserting) {
-      context.missing(_walletServiceAccountIndexMeta);
     }
     if (data.containsKey('wallet_service_pubkey')) {
       context.handle(
@@ -208,8 +196,6 @@ class $ClientConnectionsTable extends ClientConnections
           _budgetRenewedAtMeta,
           budgetRenewedAt.isAcceptableOrUnknown(
               data['budget_renewed_at']!, _budgetRenewedAtMeta));
-    } else if (isInserting) {
-      context.missing(_budgetRenewedAtMeta);
     }
     if (data.containsKey('max_amount_sat')) {
       context.handle(
@@ -230,14 +216,10 @@ class $ClientConnectionsTable extends ClientConnections
     if (data.containsKey('isolated')) {
       context.handle(_isolatedMeta,
           isolated.isAcceptableOrUnknown(data['isolated']!, _isolatedMeta));
-    } else if (isInserting) {
-      context.missing(_isolatedMeta);
     }
     if (data.containsKey('is_frozen')) {
       context.handle(_isFrozenMeta,
           isFrozen.isAcceptableOrUnknown(data['is_frozen']!, _isFrozenMeta));
-    } else if (isInserting) {
-      context.missing(_isFrozenMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -245,69 +227,72 @@ class $ClientConnectionsTable extends ClientConnections
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    if (data.containsKey('lud16')) {
+      context.handle(
+          _lud16Meta, lud16.isAcceptableOrUnknown(data['lud16']!, _lud16Meta));
+    }
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {clientPubkey};
   @override
-  ClientConnectionTable map(Map<String, dynamic> data, {String? tablePrefix}) {
+  WalletConnectionTable map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ClientConnectionTable(
+    return WalletConnectionTable(
       clientPubkey: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}client_pubkey'])!,
       name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      walletServiceAccountIndex: attachedDatabase.typeMapping.read(
-          DriftSqlType.int,
-          data['${effectivePrefix}wallet_service_account_index'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}name']),
       walletServicePubkey: attachedDatabase.typeMapping.read(
           DriftSqlType.string,
           data['${effectivePrefix}wallet_service_pubkey'])!,
-      relays: $ClientConnectionsTable.$converterrelays.fromSql(attachedDatabase
+      relays: $WalletConnectionsTable.$converterrelays.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}relays'])!),
-      clientRelays: $ClientConnectionsTable.$converterclientRelaysn.fromSql(
+      clientRelays: $WalletConnectionsTable.$converterclientRelaysn.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}client_relays'])),
       budgetRenewal: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}budget_renewal'])!,
       budgetRenewedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}budget_renewed_at'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}budget_renewed_at']),
       maxAmountSat: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}max_amount_sat']),
       remainingAmountSat: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}remaining_amount_sat']),
       expiresAt: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}expires_at']),
-      methods: $ClientConnectionsTable.$convertermethodsn.fromSql(
+      methods: $WalletConnectionsTable.$convertermethodsn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.string, data['${effectivePrefix}methods'])),
-      customMethods: $ClientConnectionsTable.$convertercustomMethodsn.fromSql(
+      customMethods: $WalletConnectionsTable.$convertercustomMethodsn.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}custom_methods'])),
-      notifications: $ClientConnectionsTable.$converternotificationsn.fromSql(
+      notifications: $WalletConnectionsTable.$converternotificationsn.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}notifications'])),
-      customNotifications: $ClientConnectionsTable
+      customNotifications: $WalletConnectionsTable
           .$convertercustomNotificationsn
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
               data['${effectivePrefix}custom_notifications'])),
       isolated: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}isolated'])!,
+          .read(DriftSqlType.bool, data['${effectivePrefix}isolated']),
       isFrozen: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_frozen'])!,
-      categories: $ClientConnectionsTable.$convertercategoriesn.fromSql(
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_frozen']),
+      categories: $WalletConnectionsTable.$convertercategoriesn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.string, data['${effectivePrefix}categories'])),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      lud16: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}lud16']),
     );
   }
 
   @override
-  $ClientConnectionsTable createAlias(String alias) {
-    return $ClientConnectionsTable(attachedDatabase, alias);
+  $WalletConnectionsTable createAlias(String alias) {
+    return $WalletConnectionsTable(attachedDatabase, alias);
   }
 
   static TypeConverter<List<String>, String> $converterrelays =
@@ -338,16 +323,15 @@ class $ClientConnectionsTable extends ClientConnections
       NullAwareTypeConverter.wrap($convertercategories);
 }
 
-class ClientConnectionTable extends DataClass
-    implements Insertable<ClientConnectionTable> {
+class WalletConnectionTable extends DataClass
+    implements Insertable<WalletConnectionTable> {
   final String clientPubkey;
-  final String name;
-  final int walletServiceAccountIndex;
+  final String? name;
   final String walletServicePubkey;
   final List<String> relays;
   final List<String>? clientRelays;
   final String budgetRenewal;
-  final int budgetRenewedAt;
+  final int? budgetRenewedAt;
   final int? maxAmountSat;
   final int? remainingAmountSat;
   final int? expiresAt;
@@ -355,19 +339,19 @@ class ClientConnectionTable extends DataClass
   final List<String>? customMethods;
   final List<String>? notifications;
   final List<String>? customNotifications;
-  final bool isolated;
-  final bool isFrozen;
+  final bool? isolated;
+  final bool? isFrozen;
   final List<String>? categories;
   final DateTime createdAt;
-  const ClientConnectionTable(
+  final String? lud16;
+  const WalletConnectionTable(
       {required this.clientPubkey,
-      required this.name,
-      required this.walletServiceAccountIndex,
+      this.name,
       required this.walletServicePubkey,
       required this.relays,
       this.clientRelays,
       required this.budgetRenewal,
-      required this.budgetRenewedAt,
+      this.budgetRenewedAt,
       this.maxAmountSat,
       this.remainingAmountSat,
       this.expiresAt,
@@ -375,28 +359,31 @@ class ClientConnectionTable extends DataClass
       this.customMethods,
       this.notifications,
       this.customNotifications,
-      required this.isolated,
-      required this.isFrozen,
+      this.isolated,
+      this.isFrozen,
       this.categories,
-      required this.createdAt});
+      required this.createdAt,
+      this.lud16});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['client_pubkey'] = Variable<String>(clientPubkey);
-    map['name'] = Variable<String>(name);
-    map['wallet_service_account_index'] =
-        Variable<int>(walletServiceAccountIndex);
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
     map['wallet_service_pubkey'] = Variable<String>(walletServicePubkey);
     {
       map['relays'] = Variable<String>(
-          $ClientConnectionsTable.$converterrelays.toSql(relays));
+          $WalletConnectionsTable.$converterrelays.toSql(relays));
     }
     if (!nullToAbsent || clientRelays != null) {
       map['client_relays'] = Variable<String>(
-          $ClientConnectionsTable.$converterclientRelaysn.toSql(clientRelays));
+          $WalletConnectionsTable.$converterclientRelaysn.toSql(clientRelays));
     }
     map['budget_renewal'] = Variable<String>(budgetRenewal);
-    map['budget_renewed_at'] = Variable<int>(budgetRenewedAt);
+    if (!nullToAbsent || budgetRenewedAt != null) {
+      map['budget_renewed_at'] = Variable<int>(budgetRenewedAt);
+    }
     if (!nullToAbsent || maxAmountSat != null) {
       map['max_amount_sat'] = Variable<int>(maxAmountSat);
     }
@@ -408,45 +395,53 @@ class ClientConnectionTable extends DataClass
     }
     if (!nullToAbsent || methods != null) {
       map['methods'] = Variable<String>(
-          $ClientConnectionsTable.$convertermethodsn.toSql(methods));
+          $WalletConnectionsTable.$convertermethodsn.toSql(methods));
     }
     if (!nullToAbsent || customMethods != null) {
-      map['custom_methods'] = Variable<String>($ClientConnectionsTable
+      map['custom_methods'] = Variable<String>($WalletConnectionsTable
           .$convertercustomMethodsn
           .toSql(customMethods));
     }
     if (!nullToAbsent || notifications != null) {
-      map['notifications'] = Variable<String>($ClientConnectionsTable
+      map['notifications'] = Variable<String>($WalletConnectionsTable
           .$converternotificationsn
           .toSql(notifications));
     }
     if (!nullToAbsent || customNotifications != null) {
-      map['custom_notifications'] = Variable<String>($ClientConnectionsTable
+      map['custom_notifications'] = Variable<String>($WalletConnectionsTable
           .$convertercustomNotificationsn
           .toSql(customNotifications));
     }
-    map['isolated'] = Variable<bool>(isolated);
-    map['is_frozen'] = Variable<bool>(isFrozen);
+    if (!nullToAbsent || isolated != null) {
+      map['isolated'] = Variable<bool>(isolated);
+    }
+    if (!nullToAbsent || isFrozen != null) {
+      map['is_frozen'] = Variable<bool>(isFrozen);
+    }
     if (!nullToAbsent || categories != null) {
       map['categories'] = Variable<String>(
-          $ClientConnectionsTable.$convertercategoriesn.toSql(categories));
+          $WalletConnectionsTable.$convertercategoriesn.toSql(categories));
     }
     map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || lud16 != null) {
+      map['lud16'] = Variable<String>(lud16);
+    }
     return map;
   }
 
-  ClientConnectionsCompanion toCompanion(bool nullToAbsent) {
-    return ClientConnectionsCompanion(
+  WalletConnectionsCompanion toCompanion(bool nullToAbsent) {
+    return WalletConnectionsCompanion(
       clientPubkey: Value(clientPubkey),
-      name: Value(name),
-      walletServiceAccountIndex: Value(walletServiceAccountIndex),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       walletServicePubkey: Value(walletServicePubkey),
       relays: Value(relays),
       clientRelays: clientRelays == null && nullToAbsent
           ? const Value.absent()
           : Value(clientRelays),
       budgetRenewal: Value(budgetRenewal),
-      budgetRenewedAt: Value(budgetRenewedAt),
+      budgetRenewedAt: budgetRenewedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(budgetRenewedAt),
       maxAmountSat: maxAmountSat == null && nullToAbsent
           ? const Value.absent()
           : Value(maxAmountSat),
@@ -468,29 +463,33 @@ class ClientConnectionTable extends DataClass
       customNotifications: customNotifications == null && nullToAbsent
           ? const Value.absent()
           : Value(customNotifications),
-      isolated: Value(isolated),
-      isFrozen: Value(isFrozen),
+      isolated: isolated == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isolated),
+      isFrozen: isFrozen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isFrozen),
       categories: categories == null && nullToAbsent
           ? const Value.absent()
           : Value(categories),
       createdAt: Value(createdAt),
+      lud16:
+          lud16 == null && nullToAbsent ? const Value.absent() : Value(lud16),
     );
   }
 
-  factory ClientConnectionTable.fromJson(Map<String, dynamic> json,
+  factory WalletConnectionTable.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ClientConnectionTable(
+    return WalletConnectionTable(
       clientPubkey: serializer.fromJson<String>(json['clientPubkey']),
-      name: serializer.fromJson<String>(json['name']),
-      walletServiceAccountIndex:
-          serializer.fromJson<int>(json['walletServiceAccountIndex']),
+      name: serializer.fromJson<String?>(json['name']),
       walletServicePubkey:
           serializer.fromJson<String>(json['walletServicePubkey']),
       relays: serializer.fromJson<List<String>>(json['relays']),
       clientRelays: serializer.fromJson<List<String>?>(json['clientRelays']),
       budgetRenewal: serializer.fromJson<String>(json['budgetRenewal']),
-      budgetRenewedAt: serializer.fromJson<int>(json['budgetRenewedAt']),
+      budgetRenewedAt: serializer.fromJson<int?>(json['budgetRenewedAt']),
       maxAmountSat: serializer.fromJson<int?>(json['maxAmountSat']),
       remainingAmountSat: serializer.fromJson<int?>(json['remainingAmountSat']),
       expiresAt: serializer.fromJson<int?>(json['expiresAt']),
@@ -499,10 +498,11 @@ class ClientConnectionTable extends DataClass
       notifications: serializer.fromJson<List<String>?>(json['notifications']),
       customNotifications:
           serializer.fromJson<List<String>?>(json['customNotifications']),
-      isolated: serializer.fromJson<bool>(json['isolated']),
-      isFrozen: serializer.fromJson<bool>(json['isFrozen']),
+      isolated: serializer.fromJson<bool?>(json['isolated']),
+      isFrozen: serializer.fromJson<bool?>(json['isFrozen']),
       categories: serializer.fromJson<List<String>?>(json['categories']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      lud16: serializer.fromJson<String?>(json['lud16']),
     );
   }
   @override
@@ -510,14 +510,12 @@ class ClientConnectionTable extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'clientPubkey': serializer.toJson<String>(clientPubkey),
-      'name': serializer.toJson<String>(name),
-      'walletServiceAccountIndex':
-          serializer.toJson<int>(walletServiceAccountIndex),
+      'name': serializer.toJson<String?>(name),
       'walletServicePubkey': serializer.toJson<String>(walletServicePubkey),
       'relays': serializer.toJson<List<String>>(relays),
       'clientRelays': serializer.toJson<List<String>?>(clientRelays),
       'budgetRenewal': serializer.toJson<String>(budgetRenewal),
-      'budgetRenewedAt': serializer.toJson<int>(budgetRenewedAt),
+      'budgetRenewedAt': serializer.toJson<int?>(budgetRenewedAt),
       'maxAmountSat': serializer.toJson<int?>(maxAmountSat),
       'remainingAmountSat': serializer.toJson<int?>(remainingAmountSat),
       'expiresAt': serializer.toJson<int?>(expiresAt),
@@ -526,22 +524,22 @@ class ClientConnectionTable extends DataClass
       'notifications': serializer.toJson<List<String>?>(notifications),
       'customNotifications':
           serializer.toJson<List<String>?>(customNotifications),
-      'isolated': serializer.toJson<bool>(isolated),
-      'isFrozen': serializer.toJson<bool>(isFrozen),
+      'isolated': serializer.toJson<bool?>(isolated),
+      'isFrozen': serializer.toJson<bool?>(isFrozen),
       'categories': serializer.toJson<List<String>?>(categories),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'lud16': serializer.toJson<String?>(lud16),
     };
   }
 
-  ClientConnectionTable copyWith(
+  WalletConnectionTable copyWith(
           {String? clientPubkey,
-          String? name,
-          int? walletServiceAccountIndex,
+          Value<String?> name = const Value.absent(),
           String? walletServicePubkey,
           List<String>? relays,
           Value<List<String>?> clientRelays = const Value.absent(),
           String? budgetRenewal,
-          int? budgetRenewedAt,
+          Value<int?> budgetRenewedAt = const Value.absent(),
           Value<int?> maxAmountSat = const Value.absent(),
           Value<int?> remainingAmountSat = const Value.absent(),
           Value<int?> expiresAt = const Value.absent(),
@@ -549,21 +547,22 @@ class ClientConnectionTable extends DataClass
           Value<List<String>?> customMethods = const Value.absent(),
           Value<List<String>?> notifications = const Value.absent(),
           Value<List<String>?> customNotifications = const Value.absent(),
-          bool? isolated,
-          bool? isFrozen,
+          Value<bool?> isolated = const Value.absent(),
+          Value<bool?> isFrozen = const Value.absent(),
           Value<List<String>?> categories = const Value.absent(),
-          DateTime? createdAt}) =>
-      ClientConnectionTable(
+          DateTime? createdAt,
+          Value<String?> lud16 = const Value.absent()}) =>
+      WalletConnectionTable(
         clientPubkey: clientPubkey ?? this.clientPubkey,
-        name: name ?? this.name,
-        walletServiceAccountIndex:
-            walletServiceAccountIndex ?? this.walletServiceAccountIndex,
+        name: name.present ? name.value : this.name,
         walletServicePubkey: walletServicePubkey ?? this.walletServicePubkey,
         relays: relays ?? this.relays,
         clientRelays:
             clientRelays.present ? clientRelays.value : this.clientRelays,
         budgetRenewal: budgetRenewal ?? this.budgetRenewal,
-        budgetRenewedAt: budgetRenewedAt ?? this.budgetRenewedAt,
+        budgetRenewedAt: budgetRenewedAt.present
+            ? budgetRenewedAt.value
+            : this.budgetRenewedAt,
         maxAmountSat:
             maxAmountSat.present ? maxAmountSat.value : this.maxAmountSat,
         remainingAmountSat: remainingAmountSat.present
@@ -578,20 +577,18 @@ class ClientConnectionTable extends DataClass
         customNotifications: customNotifications.present
             ? customNotifications.value
             : this.customNotifications,
-        isolated: isolated ?? this.isolated,
-        isFrozen: isFrozen ?? this.isFrozen,
+        isolated: isolated.present ? isolated.value : this.isolated,
+        isFrozen: isFrozen.present ? isFrozen.value : this.isFrozen,
         categories: categories.present ? categories.value : this.categories,
         createdAt: createdAt ?? this.createdAt,
+        lud16: lud16.present ? lud16.value : this.lud16,
       );
-  ClientConnectionTable copyWithCompanion(ClientConnectionsCompanion data) {
-    return ClientConnectionTable(
+  WalletConnectionTable copyWithCompanion(WalletConnectionsCompanion data) {
+    return WalletConnectionTable(
       clientPubkey: data.clientPubkey.present
           ? data.clientPubkey.value
           : this.clientPubkey,
       name: data.name.present ? data.name.value : this.name,
-      walletServiceAccountIndex: data.walletServiceAccountIndex.present
-          ? data.walletServiceAccountIndex.value
-          : this.walletServiceAccountIndex,
       walletServicePubkey: data.walletServicePubkey.present
           ? data.walletServicePubkey.value
           : this.walletServicePubkey,
@@ -627,15 +624,15 @@ class ClientConnectionTable extends DataClass
       categories:
           data.categories.present ? data.categories.value : this.categories,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      lud16: data.lud16.present ? data.lud16.value : this.lud16,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('ClientConnectionTable(')
+    return (StringBuffer('WalletConnectionTable(')
           ..write('clientPubkey: $clientPubkey, ')
           ..write('name: $name, ')
-          ..write('walletServiceAccountIndex: $walletServiceAccountIndex, ')
           ..write('walletServicePubkey: $walletServicePubkey, ')
           ..write('relays: $relays, ')
           ..write('clientRelays: $clientRelays, ')
@@ -651,7 +648,8 @@ class ClientConnectionTable extends DataClass
           ..write('isolated: $isolated, ')
           ..write('isFrozen: $isFrozen, ')
           ..write('categories: $categories, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('lud16: $lud16')
           ..write(')'))
         .toString();
   }
@@ -660,7 +658,6 @@ class ClientConnectionTable extends DataClass
   int get hashCode => Object.hash(
       clientPubkey,
       name,
-      walletServiceAccountIndex,
       walletServicePubkey,
       relays,
       clientRelays,
@@ -676,14 +673,14 @@ class ClientConnectionTable extends DataClass
       isolated,
       isFrozen,
       categories,
-      createdAt);
+      createdAt,
+      lud16);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ClientConnectionTable &&
+      (other is WalletConnectionTable &&
           other.clientPubkey == this.clientPubkey &&
           other.name == this.name &&
-          other.walletServiceAccountIndex == this.walletServiceAccountIndex &&
           other.walletServicePubkey == this.walletServicePubkey &&
           other.relays == this.relays &&
           other.clientRelays == this.clientRelays &&
@@ -699,19 +696,19 @@ class ClientConnectionTable extends DataClass
           other.isolated == this.isolated &&
           other.isFrozen == this.isFrozen &&
           other.categories == this.categories &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.lud16 == this.lud16);
 }
 
-class ClientConnectionsCompanion
-    extends UpdateCompanion<ClientConnectionTable> {
+class WalletConnectionsCompanion
+    extends UpdateCompanion<WalletConnectionTable> {
   final Value<String> clientPubkey;
-  final Value<String> name;
-  final Value<int> walletServiceAccountIndex;
+  final Value<String?> name;
   final Value<String> walletServicePubkey;
   final Value<List<String>> relays;
   final Value<List<String>?> clientRelays;
   final Value<String> budgetRenewal;
-  final Value<int> budgetRenewedAt;
+  final Value<int?> budgetRenewedAt;
   final Value<int?> maxAmountSat;
   final Value<int?> remainingAmountSat;
   final Value<int?> expiresAt;
@@ -719,15 +716,15 @@ class ClientConnectionsCompanion
   final Value<List<String>?> customMethods;
   final Value<List<String>?> notifications;
   final Value<List<String>?> customNotifications;
-  final Value<bool> isolated;
-  final Value<bool> isFrozen;
+  final Value<bool?> isolated;
+  final Value<bool?> isFrozen;
   final Value<List<String>?> categories;
   final Value<DateTime> createdAt;
+  final Value<String?> lud16;
   final Value<int> rowid;
-  const ClientConnectionsCompanion({
+  const WalletConnectionsCompanion({
     this.clientPubkey = const Value.absent(),
     this.name = const Value.absent(),
-    this.walletServiceAccountIndex = const Value.absent(),
     this.walletServicePubkey = const Value.absent(),
     this.relays = const Value.absent(),
     this.clientRelays = const Value.absent(),
@@ -744,17 +741,17 @@ class ClientConnectionsCompanion
     this.isFrozen = const Value.absent(),
     this.categories = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.lud16 = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  ClientConnectionsCompanion.insert({
+  WalletConnectionsCompanion.insert({
     required String clientPubkey,
-    required String name,
-    required int walletServiceAccountIndex,
+    this.name = const Value.absent(),
     required String walletServicePubkey,
     required List<String> relays,
     this.clientRelays = const Value.absent(),
     required String budgetRenewal,
-    required int budgetRenewedAt,
+    this.budgetRenewedAt = const Value.absent(),
     this.maxAmountSat = const Value.absent(),
     this.remainingAmountSat = const Value.absent(),
     this.expiresAt = const Value.absent(),
@@ -762,25 +759,20 @@ class ClientConnectionsCompanion
     this.customMethods = const Value.absent(),
     this.notifications = const Value.absent(),
     this.customNotifications = const Value.absent(),
-    required bool isolated,
-    required bool isFrozen,
+    this.isolated = const Value.absent(),
+    this.isFrozen = const Value.absent(),
     this.categories = const Value.absent(),
     required DateTime createdAt,
+    this.lud16 = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : clientPubkey = Value(clientPubkey),
-        name = Value(name),
-        walletServiceAccountIndex = Value(walletServiceAccountIndex),
         walletServicePubkey = Value(walletServicePubkey),
         relays = Value(relays),
         budgetRenewal = Value(budgetRenewal),
-        budgetRenewedAt = Value(budgetRenewedAt),
-        isolated = Value(isolated),
-        isFrozen = Value(isFrozen),
         createdAt = Value(createdAt);
-  static Insertable<ClientConnectionTable> custom({
+  static Insertable<WalletConnectionTable> custom({
     Expression<String>? clientPubkey,
     Expression<String>? name,
-    Expression<int>? walletServiceAccountIndex,
     Expression<String>? walletServicePubkey,
     Expression<String>? relays,
     Expression<String>? clientRelays,
@@ -797,13 +789,12 @@ class ClientConnectionsCompanion
     Expression<bool>? isFrozen,
     Expression<String>? categories,
     Expression<DateTime>? createdAt,
+    Expression<String>? lud16,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (clientPubkey != null) 'client_pubkey': clientPubkey,
       if (name != null) 'name': name,
-      if (walletServiceAccountIndex != null)
-        'wallet_service_account_index': walletServiceAccountIndex,
       if (walletServicePubkey != null)
         'wallet_service_pubkey': walletServicePubkey,
       if (relays != null) 'relays': relays,
@@ -823,19 +814,19 @@ class ClientConnectionsCompanion
       if (isFrozen != null) 'is_frozen': isFrozen,
       if (categories != null) 'categories': categories,
       if (createdAt != null) 'created_at': createdAt,
+      if (lud16 != null) 'lud16': lud16,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  ClientConnectionsCompanion copyWith(
+  WalletConnectionsCompanion copyWith(
       {Value<String>? clientPubkey,
-      Value<String>? name,
-      Value<int>? walletServiceAccountIndex,
+      Value<String?>? name,
       Value<String>? walletServicePubkey,
       Value<List<String>>? relays,
       Value<List<String>?>? clientRelays,
       Value<String>? budgetRenewal,
-      Value<int>? budgetRenewedAt,
+      Value<int?>? budgetRenewedAt,
       Value<int?>? maxAmountSat,
       Value<int?>? remainingAmountSat,
       Value<int?>? expiresAt,
@@ -843,16 +834,15 @@ class ClientConnectionsCompanion
       Value<List<String>?>? customMethods,
       Value<List<String>?>? notifications,
       Value<List<String>?>? customNotifications,
-      Value<bool>? isolated,
-      Value<bool>? isFrozen,
+      Value<bool?>? isolated,
+      Value<bool?>? isFrozen,
       Value<List<String>?>? categories,
       Value<DateTime>? createdAt,
+      Value<String?>? lud16,
       Value<int>? rowid}) {
-    return ClientConnectionsCompanion(
+    return WalletConnectionsCompanion(
       clientPubkey: clientPubkey ?? this.clientPubkey,
       name: name ?? this.name,
-      walletServiceAccountIndex:
-          walletServiceAccountIndex ?? this.walletServiceAccountIndex,
       walletServicePubkey: walletServicePubkey ?? this.walletServicePubkey,
       relays: relays ?? this.relays,
       clientRelays: clientRelays ?? this.clientRelays,
@@ -869,6 +859,7 @@ class ClientConnectionsCompanion
       isFrozen: isFrozen ?? this.isFrozen,
       categories: categories ?? this.categories,
       createdAt: createdAt ?? this.createdAt,
+      lud16: lud16 ?? this.lud16,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -882,20 +873,16 @@ class ClientConnectionsCompanion
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (walletServiceAccountIndex.present) {
-      map['wallet_service_account_index'] =
-          Variable<int>(walletServiceAccountIndex.value);
-    }
     if (walletServicePubkey.present) {
       map['wallet_service_pubkey'] =
           Variable<String>(walletServicePubkey.value);
     }
     if (relays.present) {
       map['relays'] = Variable<String>(
-          $ClientConnectionsTable.$converterrelays.toSql(relays.value));
+          $WalletConnectionsTable.$converterrelays.toSql(relays.value));
     }
     if (clientRelays.present) {
-      map['client_relays'] = Variable<String>($ClientConnectionsTable
+      map['client_relays'] = Variable<String>($WalletConnectionsTable
           .$converterclientRelaysn
           .toSql(clientRelays.value));
     }
@@ -916,20 +903,20 @@ class ClientConnectionsCompanion
     }
     if (methods.present) {
       map['methods'] = Variable<String>(
-          $ClientConnectionsTable.$convertermethodsn.toSql(methods.value));
+          $WalletConnectionsTable.$convertermethodsn.toSql(methods.value));
     }
     if (customMethods.present) {
-      map['custom_methods'] = Variable<String>($ClientConnectionsTable
+      map['custom_methods'] = Variable<String>($WalletConnectionsTable
           .$convertercustomMethodsn
           .toSql(customMethods.value));
     }
     if (notifications.present) {
-      map['notifications'] = Variable<String>($ClientConnectionsTable
+      map['notifications'] = Variable<String>($WalletConnectionsTable
           .$converternotificationsn
           .toSql(notifications.value));
     }
     if (customNotifications.present) {
-      map['custom_notifications'] = Variable<String>($ClientConnectionsTable
+      map['custom_notifications'] = Variable<String>($WalletConnectionsTable
           .$convertercustomNotificationsn
           .toSql(customNotifications.value));
     }
@@ -940,12 +927,15 @@ class ClientConnectionsCompanion
       map['is_frozen'] = Variable<bool>(isFrozen.value);
     }
     if (categories.present) {
-      map['categories'] = Variable<String>($ClientConnectionsTable
+      map['categories'] = Variable<String>($WalletConnectionsTable
           .$convertercategoriesn
           .toSql(categories.value));
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (lud16.present) {
+      map['lud16'] = Variable<String>(lud16.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -955,10 +945,9 @@ class ClientConnectionsCompanion
 
   @override
   String toString() {
-    return (StringBuffer('ClientConnectionsCompanion(')
+    return (StringBuffer('WalletConnectionsCompanion(')
           ..write('clientPubkey: $clientPubkey, ')
           ..write('name: $name, ')
-          ..write('walletServiceAccountIndex: $walletServiceAccountIndex, ')
           ..write('walletServicePubkey: $walletServicePubkey, ')
           ..write('relays: $relays, ')
           ..write('clientRelays: $clientRelays, ')
@@ -975,6 +964,7 @@ class ClientConnectionsCompanion
           ..write('isFrozen: $isFrozen, ')
           ..write('categories: $categories, ')
           ..write('createdAt: $createdAt, ')
+          ..write('lud16: $lud16, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -999,8 +989,8 @@ class $RequestsTable extends Requests
       'client_pubkey', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
-      $customConstraints:
-          'NOT NULL REFERENCES client_connections(client_pubkey)');
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES wallet_connections (client_pubkey)'));
   static const VerificationMeta _walletServicePubkeyMeta =
       const VerificationMeta('walletServicePubkey');
   @override
@@ -1008,8 +998,8 @@ class $RequestsTable extends Requests
       GeneratedColumn<String>('wallet_service_pubkey', aliasedName, false,
           type: DriftSqlType.string,
           requiredDuringInsert: true,
-          $customConstraints:
-              'NOT NULL REFERENCES client_connections(wallet_service_pubkey)');
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'REFERENCES wallet_connections (wallet_service_pubkey)'));
   static const VerificationMeta _methodMeta = const VerificationMeta('method');
   @override
   late final GeneratedColumn<String> method = GeneratedColumn<String>(
@@ -1407,7 +1397,14 @@ class $ResponsesTable extends Responses
       'request_id', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL REFERENCES requests(id)');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES requests (id)'));
+  static const VerificationMeta _resultTypeMeta =
+      const VerificationMeta('resultType');
+  @override
+  late final GeneratedColumn<String> resultType = GeneratedColumn<String>(
+      'result_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _resultMeta = const VerificationMeta('result');
   @override
   late final GeneratedColumn<String> result = GeneratedColumn<String>(
@@ -1435,11 +1432,19 @@ class $ResponsesTable extends Responses
       const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, requestId, result, errorCode, errorMessage, multiId, createdAt];
+  List<GeneratedColumn> get $columns => [
+        id,
+        requestId,
+        resultType,
+        result,
+        errorCode,
+        errorMessage,
+        multiId,
+        createdAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1460,6 +1465,14 @@ class $ResponsesTable extends Responses
           requestId.isAcceptableOrUnknown(data['request_id']!, _requestIdMeta));
     } else if (isInserting) {
       context.missing(_requestIdMeta);
+    }
+    if (data.containsKey('result_type')) {
+      context.handle(
+          _resultTypeMeta,
+          resultType.isAcceptableOrUnknown(
+              data['result_type']!, _resultTypeMeta));
+    } else if (isInserting) {
+      context.missing(_resultTypeMeta);
     }
     if (data.containsKey('result')) {
       context.handle(_resultMeta,
@@ -1482,6 +1495,8 @@ class $ResponsesTable extends Responses
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
     }
     return context;
   }
@@ -1496,6 +1511,8 @@ class $ResponsesTable extends Responses
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       requestId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}request_id'])!,
+      resultType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}result_type'])!,
       result: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}result']),
       errorCode: attachedDatabase.typeMapping
@@ -1505,7 +1522,7 @@ class $ResponsesTable extends Responses
       multiId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}multi_id']),
       createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
   }
 
@@ -1518,24 +1535,27 @@ class $ResponsesTable extends Responses
 class ResponseTable extends DataClass implements Insertable<ResponseTable> {
   final String id;
   final String requestId;
+  final String resultType;
   final String? result;
   final String? errorCode;
   final String? errorMessage;
   final String? multiId;
-  final DateTime? createdAt;
+  final DateTime createdAt;
   const ResponseTable(
       {required this.id,
       required this.requestId,
+      required this.resultType,
       this.result,
       this.errorCode,
       this.errorMessage,
       this.multiId,
-      this.createdAt});
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['request_id'] = Variable<String>(requestId);
+    map['result_type'] = Variable<String>(resultType);
     if (!nullToAbsent || result != null) {
       map['result'] = Variable<String>(result);
     }
@@ -1548,9 +1568,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
     if (!nullToAbsent || multiId != null) {
       map['multi_id'] = Variable<String>(multiId);
     }
-    if (!nullToAbsent || createdAt != null) {
-      map['created_at'] = Variable<DateTime>(createdAt);
-    }
+    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
@@ -1558,6 +1576,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
     return ResponsesCompanion(
       id: Value(id),
       requestId: Value(requestId),
+      resultType: Value(resultType),
       result:
           result == null && nullToAbsent ? const Value.absent() : Value(result),
       errorCode: errorCode == null && nullToAbsent
@@ -1569,9 +1588,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
       multiId: multiId == null && nullToAbsent
           ? const Value.absent()
           : Value(multiId),
-      createdAt: createdAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(createdAt),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -1581,11 +1598,12 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
     return ResponseTable(
       id: serializer.fromJson<String>(json['id']),
       requestId: serializer.fromJson<String>(json['requestId']),
+      resultType: serializer.fromJson<String>(json['resultType']),
       result: serializer.fromJson<String?>(json['result']),
       errorCode: serializer.fromJson<String?>(json['errorCode']),
       errorMessage: serializer.fromJson<String?>(json['errorMessage']),
       multiId: serializer.fromJson<String?>(json['multiId']),
-      createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -1594,36 +1612,41 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'requestId': serializer.toJson<String>(requestId),
+      'resultType': serializer.toJson<String>(resultType),
       'result': serializer.toJson<String?>(result),
       'errorCode': serializer.toJson<String?>(errorCode),
       'errorMessage': serializer.toJson<String?>(errorMessage),
       'multiId': serializer.toJson<String?>(multiId),
-      'createdAt': serializer.toJson<DateTime?>(createdAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
   ResponseTable copyWith(
           {String? id,
           String? requestId,
+          String? resultType,
           Value<String?> result = const Value.absent(),
           Value<String?> errorCode = const Value.absent(),
           Value<String?> errorMessage = const Value.absent(),
           Value<String?> multiId = const Value.absent(),
-          Value<DateTime?> createdAt = const Value.absent()}) =>
+          DateTime? createdAt}) =>
       ResponseTable(
         id: id ?? this.id,
         requestId: requestId ?? this.requestId,
+        resultType: resultType ?? this.resultType,
         result: result.present ? result.value : this.result,
         errorCode: errorCode.present ? errorCode.value : this.errorCode,
         errorMessage:
             errorMessage.present ? errorMessage.value : this.errorMessage,
         multiId: multiId.present ? multiId.value : this.multiId,
-        createdAt: createdAt.present ? createdAt.value : this.createdAt,
+        createdAt: createdAt ?? this.createdAt,
       );
   ResponseTable copyWithCompanion(ResponsesCompanion data) {
     return ResponseTable(
       id: data.id.present ? data.id.value : this.id,
       requestId: data.requestId.present ? data.requestId.value : this.requestId,
+      resultType:
+          data.resultType.present ? data.resultType.value : this.resultType,
       result: data.result.present ? data.result.value : this.result,
       errorCode: data.errorCode.present ? data.errorCode.value : this.errorCode,
       errorMessage: data.errorMessage.present
@@ -1639,6 +1662,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
     return (StringBuffer('ResponseTable(')
           ..write('id: $id, ')
           ..write('requestId: $requestId, ')
+          ..write('resultType: $resultType, ')
           ..write('result: $result, ')
           ..write('errorCode: $errorCode, ')
           ..write('errorMessage: $errorMessage, ')
@@ -1649,14 +1673,15 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, requestId, result, errorCode, errorMessage, multiId, createdAt);
+  int get hashCode => Object.hash(id, requestId, resultType, result, errorCode,
+      errorMessage, multiId, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ResponseTable &&
           other.id == this.id &&
           other.requestId == this.requestId &&
+          other.resultType == this.resultType &&
           other.result == this.result &&
           other.errorCode == this.errorCode &&
           other.errorMessage == this.errorMessage &&
@@ -1667,15 +1692,17 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
 class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
   final Value<String> id;
   final Value<String> requestId;
+  final Value<String> resultType;
   final Value<String?> result;
   final Value<String?> errorCode;
   final Value<String?> errorMessage;
   final Value<String?> multiId;
-  final Value<DateTime?> createdAt;
+  final Value<DateTime> createdAt;
   final Value<int> rowid;
   const ResponsesCompanion({
     this.id = const Value.absent(),
     this.requestId = const Value.absent(),
+    this.resultType = const Value.absent(),
     this.result = const Value.absent(),
     this.errorCode = const Value.absent(),
     this.errorMessage = const Value.absent(),
@@ -1686,17 +1713,21 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
   ResponsesCompanion.insert({
     required String id,
     required String requestId,
+    required String resultType,
     this.result = const Value.absent(),
     this.errorCode = const Value.absent(),
     this.errorMessage = const Value.absent(),
     this.multiId = const Value.absent(),
-    this.createdAt = const Value.absent(),
+    required DateTime createdAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
-        requestId = Value(requestId);
+        requestId = Value(requestId),
+        resultType = Value(resultType),
+        createdAt = Value(createdAt);
   static Insertable<ResponseTable> custom({
     Expression<String>? id,
     Expression<String>? requestId,
+    Expression<String>? resultType,
     Expression<String>? result,
     Expression<String>? errorCode,
     Expression<String>? errorMessage,
@@ -1707,6 +1738,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (requestId != null) 'request_id': requestId,
+      if (resultType != null) 'result_type': resultType,
       if (result != null) 'result': result,
       if (errorCode != null) 'error_code': errorCode,
       if (errorMessage != null) 'error_message': errorMessage,
@@ -1719,15 +1751,17 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
   ResponsesCompanion copyWith(
       {Value<String>? id,
       Value<String>? requestId,
+      Value<String>? resultType,
       Value<String?>? result,
       Value<String?>? errorCode,
       Value<String?>? errorMessage,
       Value<String?>? multiId,
-      Value<DateTime?>? createdAt,
+      Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return ResponsesCompanion(
       id: id ?? this.id,
       requestId: requestId ?? this.requestId,
+      resultType: resultType ?? this.resultType,
       result: result ?? this.result,
       errorCode: errorCode ?? this.errorCode,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -1745,6 +1779,9 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
     }
     if (requestId.present) {
       map['request_id'] = Variable<String>(requestId.value);
+    }
+    if (resultType.present) {
+      map['result_type'] = Variable<String>(resultType.value);
     }
     if (result.present) {
       map['result'] = Variable<String>(result.value);
@@ -1772,6 +1809,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
     return (StringBuffer('ResponsesCompanion(')
           ..write('id: $id, ')
           ..write('requestId: $requestId, ')
+          ..write('resultType: $resultType, ')
           ..write('result: $result, ')
           ..write('errorCode: $errorCode, ')
           ..write('errorMessage: $errorMessage, ')
@@ -1786,8 +1824,8 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
 abstract class _$Nip47Database extends GeneratedDatabase {
   _$Nip47Database(QueryExecutor e) : super(e);
   $Nip47DatabaseManager get managers => $Nip47DatabaseManager(this);
-  late final $ClientConnectionsTable clientConnections =
-      $ClientConnectionsTable(this);
+  late final $WalletConnectionsTable walletConnections =
+      $WalletConnectionsTable(this);
   late final $RequestsTable requests = $RequestsTable(this);
   late final $ResponsesTable responses = $ResponsesTable(this);
   @override
@@ -1795,19 +1833,18 @@ abstract class _$Nip47Database extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [clientConnections, requests, responses];
+      [walletConnections, requests, responses];
 }
 
-typedef $$ClientConnectionsTableCreateCompanionBuilder
-    = ClientConnectionsCompanion Function({
+typedef $$WalletConnectionsTableCreateCompanionBuilder
+    = WalletConnectionsCompanion Function({
   required String clientPubkey,
-  required String name,
-  required int walletServiceAccountIndex,
+  Value<String?> name,
   required String walletServicePubkey,
   required List<String> relays,
   Value<List<String>?> clientRelays,
   required String budgetRenewal,
-  required int budgetRenewedAt,
+  Value<int?> budgetRenewedAt,
   Value<int?> maxAmountSat,
   Value<int?> remainingAmountSat,
   Value<int?> expiresAt,
@@ -1815,22 +1852,22 @@ typedef $$ClientConnectionsTableCreateCompanionBuilder
   Value<List<String>?> customMethods,
   Value<List<String>?> notifications,
   Value<List<String>?> customNotifications,
-  required bool isolated,
-  required bool isFrozen,
+  Value<bool?> isolated,
+  Value<bool?> isFrozen,
   Value<List<String>?> categories,
   required DateTime createdAt,
+  Value<String?> lud16,
   Value<int> rowid,
 });
-typedef $$ClientConnectionsTableUpdateCompanionBuilder
-    = ClientConnectionsCompanion Function({
+typedef $$WalletConnectionsTableUpdateCompanionBuilder
+    = WalletConnectionsCompanion Function({
   Value<String> clientPubkey,
-  Value<String> name,
-  Value<int> walletServiceAccountIndex,
+  Value<String?> name,
   Value<String> walletServicePubkey,
   Value<List<String>> relays,
   Value<List<String>?> clientRelays,
   Value<String> budgetRenewal,
-  Value<int> budgetRenewedAt,
+  Value<int?> budgetRenewedAt,
   Value<int?> maxAmountSat,
   Value<int?> remainingAmountSat,
   Value<int?> expiresAt,
@@ -1838,16 +1875,57 @@ typedef $$ClientConnectionsTableUpdateCompanionBuilder
   Value<List<String>?> customMethods,
   Value<List<String>?> notifications,
   Value<List<String>?> customNotifications,
-  Value<bool> isolated,
-  Value<bool> isFrozen,
+  Value<bool?> isolated,
+  Value<bool?> isFrozen,
   Value<List<String>?> categories,
   Value<DateTime> createdAt,
+  Value<String?> lud16,
   Value<int> rowid,
 });
 
-class $$ClientConnectionsTableFilterComposer
-    extends Composer<_$Nip47Database, $ClientConnectionsTable> {
-  $$ClientConnectionsTableFilterComposer({
+final class $$WalletConnectionsTableReferences extends BaseReferences<
+    _$Nip47Database, $WalletConnectionsTable, WalletConnectionTable> {
+  $$WalletConnectionsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$RequestsTable, List<RequestTable>>
+      _requestsRefsTable(_$Nip47Database db) =>
+          MultiTypedResultKey.fromTable(db.requests,
+              aliasName: $_aliasNameGenerator(
+                  db.walletConnections.clientPubkey, db.requests.clientPubkey));
+
+  $$RequestsTableProcessedTableManager get requestsRefs {
+    final manager = $$RequestsTableTableManager($_db, $_db.requests).filter(
+        (f) => f.clientPubkey.clientPubkey
+            .sqlEquals($_itemColumn<String>('client_pubkey')!));
+
+    final cache = $_typedResult.readTableOrNull(_requestsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$RequestsTable, List<RequestTable>>
+      _walletServiceConnectionRequestsTable(_$Nip47Database db) =>
+          MultiTypedResultKey.fromTable(db.requests,
+              aliasName: $_aliasNameGenerator(
+                  db.walletConnections.walletServicePubkey,
+                  db.requests.walletServicePubkey));
+
+  $$RequestsTableProcessedTableManager get walletServiceConnectionRequests {
+    final manager = $$RequestsTableTableManager($_db, $_db.requests).filter(
+        (f) => f.walletServicePubkey.walletServicePubkey
+            .sqlEquals($_itemColumn<String>('wallet_service_pubkey')!));
+
+    final cache = $_typedResult
+        .readTableOrNull(_walletServiceConnectionRequestsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$WalletConnectionsTableFilterComposer
+    extends Composer<_$Nip47Database, $WalletConnectionsTable> {
+  $$WalletConnectionsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1859,10 +1937,6 @@ class $$ClientConnectionsTableFilterComposer
 
   ColumnFilters<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get walletServiceAccountIndex => $composableBuilder(
-      column: $table.walletServiceAccountIndex,
-      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get walletServicePubkey => $composableBuilder(
       column: $table.walletServicePubkey,
@@ -1928,11 +2002,56 @@ class $$ClientConnectionsTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lud16 => $composableBuilder(
+      column: $table.lud16, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> requestsRefs(
+      Expression<bool> Function($$RequestsTableFilterComposer f) f) {
+    final $$RequestsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.clientPubkey,
+        referencedTable: $db.requests,
+        getReferencedColumn: (t) => t.clientPubkey,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RequestsTableFilterComposer(
+              $db: $db,
+              $table: $db.requests,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> walletServiceConnectionRequests(
+      Expression<bool> Function($$RequestsTableFilterComposer f) f) {
+    final $$RequestsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.walletServicePubkey,
+        referencedTable: $db.requests,
+        getReferencedColumn: (t) => t.walletServicePubkey,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RequestsTableFilterComposer(
+              $db: $db,
+              $table: $db.requests,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
-class $$ClientConnectionsTableOrderingComposer
-    extends Composer<_$Nip47Database, $ClientConnectionsTable> {
-  $$ClientConnectionsTableOrderingComposer({
+class $$WalletConnectionsTableOrderingComposer
+    extends Composer<_$Nip47Database, $WalletConnectionsTable> {
+  $$WalletConnectionsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1945,10 +2064,6 @@ class $$ClientConnectionsTableOrderingComposer
 
   ColumnOrderings<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get walletServiceAccountIndex => $composableBuilder(
-      column: $table.walletServiceAccountIndex,
-      builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get walletServicePubkey => $composableBuilder(
       column: $table.walletServicePubkey,
@@ -2006,11 +2121,14 @@ class $$ClientConnectionsTableOrderingComposer
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get lud16 => $composableBuilder(
+      column: $table.lud16, builder: (column) => ColumnOrderings(column));
 }
 
-class $$ClientConnectionsTableAnnotationComposer
-    extends Composer<_$Nip47Database, $ClientConnectionsTable> {
-  $$ClientConnectionsTableAnnotationComposer({
+class $$WalletConnectionsTableAnnotationComposer
+    extends Composer<_$Nip47Database, $WalletConnectionsTable> {
+  $$WalletConnectionsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2022,9 +2140,6 @@ class $$ClientConnectionsTableAnnotationComposer
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
-
-  GeneratedColumn<int> get walletServiceAccountIndex => $composableBuilder(
-      column: $table.walletServiceAccountIndex, builder: (column) => column);
 
   GeneratedColumn<String> get walletServicePubkey => $composableBuilder(
       column: $table.walletServicePubkey, builder: (column) => column);
@@ -2078,45 +2193,86 @@ class $$ClientConnectionsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get lud16 =>
+      $composableBuilder(column: $table.lud16, builder: (column) => column);
+
+  Expression<T> requestsRefs<T extends Object>(
+      Expression<T> Function($$RequestsTableAnnotationComposer a) f) {
+    final $$RequestsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.clientPubkey,
+        referencedTable: $db.requests,
+        getReferencedColumn: (t) => t.clientPubkey,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RequestsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.requests,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> walletServiceConnectionRequests<T extends Object>(
+      Expression<T> Function($$RequestsTableAnnotationComposer a) f) {
+    final $$RequestsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.walletServicePubkey,
+        referencedTable: $db.requests,
+        getReferencedColumn: (t) => t.walletServicePubkey,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RequestsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.requests,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
-class $$ClientConnectionsTableTableManager extends RootTableManager<
+class $$WalletConnectionsTableTableManager extends RootTableManager<
     _$Nip47Database,
-    $ClientConnectionsTable,
-    ClientConnectionTable,
-    $$ClientConnectionsTableFilterComposer,
-    $$ClientConnectionsTableOrderingComposer,
-    $$ClientConnectionsTableAnnotationComposer,
-    $$ClientConnectionsTableCreateCompanionBuilder,
-    $$ClientConnectionsTableUpdateCompanionBuilder,
-    (
-      ClientConnectionTable,
-      BaseReferences<_$Nip47Database, $ClientConnectionsTable,
-          ClientConnectionTable>
-    ),
-    ClientConnectionTable,
-    PrefetchHooks Function()> {
-  $$ClientConnectionsTableTableManager(
-      _$Nip47Database db, $ClientConnectionsTable table)
+    $WalletConnectionsTable,
+    WalletConnectionTable,
+    $$WalletConnectionsTableFilterComposer,
+    $$WalletConnectionsTableOrderingComposer,
+    $$WalletConnectionsTableAnnotationComposer,
+    $$WalletConnectionsTableCreateCompanionBuilder,
+    $$WalletConnectionsTableUpdateCompanionBuilder,
+    (WalletConnectionTable, $$WalletConnectionsTableReferences),
+    WalletConnectionTable,
+    PrefetchHooks Function(
+        {bool requestsRefs, bool walletServiceConnectionRequests})> {
+  $$WalletConnectionsTableTableManager(
+      _$Nip47Database db, $WalletConnectionsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$ClientConnectionsTableFilterComposer($db: db, $table: table),
+              $$WalletConnectionsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$ClientConnectionsTableOrderingComposer($db: db, $table: table),
+              $$WalletConnectionsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$ClientConnectionsTableAnnotationComposer(
+              $$WalletConnectionsTableAnnotationComposer(
                   $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> clientPubkey = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<int> walletServiceAccountIndex = const Value.absent(),
+            Value<String?> name = const Value.absent(),
             Value<String> walletServicePubkey = const Value.absent(),
             Value<List<String>> relays = const Value.absent(),
             Value<List<String>?> clientRelays = const Value.absent(),
             Value<String> budgetRenewal = const Value.absent(),
-            Value<int> budgetRenewedAt = const Value.absent(),
+            Value<int?> budgetRenewedAt = const Value.absent(),
             Value<int?> maxAmountSat = const Value.absent(),
             Value<int?> remainingAmountSat = const Value.absent(),
             Value<int?> expiresAt = const Value.absent(),
@@ -2124,16 +2280,16 @@ class $$ClientConnectionsTableTableManager extends RootTableManager<
             Value<List<String>?> customMethods = const Value.absent(),
             Value<List<String>?> notifications = const Value.absent(),
             Value<List<String>?> customNotifications = const Value.absent(),
-            Value<bool> isolated = const Value.absent(),
-            Value<bool> isFrozen = const Value.absent(),
+            Value<bool?> isolated = const Value.absent(),
+            Value<bool?> isFrozen = const Value.absent(),
             Value<List<String>?> categories = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
+            Value<String?> lud16 = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
-              ClientConnectionsCompanion(
+              WalletConnectionsCompanion(
             clientPubkey: clientPubkey,
             name: name,
-            walletServiceAccountIndex: walletServiceAccountIndex,
             walletServicePubkey: walletServicePubkey,
             relays: relays,
             clientRelays: clientRelays,
@@ -2150,17 +2306,17 @@ class $$ClientConnectionsTableTableManager extends RootTableManager<
             isFrozen: isFrozen,
             categories: categories,
             createdAt: createdAt,
+            lud16: lud16,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required String clientPubkey,
-            required String name,
-            required int walletServiceAccountIndex,
+            Value<String?> name = const Value.absent(),
             required String walletServicePubkey,
             required List<String> relays,
             Value<List<String>?> clientRelays = const Value.absent(),
             required String budgetRenewal,
-            required int budgetRenewedAt,
+            Value<int?> budgetRenewedAt = const Value.absent(),
             Value<int?> maxAmountSat = const Value.absent(),
             Value<int?> remainingAmountSat = const Value.absent(),
             Value<int?> expiresAt = const Value.absent(),
@@ -2168,16 +2324,16 @@ class $$ClientConnectionsTableTableManager extends RootTableManager<
             Value<List<String>?> customMethods = const Value.absent(),
             Value<List<String>?> notifications = const Value.absent(),
             Value<List<String>?> customNotifications = const Value.absent(),
-            required bool isolated,
-            required bool isFrozen,
+            Value<bool?> isolated = const Value.absent(),
+            Value<bool?> isFrozen = const Value.absent(),
             Value<List<String>?> categories = const Value.absent(),
             required DateTime createdAt,
+            Value<String?> lud16 = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
-              ClientConnectionsCompanion.insert(
+              WalletConnectionsCompanion.insert(
             clientPubkey: clientPubkey,
             name: name,
-            walletServiceAccountIndex: walletServiceAccountIndex,
             walletServicePubkey: walletServicePubkey,
             relays: relays,
             clientRelays: clientRelays,
@@ -2194,31 +2350,74 @@ class $$ClientConnectionsTableTableManager extends RootTableManager<
             isFrozen: isFrozen,
             categories: categories,
             createdAt: createdAt,
+            lud16: lud16,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$WalletConnectionsTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: (
+              {requestsRefs = false, walletServiceConnectionRequests = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (requestsRefs) db.requests,
+                if (walletServiceConnectionRequests) db.requests
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (requestsRefs)
+                    await $_getPrefetchedData<WalletConnectionTable,
+                            $WalletConnectionsTable, RequestTable>(
+                        currentTable: table,
+                        referencedTable: $$WalletConnectionsTableReferences
+                            ._requestsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$WalletConnectionsTableReferences(db, table, p0)
+                                .requestsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems.where(
+                                (e) => e.clientPubkey == item.clientPubkey),
+                        typedResults: items),
+                  if (walletServiceConnectionRequests)
+                    await $_getPrefetchedData<WalletConnectionTable,
+                            $WalletConnectionsTable, RequestTable>(
+                        currentTable: table,
+                        referencedTable: $$WalletConnectionsTableReferences
+                            ._walletServiceConnectionRequestsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$WalletConnectionsTableReferences(db, table, p0)
+                                .walletServiceConnectionRequests,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems.where(
+                                (e) =>
+                                    e.walletServicePubkey ==
+                                    item.walletServicePubkey),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-typedef $$ClientConnectionsTableProcessedTableManager = ProcessedTableManager<
+typedef $$WalletConnectionsTableProcessedTableManager = ProcessedTableManager<
     _$Nip47Database,
-    $ClientConnectionsTable,
-    ClientConnectionTable,
-    $$ClientConnectionsTableFilterComposer,
-    $$ClientConnectionsTableOrderingComposer,
-    $$ClientConnectionsTableAnnotationComposer,
-    $$ClientConnectionsTableCreateCompanionBuilder,
-    $$ClientConnectionsTableUpdateCompanionBuilder,
-    (
-      ClientConnectionTable,
-      BaseReferences<_$Nip47Database, $ClientConnectionsTable,
-          ClientConnectionTable>
-    ),
-    ClientConnectionTable,
-    PrefetchHooks Function()>;
+    $WalletConnectionsTable,
+    WalletConnectionTable,
+    $$WalletConnectionsTableFilterComposer,
+    $$WalletConnectionsTableOrderingComposer,
+    $$WalletConnectionsTableAnnotationComposer,
+    $$WalletConnectionsTableCreateCompanionBuilder,
+    $$WalletConnectionsTableUpdateCompanionBuilder,
+    (WalletConnectionTable, $$WalletConnectionsTableReferences),
+    WalletConnectionTable,
+    PrefetchHooks Function(
+        {bool requestsRefs, bool walletServiceConnectionRequests})>;
 typedef $$RequestsTableCreateCompanionBuilder = RequestsCompanion Function({
   required String id,
   required String clientPubkey,
@@ -2240,6 +2439,60 @@ typedef $$RequestsTableUpdateCompanionBuilder = RequestsCompanion Function({
   Value<int> rowid,
 });
 
+final class $$RequestsTableReferences
+    extends BaseReferences<_$Nip47Database, $RequestsTable, RequestTable> {
+  $$RequestsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $WalletConnectionsTable _clientPubkeyTable(_$Nip47Database db) =>
+      db.walletConnections.createAlias($_aliasNameGenerator(
+          db.requests.clientPubkey, db.walletConnections.clientPubkey));
+
+  $$WalletConnectionsTableProcessedTableManager get clientPubkey {
+    final $_column = $_itemColumn<String>('client_pubkey')!;
+
+    final manager =
+        $$WalletConnectionsTableTableManager($_db, $_db.walletConnections)
+            .filter((f) => f.clientPubkey.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_clientPubkeyTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $WalletConnectionsTable _walletServicePubkeyTable(
+          _$Nip47Database db) =>
+      db.walletConnections.createAlias($_aliasNameGenerator(
+          db.requests.walletServicePubkey,
+          db.walletConnections.walletServicePubkey));
+
+  $$WalletConnectionsTableProcessedTableManager get walletServicePubkey {
+    final $_column = $_itemColumn<String>('wallet_service_pubkey')!;
+
+    final manager =
+        $$WalletConnectionsTableTableManager($_db, $_db.walletConnections)
+            .filter((f) => f.walletServicePubkey.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_walletServicePubkeyTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$ResponsesTable, List<ResponseTable>>
+      _responsesRefsTable(_$Nip47Database db) =>
+          MultiTypedResultKey.fromTable(db.responses,
+              aliasName:
+                  $_aliasNameGenerator(db.requests.id, db.responses.requestId));
+
+  $$ResponsesTableProcessedTableManager get responsesRefs {
+    final manager = $$ResponsesTableTableManager($_db, $_db.responses)
+        .filter((f) => f.requestId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_responsesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
 class $$RequestsTableFilterComposer
     extends Composer<_$Nip47Database, $RequestsTable> {
   $$RequestsTableFilterComposer({
@@ -2252,13 +2505,6 @@ class $$RequestsTableFilterComposer
   ColumnFilters<String> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get clientPubkey => $composableBuilder(
-      column: $table.clientPubkey, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get walletServicePubkey => $composableBuilder(
-      column: $table.walletServicePubkey,
-      builder: (column) => ColumnFilters(column));
-
   ColumnFilters<String> get method => $composableBuilder(
       column: $table.method, builder: (column) => ColumnFilters(column));
 
@@ -2270,6 +2516,67 @@ class $$RequestsTableFilterComposer
 
   ColumnFilters<DateTime> get expiresAt => $composableBuilder(
       column: $table.expiresAt, builder: (column) => ColumnFilters(column));
+
+  $$WalletConnectionsTableFilterComposer get clientPubkey {
+    final $$WalletConnectionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.clientPubkey,
+        referencedTable: $db.walletConnections,
+        getReferencedColumn: (t) => t.clientPubkey,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$WalletConnectionsTableFilterComposer(
+              $db: $db,
+              $table: $db.walletConnections,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$WalletConnectionsTableFilterComposer get walletServicePubkey {
+    final $$WalletConnectionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.walletServicePubkey,
+        referencedTable: $db.walletConnections,
+        getReferencedColumn: (t) => t.walletServicePubkey,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$WalletConnectionsTableFilterComposer(
+              $db: $db,
+              $table: $db.walletConnections,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> responsesRefs(
+      Expression<bool> Function($$ResponsesTableFilterComposer f) f) {
+    final $$ResponsesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.responses,
+        getReferencedColumn: (t) => t.requestId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ResponsesTableFilterComposer(
+              $db: $db,
+              $table: $db.responses,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$RequestsTableOrderingComposer
@@ -2284,14 +2591,6 @@ class $$RequestsTableOrderingComposer
   ColumnOrderings<String> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get clientPubkey => $composableBuilder(
-      column: $table.clientPubkey,
-      builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get walletServicePubkey => $composableBuilder(
-      column: $table.walletServicePubkey,
-      builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<String> get method => $composableBuilder(
       column: $table.method, builder: (column) => ColumnOrderings(column));
 
@@ -2303,6 +2602,46 @@ class $$RequestsTableOrderingComposer
 
   ColumnOrderings<DateTime> get expiresAt => $composableBuilder(
       column: $table.expiresAt, builder: (column) => ColumnOrderings(column));
+
+  $$WalletConnectionsTableOrderingComposer get clientPubkey {
+    final $$WalletConnectionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.clientPubkey,
+        referencedTable: $db.walletConnections,
+        getReferencedColumn: (t) => t.clientPubkey,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$WalletConnectionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.walletConnections,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$WalletConnectionsTableOrderingComposer get walletServicePubkey {
+    final $$WalletConnectionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.walletServicePubkey,
+        referencedTable: $db.walletConnections,
+        getReferencedColumn: (t) => t.walletServicePubkey,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$WalletConnectionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.walletConnections,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$RequestsTableAnnotationComposer
@@ -2317,12 +2656,6 @@ class $$RequestsTableAnnotationComposer
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get clientPubkey => $composableBuilder(
-      column: $table.clientPubkey, builder: (column) => column);
-
-  GeneratedColumn<String> get walletServicePubkey => $composableBuilder(
-      column: $table.walletServicePubkey, builder: (column) => column);
-
   GeneratedColumn<String> get method =>
       $composableBuilder(column: $table.method, builder: (column) => column);
 
@@ -2334,6 +2667,69 @@ class $$RequestsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get expiresAt =>
       $composableBuilder(column: $table.expiresAt, builder: (column) => column);
+
+  $$WalletConnectionsTableAnnotationComposer get clientPubkey {
+    final $$WalletConnectionsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.clientPubkey,
+            referencedTable: $db.walletConnections,
+            getReferencedColumn: (t) => t.clientPubkey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$WalletConnectionsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.walletConnections,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+
+  $$WalletConnectionsTableAnnotationComposer get walletServicePubkey {
+    final $$WalletConnectionsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.walletServicePubkey,
+            referencedTable: $db.walletConnections,
+            getReferencedColumn: (t) => t.walletServicePubkey,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$WalletConnectionsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.walletConnections,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+
+  Expression<T> responsesRefs<T extends Object>(
+      Expression<T> Function($$ResponsesTableAnnotationComposer a) f) {
+    final $$ResponsesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.responses,
+        getReferencedColumn: (t) => t.requestId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ResponsesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.responses,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$RequestsTableTableManager extends RootTableManager<
@@ -2345,12 +2741,10 @@ class $$RequestsTableTableManager extends RootTableManager<
     $$RequestsTableAnnotationComposer,
     $$RequestsTableCreateCompanionBuilder,
     $$RequestsTableUpdateCompanionBuilder,
-    (
-      RequestTable,
-      BaseReferences<_$Nip47Database, $RequestsTable, RequestTable>
-    ),
+    (RequestTable, $$RequestsTableReferences),
     RequestTable,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function(
+        {bool clientPubkey, bool walletServicePubkey, bool responsesRefs})> {
   $$RequestsTableTableManager(_$Nip47Database db, $RequestsTable table)
       : super(TableManagerState(
           db: db,
@@ -2402,9 +2796,73 @@ class $$RequestsTableTableManager extends RootTableManager<
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) =>
+                  (e.readTable(table), $$RequestsTableReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: (
+              {clientPubkey = false,
+              walletServicePubkey = false,
+              responsesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (responsesRefs) db.responses],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (clientPubkey) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.clientPubkey,
+                    referencedTable:
+                        $$RequestsTableReferences._clientPubkeyTable(db),
+                    referencedColumn: $$RequestsTableReferences
+                        ._clientPubkeyTable(db)
+                        .clientPubkey,
+                  ) as T;
+                }
+                if (walletServicePubkey) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.walletServicePubkey,
+                    referencedTable:
+                        $$RequestsTableReferences._walletServicePubkeyTable(db),
+                    referencedColumn: $$RequestsTableReferences
+                        ._walletServicePubkeyTable(db)
+                        .walletServicePubkey,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (responsesRefs)
+                    await $_getPrefetchedData<RequestTable, $RequestsTable,
+                            ResponseTable>(
+                        currentTable: table,
+                        referencedTable:
+                            $$RequestsTableReferences._responsesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$RequestsTableReferences(db, table, p0)
+                                .responsesRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.requestId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
@@ -2417,32 +2875,52 @@ typedef $$RequestsTableProcessedTableManager = ProcessedTableManager<
     $$RequestsTableAnnotationComposer,
     $$RequestsTableCreateCompanionBuilder,
     $$RequestsTableUpdateCompanionBuilder,
-    (
-      RequestTable,
-      BaseReferences<_$Nip47Database, $RequestsTable, RequestTable>
-    ),
+    (RequestTable, $$RequestsTableReferences),
     RequestTable,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function(
+        {bool clientPubkey, bool walletServicePubkey, bool responsesRefs})>;
 typedef $$ResponsesTableCreateCompanionBuilder = ResponsesCompanion Function({
   required String id,
   required String requestId,
+  required String resultType,
   Value<String?> result,
   Value<String?> errorCode,
   Value<String?> errorMessage,
   Value<String?> multiId,
-  Value<DateTime?> createdAt,
+  required DateTime createdAt,
   Value<int> rowid,
 });
 typedef $$ResponsesTableUpdateCompanionBuilder = ResponsesCompanion Function({
   Value<String> id,
   Value<String> requestId,
+  Value<String> resultType,
   Value<String?> result,
   Value<String?> errorCode,
   Value<String?> errorMessage,
   Value<String?> multiId,
-  Value<DateTime?> createdAt,
+  Value<DateTime> createdAt,
   Value<int> rowid,
 });
+
+final class $$ResponsesTableReferences
+    extends BaseReferences<_$Nip47Database, $ResponsesTable, ResponseTable> {
+  $$ResponsesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RequestsTable _requestIdTable(_$Nip47Database db) =>
+      db.requests.createAlias(
+          $_aliasNameGenerator(db.responses.requestId, db.requests.id));
+
+  $$RequestsTableProcessedTableManager get requestId {
+    final $_column = $_itemColumn<String>('request_id')!;
+
+    final manager = $$RequestsTableTableManager($_db, $_db.requests)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_requestIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
 
 class $$ResponsesTableFilterComposer
     extends Composer<_$Nip47Database, $ResponsesTable> {
@@ -2456,8 +2934,8 @@ class $$ResponsesTableFilterComposer
   ColumnFilters<String> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get requestId => $composableBuilder(
-      column: $table.requestId, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get resultType => $composableBuilder(
+      column: $table.resultType, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get result => $composableBuilder(
       column: $table.result, builder: (column) => ColumnFilters(column));
@@ -2473,6 +2951,26 @@ class $$ResponsesTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$RequestsTableFilterComposer get requestId {
+    final $$RequestsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.requestId,
+        referencedTable: $db.requests,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RequestsTableFilterComposer(
+              $db: $db,
+              $table: $db.requests,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$ResponsesTableOrderingComposer
@@ -2487,8 +2985,8 @@ class $$ResponsesTableOrderingComposer
   ColumnOrderings<String> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get requestId => $composableBuilder(
-      column: $table.requestId, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get resultType => $composableBuilder(
+      column: $table.resultType, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get result => $composableBuilder(
       column: $table.result, builder: (column) => ColumnOrderings(column));
@@ -2505,6 +3003,26 @@ class $$ResponsesTableOrderingComposer
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$RequestsTableOrderingComposer get requestId {
+    final $$RequestsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.requestId,
+        referencedTable: $db.requests,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RequestsTableOrderingComposer(
+              $db: $db,
+              $table: $db.requests,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$ResponsesTableAnnotationComposer
@@ -2519,8 +3037,8 @@ class $$ResponsesTableAnnotationComposer
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get requestId =>
-      $composableBuilder(column: $table.requestId, builder: (column) => column);
+  GeneratedColumn<String> get resultType => $composableBuilder(
+      column: $table.resultType, builder: (column) => column);
 
   GeneratedColumn<String> get result =>
       $composableBuilder(column: $table.result, builder: (column) => column);
@@ -2536,6 +3054,26 @@ class $$ResponsesTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$RequestsTableAnnotationComposer get requestId {
+    final $$RequestsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.requestId,
+        referencedTable: $db.requests,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RequestsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.requests,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$ResponsesTableTableManager extends RootTableManager<
@@ -2547,12 +3085,9 @@ class $$ResponsesTableTableManager extends RootTableManager<
     $$ResponsesTableAnnotationComposer,
     $$ResponsesTableCreateCompanionBuilder,
     $$ResponsesTableUpdateCompanionBuilder,
-    (
-      ResponseTable,
-      BaseReferences<_$Nip47Database, $ResponsesTable, ResponseTable>
-    ),
+    (ResponseTable, $$ResponsesTableReferences),
     ResponseTable,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function({bool requestId})> {
   $$ResponsesTableTableManager(_$Nip47Database db, $ResponsesTable table)
       : super(TableManagerState(
           db: db,
@@ -2566,16 +3101,18 @@ class $$ResponsesTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> requestId = const Value.absent(),
+            Value<String> resultType = const Value.absent(),
             Value<String?> result = const Value.absent(),
             Value<String?> errorCode = const Value.absent(),
             Value<String?> errorMessage = const Value.absent(),
             Value<String?> multiId = const Value.absent(),
-            Value<DateTime?> createdAt = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ResponsesCompanion(
             id: id,
             requestId: requestId,
+            resultType: resultType,
             result: result,
             errorCode: errorCode,
             errorMessage: errorMessage,
@@ -2586,16 +3123,18 @@ class $$ResponsesTableTableManager extends RootTableManager<
           createCompanionCallback: ({
             required String id,
             required String requestId,
+            required String resultType,
             Value<String?> result = const Value.absent(),
             Value<String?> errorCode = const Value.absent(),
             Value<String?> errorMessage = const Value.absent(),
             Value<String?> multiId = const Value.absent(),
-            Value<DateTime?> createdAt = const Value.absent(),
+            required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
               ResponsesCompanion.insert(
             id: id,
             requestId: requestId,
+            resultType: resultType,
             result: result,
             errorCode: errorCode,
             errorMessage: errorMessage,
@@ -2604,9 +3143,46 @@ class $$ResponsesTableTableManager extends RootTableManager<
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$ResponsesTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({requestId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (requestId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.requestId,
+                    referencedTable:
+                        $$ResponsesTableReferences._requestIdTable(db),
+                    referencedColumn:
+                        $$ResponsesTableReferences._requestIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
@@ -2619,18 +3195,15 @@ typedef $$ResponsesTableProcessedTableManager = ProcessedTableManager<
     $$ResponsesTableAnnotationComposer,
     $$ResponsesTableCreateCompanionBuilder,
     $$ResponsesTableUpdateCompanionBuilder,
-    (
-      ResponseTable,
-      BaseReferences<_$Nip47Database, $ResponsesTable, ResponseTable>
-    ),
+    (ResponseTable, $$ResponsesTableReferences),
     ResponseTable,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function({bool requestId})>;
 
 class $Nip47DatabaseManager {
   final _$Nip47Database _db;
   $Nip47DatabaseManager(this._db);
-  $$ClientConnectionsTableTableManager get clientConnections =>
-      $$ClientConnectionsTableTableManager(_db, _db.clientConnections);
+  $$WalletConnectionsTableTableManager get walletConnections =>
+      $$WalletConnectionsTableTableManager(_db, _db.walletConnections);
   $$RequestsTableTableManager get requests =>
       $$RequestsTableTableManager(_db, _db.requests);
   $$ResponsesTableTableManager get responses =>

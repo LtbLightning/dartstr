@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:nip47/src/database/tables/wallet_connection_table.dart';
 
 @DataClassName('RequestTable')
 class Requests extends Table {
@@ -6,10 +7,11 @@ class Requests extends Table {
 
   @override
   Set<Column<Object>> get primaryKey => {id};
-  TextColumn get clientPubkey => text().customConstraint(
-      'NOT NULL REFERENCES client_connections(client_pubkey)')();
-  TextColumn get walletServicePubkey => text().customConstraint(
-      'NOT NULL REFERENCES client_connections(wallet_service_pubkey)')();
+  TextColumn get clientPubkey =>
+      text().references(WalletConnections, #clientPubkey)();
+  @ReferenceName('walletServiceConnectionRequests')
+  TextColumn get walletServicePubkey =>
+      text().references(WalletConnections, #walletServicePubkey)();
   TextColumn get method => text()();
   TextColumn get params => text()();
   DateTimeColumn get createdAt => dateTime()();

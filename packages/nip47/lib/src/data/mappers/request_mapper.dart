@@ -58,7 +58,7 @@ class RequestMapper {
   }
 
   static RequestTable modelToTable(RequestEventModel model) => RequestTable(
-        id: model.id,
+        id: model.id!,
         clientPubkey: model.clientPubkey,
         walletServicePubkey: model.walletServicePubkey,
         method: model.method,
