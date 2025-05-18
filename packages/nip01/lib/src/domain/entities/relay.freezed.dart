@@ -16,7 +16,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Relay {
   String get url;
-  bool get isConnected;
+  RelayStatus get status;
+  String get statusMessage;
 
   /// Create a copy of Relay
   /// with the given fields replaced by the non-null parameter values.
@@ -31,16 +32,17 @@ mixin _$Relay {
         (other.runtimeType == runtimeType &&
             other is Relay &&
             (identical(other.url, url) || other.url == url) &&
-            (identical(other.isConnected, isConnected) ||
-                other.isConnected == isConnected));
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.statusMessage, statusMessage) ||
+                other.statusMessage == statusMessage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, url, isConnected);
+  int get hashCode => Object.hash(runtimeType, url, status, statusMessage);
 
   @override
   String toString() {
-    return 'Relay(url: $url, isConnected: $isConnected)';
+    return 'Relay(url: $url, status: $status, statusMessage: $statusMessage)';
   }
 }
 
@@ -49,7 +51,7 @@ abstract mixin class $RelayCopyWith<$Res> {
   factory $RelayCopyWith(Relay value, $Res Function(Relay) _then) =
       _$RelayCopyWithImpl;
   @useResult
-  $Res call({String url, bool isConnected});
+  $Res call({String url, RelayStatus status, String statusMessage});
 }
 
 /// @nodoc
@@ -65,17 +67,22 @@ class _$RelayCopyWithImpl<$Res> implements $RelayCopyWith<$Res> {
   @override
   $Res call({
     Object? url = null,
-    Object? isConnected = null,
+    Object? status = null,
+    Object? statusMessage = null,
   }) {
     return _then(_self.copyWith(
       url: null == url
           ? _self.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
-      isConnected: null == isConnected
-          ? _self.isConnected
-          : isConnected // ignore: cast_nullable_to_non_nullable
-              as bool,
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as RelayStatus,
+      statusMessage: null == statusMessage
+          ? _self.statusMessage
+          : statusMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -83,13 +90,16 @@ class _$RelayCopyWithImpl<$Res> implements $RelayCopyWith<$Res> {
 /// @nodoc
 
 class _Relay extends Relay {
-  _Relay({required this.url, this.isConnected = false}) : super._();
+  _Relay({required this.url, required this.status, this.statusMessage = ''})
+      : super._();
 
   @override
   final String url;
   @override
+  final RelayStatus status;
+  @override
   @JsonKey()
-  final bool isConnected;
+  final String statusMessage;
 
   /// Create a copy of Relay
   /// with the given fields replaced by the non-null parameter values.
@@ -105,16 +115,17 @@ class _Relay extends Relay {
         (other.runtimeType == runtimeType &&
             other is _Relay &&
             (identical(other.url, url) || other.url == url) &&
-            (identical(other.isConnected, isConnected) ||
-                other.isConnected == isConnected));
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.statusMessage, statusMessage) ||
+                other.statusMessage == statusMessage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, url, isConnected);
+  int get hashCode => Object.hash(runtimeType, url, status, statusMessage);
 
   @override
   String toString() {
-    return 'Relay(url: $url, isConnected: $isConnected)';
+    return 'Relay(url: $url, status: $status, statusMessage: $statusMessage)';
   }
 }
 
@@ -124,7 +135,7 @@ abstract mixin class _$RelayCopyWith<$Res> implements $RelayCopyWith<$Res> {
       __$RelayCopyWithImpl;
   @override
   @useResult
-  $Res call({String url, bool isConnected});
+  $Res call({String url, RelayStatus status, String statusMessage});
 }
 
 /// @nodoc
@@ -140,17 +151,22 @@ class __$RelayCopyWithImpl<$Res> implements _$RelayCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? url = null,
-    Object? isConnected = null,
+    Object? status = null,
+    Object? statusMessage = null,
   }) {
     return _then(_Relay(
       url: null == url
           ? _self.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
-      isConnected: null == isConnected
-          ? _self.isConnected
-          : isConnected // ignore: cast_nullable_to_non_nullable
-              as bool,
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as RelayStatus,
+      statusMessage: null == statusMessage
+          ? _self.statusMessage
+          : statusMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }

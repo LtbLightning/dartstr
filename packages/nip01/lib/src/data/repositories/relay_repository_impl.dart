@@ -3,7 +3,6 @@ import 'package:nip01/src/data/data_sources/relay_data_source.dart';
 import 'package:nip01/src/data/models/relay_message_model.dart';
 import 'package:nip01/src/data/models/relay_state.dart';
 import 'package:nip01/src/domain/entities/entities.dart';
-import 'package:nip01/src/domain/entities/notice_message.dart';
 import 'package:nip01/src/domain/repositories/relay_repository.dart';
 
 class RelayRepositoryImpl implements RelayRepository {
@@ -23,15 +22,32 @@ class RelayRepositoryImpl implements RelayRepository {
   @override
   Stream<Relay> get relayStream => _relayDataSource.stateStream.map((state) {
         return Relay(
-            url: state.relayUrl, isConnected: state is ConnectedRelayState);
+          url: state.relayUrl,
+          status: state.status,
+          statusMessage: state.statusMessage ?? '',
+        );
       });
 
   @override
   Stream<NoticeMessage> get noticeStream => _noticeBroadcaster.stream;
 
   @override
-  Future<void> addRelay(String url) async {
-    await _relayDataSource.connect(url);
+  Future<List<String>> addRelays(List<String> urls) async {
+    final relays = (await Future.wait(urls.map((url) async {
+      try {
+        await _relayDataSource.connect(url.toString());
+        return url.toString();
+      } catch (e) {
+        return null;
+      }
+    })))
+        .whereType<String>()
+        .toList();
+
+    if (relays.isEmpty) {
+      throw Exception('No relays added');
+    }
+    return relays;
   }
 
   @override
@@ -42,15 +58,24 @@ class RelayRepositoryImpl implements RelayRepository {
     }
     return Relay(
       url: state.relayUrl,
-      isConnected: state is ConnectedRelayState,
+      status: state.status,
+      statusMessage: state.statusMessage ?? '',
     );
   }
 
   @override
-  List<Relay> get relays => _relayDataSource.states.map((state) {
+  List<Relay> getRelays({bool? connected}) =>
+      _relayDataSource.states.where((state) {
+        if ((connected == true && state is! ConnectedRelayState) ||
+            (connected == false && state is ConnectedRelayState)) {
+          return false;
+        }
+        return true;
+      }).map((state) {
         return Relay(
           url: state.relayUrl,
-          isConnected: state is ConnectedRelayState,
+          status: state.status,
+          statusMessage: state.statusMessage ?? '',
         );
       }).toList();
 

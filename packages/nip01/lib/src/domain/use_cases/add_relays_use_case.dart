@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:nip01/nip01.dart';
 
 class AddRelaysUseCase {
@@ -9,27 +7,16 @@ class AddRelaysUseCase {
     required RelayRepository relayRepository,
   }) : _relayRepository = relayRepository;
 
-  Future<List<Uri>> execute(List<Uri> relayUrls) async {
+  Future<List<String>> execute(List<Uri> relayUrls) async {
     try {
       if (relayUrls.isEmpty) {
         throw AddRelaysException('Relay URLs cannot be empty');
       }
 
-      final relayAdditionResults = await Future.wait(
-        relayUrls.map(
-          (url) async {
-            try {
-              await _relayRepository.addRelay(url.toString());
-              return url;
-            } catch (e) {
-              log('Failed to add relay: $url, error: $e');
-              return null;
-            }
-          },
-        ),
-      );
+      final addedRelays = await _relayRepository
+          .addRelays(relayUrls.map((uri) => uri.toString()).toList());
 
-      return relayAdditionResults.whereType<Uri>().toList();
+      return addedRelays;
     } catch (e) {
       throw AddRelaysException(e.toString());
     }

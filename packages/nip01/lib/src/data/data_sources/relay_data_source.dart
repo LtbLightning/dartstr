@@ -85,9 +85,17 @@ class WebSocketRelayDataSource implements RelayDataSource {
   Future<void> connect(String relayUrl) async {
     final lock = _locks.putIfAbsent(relayUrl, () => Lock());
     await lock.synchronized(() async {
-      if (_states[relayUrl] is ConnectedRelayState) {
-        log('[WebSocketRelayDataSource] Relay $relayUrl is already connected');
-        return;
+      final existingState = _states[relayUrl];
+      if (existingState != null) {
+        if (existingState is ConnectedRelayState) {
+          log('[WebSocketRelayDataSource] Relay $relayUrl is already connected');
+          return;
+        } else {
+          log('[WebSocketRelayDataSource] Relay $relayUrl is already in ${existingState.status} state');
+          // Disconnect the existing connection before reconnecting so we
+          // are in a clean state
+          await _disconnect(relayUrl);
+        }
       }
 
       _changeState(ConnectingRelayState(relayUrl: relayUrl));

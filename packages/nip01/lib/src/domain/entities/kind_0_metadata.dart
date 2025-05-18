@@ -23,13 +23,9 @@ sealed class Kind0Metadata with _$Kind0Metadata {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'about': about,
-      'picture': picture,
-    };
-  }
-
-  String get content => jsonEncode(toJson());
+  String get content => jsonEncode({
+        'name': name,
+        'about': about,
+        'picture': picture,
+      });
 }

@@ -125,7 +125,7 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   List<Subscription> get subscriptions => _subscriptions.values.toList();
 
   @override
-  Future<void> unsubscribe(
+  Future<List<String>> unsubscribe(
     String subscriptionId, {
     List<String>? relayUrls,
   }) async {
@@ -143,6 +143,8 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
       _relaySubscriptionIds[relayUrl]?.remove(subscriptionId);
     }
     _subscriptions.remove(subscriptionId);
+
+    return sentToRelays;
   }
 
   _handleClosedMessage(RelayClosedMessageModel message) {

@@ -9,7 +9,7 @@ abstract class SubscriptionRepository {
     required List<Filters> filters,
     List<String>? relayUrls,
   });
-  Future<void> unsubscribe(
+  Future<List<String>> unsubscribe(
     String subscriptionId, {
     List<String>? relayUrls,
   });

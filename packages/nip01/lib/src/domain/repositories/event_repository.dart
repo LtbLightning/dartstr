@@ -7,7 +7,6 @@ abstract class EventRepository {
   Future<List<String>> publishEvent(
     Event event, {
     List<String>? relayUrls,
-    int timeoutSeconds = 10,
   });
   Future<List<Event>> getEvents(
     List<Filters> filters, {

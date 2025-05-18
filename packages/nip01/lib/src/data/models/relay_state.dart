@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:nip01/nip01.dart';
 
 part 'relay_state.freezed.dart';
 
@@ -31,4 +32,27 @@ sealed class RelayState with _$RelayState {
   }) = DisposedRelayState;
 
   const RelayState._();
+
+  RelayStatus get status {
+    return switch (this) {
+      ConnectingRelayState() => RelayStatus.connecting,
+      ConnectedRelayState() => RelayStatus.connected,
+      DisconnectingRelayState() => RelayStatus.disconnecting,
+      DisconnectedRelayState() => RelayStatus.disconnected,
+      DisposingRelayState() => RelayStatus.disposing,
+      DisposedRelayState() => RelayStatus.disposed,
+    };
+  }
+
+  String? get statusMessage {
+    switch (this) {
+      case DisconnectingRelayState state:
+        return state.reason;
+      case DisconnectedRelayState state:
+        return state.reason;
+      case _:
+        return null;
+    }
+    ;
+  }
 }

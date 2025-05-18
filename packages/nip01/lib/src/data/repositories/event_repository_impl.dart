@@ -52,24 +52,9 @@ class EventRepositoryImpl implements EventRepository {
   Future<List<String>> publishEvent(
     Event event, {
     List<String>? relayUrls,
-    int timeoutSeconds = 10,
   }) async {
     final relays = relayUrls ?? _relayDataSource.relayUrls;
     log('[EventRepositoryImpl] Publishing event: $event to $relays');
-
-    // Cache the OK message receptions
-    final oks = <String, Completer<void>>{};
-    for (final relay in relays) {
-      oks[relay] = Completer<void>();
-    }
-    // Listen to the OK messages
-    final okSub = okStream.where((okMessage) {
-      return oks.containsKey(okMessage.relayUrl) &&
-          okMessage.eventId == event.id;
-    }).listen((okMessage) {
-      log('[EventRepositoryImpl] Received OK message: ${okMessage.accepted} for event: ${okMessage.eventId} from relay ${okMessage.relayUrl}');
-      oks[okMessage.relayUrl]?.complete();
-    });
 
     // Send the event message to the relay
     final message = ClientMessageModel.event(EventModel.fromEvent(event));
@@ -77,28 +62,7 @@ class EventRepositoryImpl implements EventRepository {
         await _relayDataSource.sendMessage(message, relayUrls: relayUrls);
     log('[EventRepositoryImpl] Successfully sent event message: $message to $relaysSentTo');
 
-    // Wait for the OK messages or the timeout, whichever comes first
-    final futures = <Future<void>>[];
-    for (final relay in relaysSentTo) {
-      final completer = oks[relay];
-      if (completer != null) {
-        futures.add(completer.future.timeout(
-          Duration(seconds: timeoutSeconds),
-          onTimeout: () {
-            log('[EventRepositoryImpl] Timeout waiting for OK from $relay');
-            return;
-          },
-        ));
-      }
-    }
-    await Future.wait(futures);
-
-    // Cancel the stream subscription
-    await okSub.cancel();
-
-    return relaysSentTo.where((relay) {
-      return oks[relay]?.isCompleted ?? false;
-    }).toList();
+    return relaysSentTo;
   }
 
   @override

@@ -72,4 +72,9 @@ sealed class Event with _$Event {
     final id = hex.encode(digest.bytes);
     return id;
   }
+
+  String? get pTag =>
+      tags.firstWhere((tag) => tag[0] == 'p', orElse: () => [''])[1].isNotEmpty
+          ? tags.firstWhere((tag) => tag[0] == 'p')[1]
+          : null;
 }
