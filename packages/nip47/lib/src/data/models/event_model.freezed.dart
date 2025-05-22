@@ -15,10 +15,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$EventModel {
-  String? get id;
-  String? get clientPubkey;
   DateTime get createdAt;
-  String? get relay;
+  Object? get relay;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -32,21 +30,18 @@ mixin _$EventModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is EventModel &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.clientPubkey, clientPubkey) ||
-                other.clientPubkey == clientPubkey) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            (identical(other.relay, relay) || other.relay == relay));
+            const DeepCollectionEquality().equals(other.relay, relay));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, clientPubkey, createdAt, relay);
+  int get hashCode => Object.hash(
+      runtimeType, createdAt, const DeepCollectionEquality().hash(relay));
 
   @override
   String toString() {
-    return 'EventModel(id: $id, clientPubkey: $clientPubkey, createdAt: $createdAt, relay: $relay)';
+    return 'EventModel(createdAt: $createdAt, relay: $relay)';
   }
 }
 
@@ -56,8 +51,7 @@ abstract mixin class $EventModelCopyWith<$Res> {
           EventModel value, $Res Function(EventModel) _then) =
       _$EventModelCopyWithImpl;
   @useResult
-  $Res call(
-      {String? id, String clientPubkey, DateTime createdAt, String? relay});
+  $Res call({DateTime createdAt});
 }
 
 /// @nodoc
@@ -72,28 +66,13 @@ class _$EventModelCopyWithImpl<$Res> implements $EventModelCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? clientPubkey = null,
     Object? createdAt = null,
-    Object? relay = freezed,
   }) {
     return _then(_self.copyWith(
-      id: freezed == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      clientPubkey: null == clientPubkey
-          ? _self.clientPubkey!
-          : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      relay: freezed == relay
-          ? _self.relay
-          : relay // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -113,9 +92,7 @@ class RequestEventModel extends EventModel {
       : _params = params,
         super._();
 
-  @override
   final String? id;
-  @override
   final String clientPubkey;
   final String walletServicePubkey;
   final String method;
@@ -258,43 +235,24 @@ class _$RequestEventModelCopyWithImpl<$Res>
 /// @nodoc
 
 class ResponseEventModel extends EventModel {
-  const ResponseEventModel(
-      {this.id,
-      required this.requestId,
-      required this.clientPubkey,
-      required this.resultType,
-      final Map<String, dynamic>? result,
-      this.errorCode,
-      this.errorMessage,
-      this.multiId,
+  const ResponseEventModel(this.response,
+      {required this.eventId,
       required this.createdAt,
-      this.relay})
-      : _result = result,
+      required final List<String> relay})
+      : _relay = relay,
         super._();
 
-  @override
-  final String? id;
-  final String requestId;
-  @override
-  final String clientPubkey;
-  final String resultType;
-  final Map<String, dynamic>? _result;
-  Map<String, dynamic>? get result {
-    final value = _result;
-    if (value == null) return null;
-    if (_result is EqualUnmodifiableMapView) return _result;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
-  }
-
-  final String? errorCode;
-  final String? errorMessage;
-// The id of the invoice or keysend from a multi-pay request
-  final String? multiId;
+  final ResponseModel response;
+  final String eventId;
   @override
   final DateTime createdAt;
+  final List<String> _relay;
   @override
-  final String? relay;
+  List<String> get relay {
+    if (_relay is EqualUnmodifiableListView) return _relay;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_relay);
+  }
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -309,41 +267,21 @@ class ResponseEventModel extends EventModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ResponseEventModel &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.requestId, requestId) ||
-                other.requestId == requestId) &&
-            (identical(other.clientPubkey, clientPubkey) ||
-                other.clientPubkey == clientPubkey) &&
-            (identical(other.resultType, resultType) ||
-                other.resultType == resultType) &&
-            const DeepCollectionEquality().equals(other._result, _result) &&
-            (identical(other.errorCode, errorCode) ||
-                other.errorCode == errorCode) &&
-            (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage) &&
-            (identical(other.multiId, multiId) || other.multiId == multiId) &&
+            (identical(other.response, response) ||
+                other.response == response) &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            (identical(other.relay, relay) || other.relay == relay));
+            const DeepCollectionEquality().equals(other._relay, _relay));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      requestId,
-      clientPubkey,
-      resultType,
-      const DeepCollectionEquality().hash(_result),
-      errorCode,
-      errorMessage,
-      multiId,
-      createdAt,
-      relay);
+  int get hashCode => Object.hash(runtimeType, response, eventId, createdAt,
+      const DeepCollectionEquality().hash(_relay));
 
   @override
   String toString() {
-    return 'EventModel.response(id: $id, requestId: $requestId, clientPubkey: $clientPubkey, resultType: $resultType, result: $result, errorCode: $errorCode, errorMessage: $errorMessage, multiId: $multiId, createdAt: $createdAt, relay: $relay)';
+    return 'EventModel.response(response: $response, eventId: $eventId, createdAt: $createdAt, relay: $relay)';
   }
 }
 
@@ -356,16 +294,12 @@ abstract mixin class $ResponseEventModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id,
-      String requestId,
-      String clientPubkey,
-      String resultType,
-      Map<String, dynamic>? result,
-      String? errorCode,
-      String? errorMessage,
-      String? multiId,
+      {ResponseModel response,
+      String eventId,
       DateTime createdAt,
-      String? relay});
+      List<String> relay});
+
+  $ResponseModelCopyWith<$Res> get response;
 }
 
 /// @nodoc
@@ -381,59 +315,39 @@ class _$ResponseEventModelCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? id = freezed,
-    Object? requestId = null,
-    Object? clientPubkey = null,
-    Object? resultType = null,
-    Object? result = freezed,
-    Object? errorCode = freezed,
-    Object? errorMessage = freezed,
-    Object? multiId = freezed,
+    Object? response = null,
+    Object? eventId = null,
     Object? createdAt = null,
-    Object? relay = freezed,
+    Object? relay = null,
   }) {
     return _then(ResponseEventModel(
-      id: freezed == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      requestId: null == requestId
-          ? _self.requestId
-          : requestId // ignore: cast_nullable_to_non_nullable
+      null == response
+          ? _self.response
+          : response // ignore: cast_nullable_to_non_nullable
+              as ResponseModel,
+      eventId: null == eventId
+          ? _self.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
               as String,
-      clientPubkey: null == clientPubkey
-          ? _self.clientPubkey
-          : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      resultType: null == resultType
-          ? _self.resultType
-          : resultType // ignore: cast_nullable_to_non_nullable
-              as String,
-      result: freezed == result
-          ? _self._result
-          : result // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      errorCode: freezed == errorCode
-          ? _self.errorCode
-          : errorCode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorMessage: freezed == errorMessage
-          ? _self.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      multiId: freezed == multiId
-          ? _self.multiId
-          : multiId // ignore: cast_nullable_to_non_nullable
-              as String?,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      relay: freezed == relay
-          ? _self.relay
+      relay: null == relay
+          ? _self._relay
           : relay // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>,
     ));
+  }
+
+  /// Create a copy of EventModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ResponseModelCopyWith<$Res> get response {
+    return $ResponseModelCopyWith<$Res>(_self.response, (value) {
+      return _then(_self.copyWith(response: value));
+    });
   }
 }
 
@@ -453,7 +367,6 @@ class InfoEventModel extends EventModel {
         _notifications = notifications,
         super._();
 
-  @override
   final String? id;
   final String walletServicePubkey;
   final List<String> _methods;
@@ -474,7 +387,6 @@ class InfoEventModel extends EventModel {
     return EqualUnmodifiableListView(value);
   }
 
-  @override
   final String? clientPubkey;
   final String? walletRelay;
   @override

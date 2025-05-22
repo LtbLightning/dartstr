@@ -1,85 +1,68 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nip47/src/domain/entities/info_result.dart';
-import 'package:nip47/src/domain/entities/invoice.dart';
-import 'package:nip47/src/domain/entities/pay_result.dart';
-import 'package:nip47/src/domain/entities/transaction.dart';
-import 'package:nip47/src/nip47_base.dart';
+import 'package:nip47/nip47.dart';
 
 part 'response.freezed.dart';
+
+enum Network {
+  mainnet(plaintext: 'mainnet'),
+  testnet(plaintext: 'testnet'),
+  signet(plaintext: 'signet'),
+  regtest(plaintext: 'regtest');
+
+  final String plaintext;
+
+  const Network({required this.plaintext});
+}
 
 @freezed
 sealed class Response with _$Response {
   const factory Response.getInfo({
     required String requestId,
     required String clientPubkey,
-    InfoResult? info,
-    ErrorCode? error,
-    required DateTime createdAt,
+    required String walletServicePubkey,
+    @Default('') String alias,
+    @Default('') String color,
+    @Default('') String pubkey,
+    @Default(Network.mainnet) Network network,
+    int? blockHeight,
+    @Default('') String blockHash,
+    @Default([]) List<Method> methods,
+    @Default([]) List<String> customMethods,
+    @Default([]) List<NotificationType> notifications,
+    @Default([]) List<String> customNotifications,
   }) = GetInfoResponse;
   const factory Response.getBalance({
     required String requestId,
     required String clientPubkey,
-    int? balanceSat,
-    ErrorCode? error,
-    required DateTime createdAt,
+    required String walletServicePubkey,
+    required int balanceSat,
   }) = GetBalanceResponse;
-  const factory Response.makeInvoice({
-    required String requestId,
-    required String clientPubkey,
-    Invoice? invoice,
-    ErrorCode? error,
-    required DateTime createdAt,
-  }) = MakeInvoiceResponse;
   const factory Response.payInvoice({
     required String requestId,
     required String clientPubkey,
-    PayResult? payResult,
-    ErrorCode? error,
-    required DateTime createdAt,
+    required String walletServicePubkey,
+    required String preimage,
+    int? feesPaidSat,
   }) = PayInvoiceResponse;
-  const factory Response.multiPayInvoice({
+  const factory Response.error({
     required String requestId,
     required String clientPubkey,
-    required String invoiceId,
-    PayResult? payResult,
-    ErrorCode? error,
+    required String walletServicePubkey,
+    required ErrorCode errorCode,
+    String? errorMessage,
+  }) = ErrorResponse;
+
+  const Response._();
+}
+
+@freezed
+sealed class ResponseEvent with _$ResponseEvent {
+  const factory ResponseEvent(
+    Response response, {
+    required String eventId,
+    required List<String> relays,
     required DateTime createdAt,
-  }) = MultiPayInvoiceResponse;
-  const factory Response.payKeysend({
-    required String requestId,
-    required String clientPubkey,
-    PayResult? payResult,
-    ErrorCode? error,
-    required DateTime createdAt,
-  }) = PayKeysendResponse;
-  const factory Response.multiPayKeysend({
-    required String requestId,
-    required String clientPubkey,
-    required String keysendId,
-    PayResult? payResult,
-    ErrorCode? error,
-    required DateTime createdAt,
-  }) = MultiPayKeysendResponse;
-  const factory Response.lookupInvoice({
-    required String requestId,
-    required String clientPubkey,
-    Transaction? transaction,
-    ErrorCode? error,
-    required DateTime createdAt,
-  }) = LookupInvoiceResponse;
-  const factory Response.listTransactions({
-    required String requestId,
-    required String clientPubkey,
-    List<Transaction>? transactions,
-    ErrorCode? error,
-    required DateTime createdAt,
-  }) = ListTransactionsResponse;
-  const factory Response.custom({
-    required String requestId,
-    required String clientPubkey,
-    required String resultType,
-    Map<String, dynamic>? result,
-    ErrorCode? error,
-    required DateTime createdAt,
-  }) = CustomResponse;
+  }) = _ResponseEvent;
+
+  const ResponseEvent._();
 }

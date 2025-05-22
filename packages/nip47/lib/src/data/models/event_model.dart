@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nip47/nip47.dart';
+import 'package:nip47/src/data/models/response_model.dart';
 
 part 'event_model.freezed.dart';
 
@@ -15,18 +16,11 @@ sealed class EventModel with _$EventModel {
     DateTime? expiresAt,
     String? relay,
   }) = RequestEventModel;
-  const factory EventModel.response({
-    String? id,
-    required String requestId,
-    required String clientPubkey,
-    required String resultType,
-    Map<String, dynamic>? result,
-    String? errorCode,
-    String? errorMessage,
-    // The id of the invoice or keysend from a multi-pay request
-    String? multiId,
+  const factory EventModel.response(
+    ResponseModel response, {
+    required String eventId,
     required DateTime createdAt,
-    String? relay,
+    required List<String> relay,
   }) = ResponseEventModel;
   const factory EventModel.info({
     String? id,
