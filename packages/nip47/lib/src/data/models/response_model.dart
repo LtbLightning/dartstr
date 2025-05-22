@@ -1,4 +1,4 @@
-import 'dart:convert';
+/*import 'dart:convert';
 
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip04/nip04.dart';
@@ -328,3 +328,4 @@ class ResponseEncryptionException implements Exception {
 
   ResponseEncryptionException(this.message);
 }
+*/

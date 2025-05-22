@@ -13,15 +13,10 @@ import 'package:nip47/src/domain/repositories/wallet_connection_repository.dart'
 
 class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
   final LocalWalletConnectionDataSource _localWalletConnectionDataSource;
-  // TODO: Move this to RequestRepositoryImpl
-  final Map<String, String> _walletServiceKeyPairs;
-  final Map<String, StreamSubscription> _requestSubscriptions;
 
   WalletConnectionRepositoryImpl({
     required LocalWalletConnectionDataSource localWalletConnectionDataSource,
-  })  : _localWalletConnectionDataSource = localWalletConnectionDataSource,
-        _walletServiceKeyPairs = {},
-        _requestSubscriptions = {};
+  }) : _localWalletConnectionDataSource = localWalletConnectionDataSource;
 
   @override
   Future<List<WalletConnection>> getConnections() async {
@@ -37,25 +32,22 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
 
   @override
   Future<WalletConnectConnectionUri> createConnection({
-    required walletServicePrivateKey,
     required String walletServicePubkey,
     required List<String> relays,
-    required String budgetRenewal,
+    required BudgetRenewal budgetRenewal,
     String? name,
-    List<String>? clientRelays,
-    int? budgetRenewedAt,
     int? maxAmountSat,
-    int? remainingAmountSat,
     int? expiresAt,
     List<Method>? methods,
     List<NotificationType>? notifications,
     List<String>? customMethods,
     List<String>? customNotifications,
     bool? isolated,
-    bool? isFrozen,
     List<String>? categories,
     String? lud16,
   }) async {
+    // Create the secret for the connection that will be used by the client to
+    // sign and encrypt the messages
     final clientKeyPair = nip01.KeyPair.generate();
     log('Client pubkey: ${clientKeyPair.publicKey}');
 
@@ -63,13 +55,10 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
       clientPubkey: clientKeyPair.publicKey,
       walletServicePubkey: walletServicePubkey,
       relays: relays,
-      budgetRenewal: budgetRenewal,
+      budgetRenewal: budgetRenewal.plaintext,
       createdAt: DateTime.now(),
       name: name,
-      clientRelays: clientRelays,
-      budgetRenewedAt: budgetRenewedAt,
       maxAmountSat: maxAmountSat,
-      remainingAmountSat: remainingAmountSat,
       expiresAt: expiresAt,
       methods: methods?.map((method) => method.plaintext).toList(),
       notifications:
@@ -77,7 +66,6 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
       customMethods: customMethods,
       customNotifications: customNotifications,
       isolated: isolated,
-      isFrozen: isFrozen,
       categories: categories,
       lud16: lud16,
     );
@@ -85,14 +73,7 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
     // Save the connection to the local data source
     await _localWalletConnectionDataSource.store(connection);
 
-    await _subscribeAllConnections();
-
-    try {
-      await _publishInfoEvent(connection: connection);
-    } catch (e) {
-      log('Error publishing info event: $e');
-    }
-
+    // Generate and return the connection URI
     final connectionUri = WalletConnectConnectionUri(
       clientSecret: clientKeyPair.privateKey,
       walletServicePubkey: walletServicePubkey,
@@ -104,20 +85,66 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
   }
 
   @override
-  Future<WalletConnection> connect(WalletAuthConnectionUri uri) {
-    // TODO: implement connect
-    throw UnimplementedError();
+  Future<WalletConnection> createClientCreatedConnection({
+    required String clientPubkey,
+    required String walletServicePubkey,
+    required List<String> relays,
+    required BudgetRenewal budgetRenewal,
+    String? name,
+    int? maxAmountSat,
+    int? expiresAt,
+    List<Method>? methods,
+    List<NotificationType>? notifications,
+    List<String>? customMethods,
+    List<String>? customNotifications,
+    bool? isolated,
+    List<String>? categories,
+    String? lud16,
+  }) async {
+    final connectionModel = WalletConnectionModel(
+      clientPubkey: clientPubkey,
+      walletServicePubkey: walletServicePubkey,
+      relays: relays,
+      budgetRenewal: budgetRenewal.plaintext,
+      createdAt: DateTime.now(),
+      name: name,
+      maxAmountSat: maxAmountSat,
+      expiresAt: expiresAt,
+      methods: methods?.map((method) => method.plaintext).toList(),
+      notifications:
+          notifications?.map((notification) => notification.plaintext).toList(),
+      customMethods: customMethods,
+      customNotifications: customNotifications,
+      isolated: isolated,
+      categories: categories,
+      lud16: lud16,
+    );
+
+    // Save the connection to the local data source
+    await _localWalletConnectionDataSource.store(connectionModel);
+
+    final connection = WalletConnectionMapper.modelToEntity(connectionModel);
+
+    return connection;
   }
 
   @override
-  Future<void> disconnect(WalletConnection connection) {
+  Future<void> disconnect(String clientPubkey) async {
     // TODO: implement disconnect
     throw UnimplementedError();
   }
 
   @override
-  Future<void> removeConnection(String clientPubkey) {
-    // TODO: implement removeConnection
+  Future<void> removeConnection(String clientPubkey) async {
+    await _localWalletConnectionDataSource.removeConnection(clientPubkey);
+    log('[WalletConnectionRepositoryImpl] Removed connection for client: $clientPubkey');
+  }
+
+  @override
+  Future<void> resumeConnections({
+    required List<nip01.KeyPair> walletServiceKeyPairs,
+  }) {
+    // TODO: implement resumeConnections
     throw UnimplementedError();
   }
 }

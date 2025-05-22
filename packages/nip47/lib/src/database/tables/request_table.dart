@@ -9,9 +9,7 @@ class Requests extends Table {
   Set<Column<Object>> get primaryKey => {id};
   TextColumn get clientPubkey =>
       text().references(WalletConnections, #clientPubkey)();
-  @ReferenceName('walletServiceConnectionRequests')
-  TextColumn get walletServicePubkey =>
-      text().references(WalletConnections, #walletServicePubkey)();
+  TextColumn get walletServicePubkey => text()();
   TextColumn get method => text()();
   TextColumn get params => text()();
   DateTimeColumn get createdAt => dateTime()();

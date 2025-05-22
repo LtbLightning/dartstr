@@ -1,48 +1,50 @@
 import 'package:nip01/nip01.dart' as nip01;
-import 'package:nip47/nip47.dart';
+import 'package:nip47/nip47.dart' show EventKind;
 import 'package:nip47/src/data/mappers/info_event_mapper.dart';
 import 'package:nip47/src/data/mappers/request_mapper.dart';
 import 'package:nip47/src/data/mappers/response_mapper.dart';
 import 'package:nip47/src/data/models/event_model.dart';
+import 'package:nip47/src/data/models/event_subscription_model.dart';
 
 abstract class NostrDataSource {
-  Stream<RequestEventModel> get requestStream;
-  Future<({String eventId, List<String> relaysPublishedTo})> publishEvent(
+  Future<
+      ({
+        String eventId,
+        List<String> relaysPublishedTo,
+      })> publishEvent(
     EventModel event, {
     required String authorPrivateKey,
     required List<String> relays,
+  });
+  Future<RequestSubscriptionModel> subscribeToRequests({
+    required String clientPubkey,
+    required nip01.KeyPair walletServiceKeyPair,
+    List<String>? relayUrls,
+  });
+  Future<ResponseSubscriptionModel> subscribeToResponses({
+    required nip01.KeyPair clientKeyPair,
+    required String walletServicePubkey,
+    List<String>? relayUrls,
+  });
+  Future<InfoEventSubscriptionModel> subscribeToClientRelayInfoEvents({
+    required String clientPubkey,
+    List<String>? relayUrls,
+  });
+  Future<InfoEventSubscriptionModel> subscribeToWalletRelayInfoEvents({
+    required String walletServicePubkey,
+    List<String>? relayUrls,
   });
 }
 
 class NostrDataSourceImpl implements NostrDataSource {
   final nip01.PublishEventUseCase _publishEventUseCase;
-  final nip01.WatchEventsUseCase _watchEventsUseCase;
-  final Map<String, String> _walletServiceKeyPairs;
+  final nip01.SubscribeUseCase _subscribeUseCase;
 
   NostrDataSourceImpl({
     required nip01.PublishEventUseCase publishEventUseCase,
-    required nip01.WatchEventsUseCase watchEventsUseCase,
+    required nip01.SubscribeUseCase subscribeUseCase,
   })  : _publishEventUseCase = publishEventUseCase,
-        _watchEventsUseCase = watchEventsUseCase,
-        _walletServiceKeyPairs = {};
-
-  @override
-  Stream<RequestEventModel> get requestStream => _watchEventsUseCase
-      .execute(kinds: [
-        EventKind.request.kind,
-      ])
-      .where((event) =>
-          event.event.pTag != null &&
-          _walletServiceKeyPairs[event.event.pTag!] != null)
-      .map((event) {
-        final walletServicePublicKey = event.event.pTag!;
-        final walletServicePrivateKey =
-            _walletServiceKeyPairs[walletServicePublicKey]!;
-
-        final requestEvent = RequestMapper.eventToModel(event.event,
-            walletServicePrivateKey: walletServicePrivateKey);
-        return requestEvent;
-      });
+        _subscribeUseCase = subscribeUseCase;
 
   @override
   Future<({String eventId, List<String> relaysPublishedTo})> publishEvent(
@@ -71,5 +73,129 @@ class NostrDataSourceImpl implements NostrDataSource {
     );
 
     return (eventId: nip01Event.id, relaysPublishedTo: relaysPublishedTo);
+  }
+
+  @override
+  Future<RequestSubscriptionModel> subscribeToRequests({
+    required String clientPubkey,
+    required nip01.KeyPair walletServiceKeyPair,
+    List<String>? relayUrls,
+  }) async {
+    final filters = [
+      nip01.Filters(
+        kinds: [EventKind.request.kind],
+        authors: [clientPubkey],
+        tags: {
+          'p': [walletServiceKeyPair.publicKey],
+        },
+      ),
+    ];
+
+    final result = await _subscribeUseCase.execute(
+      filters: filters,
+      relayUrls: relayUrls,
+    );
+
+    return RequestSubscriptionModel(
+      subscriptionId: result.subscription.id,
+      filters: result.subscription.filters,
+      requestStream: result.eventStream.map(
+        (event) => RequestMapper.modelFromEventMessage(
+          event,
+          walletServicePrivateKey: walletServiceKeyPair.privateKey,
+        ),
+      ),
+      relayUrls: result.subscription.relayUrls,
+    );
+  }
+
+  @override
+  Future<ResponseSubscriptionModel> subscribeToResponses({
+    required nip01.KeyPair clientKeyPair,
+    required String walletServicePubkey,
+    List<String>? relayUrls,
+  }) async {
+    final filters = [
+      nip01.Filters(
+        kinds: [EventKind.response.kind],
+        authors: [walletServicePubkey],
+        tags: {
+          'p': [clientKeyPair.publicKey],
+        },
+      ),
+    ];
+
+    final result = await _subscribeUseCase.execute(
+      filters: filters,
+      relayUrls: relayUrls,
+    );
+
+    return ResponseSubscriptionModel(
+      subscriptionId: result.subscription.id,
+      filters: result.subscription.filters,
+      responseStream: result.eventStream.map(
+        (event) => ResponseMapper.modelFromEventMessage(
+          event,
+          clientPrivateKey: clientKeyPair.privateKey,
+        ),
+      ),
+      relayUrls: result.subscription.relayUrls,
+    );
+  }
+
+  @override
+  Future<InfoEventSubscriptionModel> subscribeToClientRelayInfoEvents({
+    required String clientPubkey,
+    List<String>? relayUrls,
+  }) async {
+    final filters = [
+      nip01.Filters(
+        kinds: [EventKind.info.kind],
+        tags: {
+          'p': [clientPubkey],
+        },
+      ),
+    ];
+
+    final result = await _subscribeUseCase.execute(
+      filters: filters,
+      relayUrls: relayUrls,
+    );
+
+    return InfoEventSubscriptionModel(
+      subscriptionId: result.subscription.id,
+      filters: result.subscription.filters,
+      infoEventStream: result.eventStream.map(
+        (event) => InfoEventMapper.modelFromEventMessage(event),
+      ),
+      relayUrls: result.subscription.relayUrls,
+    );
+  }
+
+  @override
+  Future<InfoEventSubscriptionModel> subscribeToWalletRelayInfoEvents({
+    required String walletServicePubkey,
+    List<String>? relayUrls,
+  }) async {
+    final filters = [
+      nip01.Filters(
+        kinds: [EventKind.info.kind],
+        authors: [walletServicePubkey],
+      ),
+    ];
+
+    final result = await _subscribeUseCase.execute(
+      filters: filters,
+      relayUrls: relayUrls,
+    );
+
+    return InfoEventSubscriptionModel(
+      subscriptionId: result.subscription.id,
+      filters: result.subscription.filters,
+      infoEventStream: result.eventStream.map(
+        (event) => InfoEventMapper.modelFromEventMessage(event),
+      ),
+      relayUrls: result.subscription.relayUrls,
+    );
   }
 }

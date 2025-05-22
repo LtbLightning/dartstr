@@ -15,6 +15,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Connection {
+  String get walletServicePubkey;
+  String get clientPubkey;
   List<String> get relays;
   BudgetRenewal? get budgetRenewal;
   String? get name;
@@ -34,6 +36,10 @@ mixin _$Connection {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Connection &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
             const DeepCollectionEquality().equals(other.relays, relays) &&
             (identical(other.budgetRenewal, budgetRenewal) ||
                 other.budgetRenewal == budgetRenewal) &&
@@ -49,6 +55,8 @@ mixin _$Connection {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      walletServicePubkey,
+      clientPubkey,
       const DeepCollectionEquality().hash(relays),
       budgetRenewal,
       name,
@@ -58,7 +66,7 @@ mixin _$Connection {
 
   @override
   String toString() {
-    return 'Connection(relays: $relays, budgetRenewal: $budgetRenewal, name: $name, maxAmountSat: $maxAmountSat, expiresAt: $expiresAt, isolated: $isolated)';
+    return 'Connection(walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, relays: $relays, budgetRenewal: $budgetRenewal, name: $name, maxAmountSat: $maxAmountSat, expiresAt: $expiresAt, isolated: $isolated)';
   }
 }
 
@@ -69,7 +77,9 @@ abstract mixin class $ConnectionCopyWith<$Res> {
       _$ConnectionCopyWithImpl;
   @useResult
   $Res call(
-      {List<String> relays,
+      {String walletServicePubkey,
+      String clientPubkey,
+      List<String> relays,
       BudgetRenewal budgetRenewal,
       String? name,
       int? maxAmountSat,
@@ -89,6 +99,8 @@ class _$ConnectionCopyWithImpl<$Res> implements $ConnectionCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? walletServicePubkey = null,
+    Object? clientPubkey = null,
     Object? relays = null,
     Object? budgetRenewal = null,
     Object? name = freezed,
@@ -97,6 +109,14 @@ class _$ConnectionCopyWithImpl<$Res> implements $ConnectionCopyWith<$Res> {
     Object? isolated = freezed,
   }) {
     return _then(_self.copyWith(
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      clientPubkey: null == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
       relays: null == relays
           ? _self.relays
           : relays // ignore: cast_nullable_to_non_nullable
@@ -129,8 +149,7 @@ class _$ConnectionCopyWithImpl<$Res> implements $ConnectionCopyWith<$Res> {
 
 class WalletConnection extends Connection {
   const WalletConnection(
-      {required this.walletServicePrivateKey,
-      required this.walletServicePubkey,
+      {required this.walletServicePubkey,
       required this.clientPubkey,
       required final List<String> relays,
       required this.budgetRenewal,
@@ -158,8 +177,9 @@ class WalletConnection extends Connection {
         _categories = categories,
         super._();
 
-  final String walletServicePrivateKey;
+  @override
   final String walletServicePubkey;
+  @override
   final String clientPubkey;
   final List<String> _relays;
   @override
@@ -253,9 +273,6 @@ class WalletConnection extends Connection {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is WalletConnection &&
-            (identical(
-                    other.walletServicePrivateKey, walletServicePrivateKey) ||
-                other.walletServicePrivateKey == walletServicePrivateKey) &&
             (identical(other.walletServicePubkey, walletServicePubkey) ||
                 other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.clientPubkey, clientPubkey) ||
@@ -295,7 +312,6 @@ class WalletConnection extends Connection {
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
-        walletServicePrivateKey,
         walletServicePubkey,
         clientPubkey,
         const DeepCollectionEquality().hash(_relays),
@@ -319,7 +335,7 @@ class WalletConnection extends Connection {
 
   @override
   String toString() {
-    return 'Connection.wallet(walletServicePrivateKey: $walletServicePrivateKey, walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, relays: $relays, budgetRenewal: $budgetRenewal, createdAt: $createdAt, name: $name, clientRelays: $clientRelays, methods: $methods, notifications: $notifications, customMethods: $customMethods, customNotifications: $customNotifications, budgetRenewedAt: $budgetRenewedAt, maxAmountSat: $maxAmountSat, remainingAmountSat: $remainingAmountSat, expiresAt: $expiresAt, isolated: $isolated, isFrozen: $isFrozen, categories: $categories, lud16: $lud16)';
+    return 'Connection.wallet(walletServicePubkey: $walletServicePubkey, clientPubkey: $clientPubkey, relays: $relays, budgetRenewal: $budgetRenewal, createdAt: $createdAt, name: $name, clientRelays: $clientRelays, methods: $methods, notifications: $notifications, customMethods: $customMethods, customNotifications: $customNotifications, budgetRenewedAt: $budgetRenewedAt, maxAmountSat: $maxAmountSat, remainingAmountSat: $remainingAmountSat, expiresAt: $expiresAt, isolated: $isolated, isFrozen: $isFrozen, categories: $categories, lud16: $lud16)';
   }
 }
 
@@ -332,8 +348,7 @@ abstract mixin class $WalletConnectionCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String walletServicePrivateKey,
-      String walletServicePubkey,
+      {String walletServicePubkey,
       String clientPubkey,
       List<String> relays,
       BudgetRenewal budgetRenewal,
@@ -367,7 +382,6 @@ class _$WalletConnectionCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? walletServicePrivateKey = null,
     Object? walletServicePubkey = null,
     Object? clientPubkey = null,
     Object? relays = null,
@@ -389,10 +403,6 @@ class _$WalletConnectionCopyWithImpl<$Res>
     Object? lud16 = freezed,
   }) {
     return _then(WalletConnection(
-      walletServicePrivateKey: null == walletServicePrivateKey
-          ? _self.walletServicePrivateKey
-          : walletServicePrivateKey // ignore: cast_nullable_to_non_nullable
-              as String,
       walletServicePubkey: null == walletServicePubkey
           ? _self.walletServicePubkey
           : walletServicePubkey // ignore: cast_nullable_to_non_nullable
@@ -477,7 +487,8 @@ class _$WalletConnectionCopyWithImpl<$Res>
 
 class ClientConnection extends Connection {
   const ClientConnection(
-      {required this.clientSecret,
+      {required this.clientPubkey,
+      required this.walletServicePubkey,
       required final List<String> relays,
       this.name,
       this.icon,
@@ -498,7 +509,10 @@ class ClientConnection extends Connection {
         _customNotificationTypes = customNotificationTypes,
         super._();
 
-  final String clientSecret;
+  @override
+  final String clientPubkey;
+  @override
+  final String walletServicePubkey;
   final List<String> _relays;
   @override
   List<String> get relays {
@@ -572,8 +586,10 @@ class ClientConnection extends Connection {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ClientConnection &&
-            (identical(other.clientSecret, clientSecret) ||
-                other.clientSecret == clientSecret) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
             const DeepCollectionEquality().equals(other._relays, _relays) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.icon, icon) || other.icon == icon) &&
@@ -601,7 +617,8 @@ class ClientConnection extends Connection {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      clientSecret,
+      clientPubkey,
+      walletServicePubkey,
       const DeepCollectionEquality().hash(_relays),
       name,
       icon,
@@ -618,7 +635,7 @@ class ClientConnection extends Connection {
 
   @override
   String toString() {
-    return 'Connection.client(clientSecret: $clientSecret, relays: $relays, name: $name, icon: $icon, returnTo: $returnTo, expiresAt: $expiresAt, maxAmountSat: $maxAmountSat, budgetRenewal: $budgetRenewal, requestMethods: $requestMethods, notificationTypes: $notificationTypes, isolated: $isolated, metadata: $metadata, customRequestMethods: $customRequestMethods, customNotificationTypes: $customNotificationTypes)';
+    return 'Connection.client(clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, relays: $relays, name: $name, icon: $icon, returnTo: $returnTo, expiresAt: $expiresAt, maxAmountSat: $maxAmountSat, budgetRenewal: $budgetRenewal, requestMethods: $requestMethods, notificationTypes: $notificationTypes, isolated: $isolated, metadata: $metadata, customRequestMethods: $customRequestMethods, customNotificationTypes: $customNotificationTypes)';
   }
 }
 
@@ -631,7 +648,8 @@ abstract mixin class $ClientConnectionCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String clientSecret,
+      {String clientPubkey,
+      String walletServicePubkey,
       List<String> relays,
       String? name,
       Uri? icon,
@@ -660,7 +678,8 @@ class _$ClientConnectionCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? clientSecret = null,
+    Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
     Object? relays = null,
     Object? name = freezed,
     Object? icon = freezed,
@@ -676,9 +695,13 @@ class _$ClientConnectionCopyWithImpl<$Res>
     Object? customNotificationTypes = freezed,
   }) {
     return _then(ClientConnection(
-      clientSecret: null == clientSecret
-          ? _self.clientSecret
-          : clientSecret // ignore: cast_nullable_to_non_nullable
+      clientPubkey: null == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       relays: null == relays
           ? _self._relays

@@ -30,7 +30,25 @@ class InfoEventMapper {
     );
   }
 
-  static InfoEventModel modelFromEvent(nip01.EventMessage event) {
+  static InfoEvent modelToEntity(
+    InfoEventModel model,
+  ) {
+    return InfoEvent(
+      id: model.id!,
+      relay: model.relay!,
+      createdAt: model.createdAt,
+      walletServicePubkey: model.walletServicePubkey,
+      methods:
+          model.methods.map((method) => Method.fromPlaintext(method)).toList(),
+      notifications: model.notifications
+          ?.map((notification) => NotificationType.fromPlaintext(notification))
+          .toList(),
+      clientPubkey: model.clientPubkey,
+      walletRelay: model.walletRelay,
+    );
+  }
+
+  static InfoEventModel modelFromEventMessage(nip01.EventMessage event) {
     final contentElements = event.event.content.split(' ');
     bool supportsNotifications = contentElements.contains('notifications');
     final methods =

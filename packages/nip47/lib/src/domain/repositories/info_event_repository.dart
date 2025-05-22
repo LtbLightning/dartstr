@@ -1,9 +1,13 @@
+import 'package:nip47/nip47.dart';
+
 abstract class InfoEventRepository {
   Future<void> publish({
     required String walletServicePrivateKey,
-    required List<String> methods,
+    List<Method> methods = const [],
+    List<NotificationType> notifications = const [],
+    List<String> customMethods = const [],
+    List<String> customNotifications = const [],
     required List<String> relays,
-    List<String>? notifications,
     String? clientPubkey,
     String? walletRelay,
   });

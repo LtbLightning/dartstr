@@ -6,7 +6,6 @@ import 'package:nip47/src/domain/entities/transaction.dart';
 import 'package:nip47/src/nip47_base.dart';
 
 part 'response.freezed.dart';
-part 'response.g.dart';
 
 @freezed
 sealed class Response with _$Response {
@@ -15,28 +14,28 @@ sealed class Response with _$Response {
     required String clientPubkey,
     InfoResult? info,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = GetInfoResponse;
   const factory Response.getBalance({
     required String requestId,
     required String clientPubkey,
     int? balanceSat,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = GetBalanceResponse;
   const factory Response.makeInvoice({
     required String requestId,
     required String clientPubkey,
     Invoice? invoice,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = MakeInvoiceResponse;
   const factory Response.payInvoice({
     required String requestId,
     required String clientPubkey,
     PayResult? payResult,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = PayInvoiceResponse;
   const factory Response.multiPayInvoice({
     required String requestId,
@@ -44,14 +43,14 @@ sealed class Response with _$Response {
     required String invoiceId,
     PayResult? payResult,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = MultiPayInvoiceResponse;
   const factory Response.payKeysend({
     required String requestId,
     required String clientPubkey,
     PayResult? payResult,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = PayKeysendResponse;
   const factory Response.multiPayKeysend({
     required String requestId,
@@ -59,21 +58,21 @@ sealed class Response with _$Response {
     required String keysendId,
     PayResult? payResult,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = MultiPayKeysendResponse;
   const factory Response.lookupInvoice({
     required String requestId,
     required String clientPubkey,
     Transaction? transaction,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = LookupInvoiceResponse;
   const factory Response.listTransactions({
     required String requestId,
     required String clientPubkey,
     List<Transaction>? transactions,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = ListTransactionsResponse;
   const factory Response.custom({
     required String requestId,
@@ -81,9 +80,6 @@ sealed class Response with _$Response {
     required String resultType,
     Map<String, dynamic>? result,
     ErrorCode? error,
-    required int createdAt,
+    required DateTime createdAt,
   }) = CustomResponse;
-
-  factory Response.fromJson(Map<String, dynamic> json) =>
-      _$ResponseFromJson(json);
 }

@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:nip47/src/data/mappers/wallet_connection_mapper.dart';
 import 'package:nip47/src/data/models/connection_model.dart';
 import 'package:nip47/src/database/database.dart';
@@ -6,6 +7,9 @@ abstract class LocalWalletConnectionDataSource {
   Future<void> store(WalletConnectionModel connection);
   Future<WalletConnectionModel?> getConnection(String clientPubkey);
   Future<List<WalletConnectionModel>> getConnections();
+  Future<WalletConnectionModel?> getConnectionFromRequest(
+    String requestId,
+  );
   Future<void> removeConnection(String clientPubkey);
 }
 
@@ -50,6 +54,29 @@ class SqliteLocalWalletConnectionDataSource
     return results
         .map((result) => WalletConnectionMapper.modelFromTable(result))
         .toList();
+  }
+
+  @override
+  Future<WalletConnectionModel?> getConnectionFromRequest(
+    String requestId,
+  ) async {
+    final result = await (_database.select(_database.requests)
+          ..where((f) => f.id.equals(requestId)))
+        .join([
+      innerJoin(
+        _database.walletConnections,
+        _database.walletConnections.clientPubkey
+            .equalsExp(_database.requests.clientPubkey),
+      ),
+    ]).getSingleOrNull();
+
+    if (result == null) {
+      return null;
+    }
+    final connectionRow = result.readTable(_database.walletConnections);
+    return WalletConnectionMapper.modelFromTable(
+      connectionRow,
+    );
   }
 
   @override

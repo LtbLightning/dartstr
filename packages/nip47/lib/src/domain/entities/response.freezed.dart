@@ -12,41 +12,13 @@ part of 'response.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-Response _$ResponseFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType']) {
-    case 'getInfo':
-      return GetInfoResponse.fromJson(json);
-    case 'getBalance':
-      return GetBalanceResponse.fromJson(json);
-    case 'makeInvoice':
-      return MakeInvoiceResponse.fromJson(json);
-    case 'payInvoice':
-      return PayInvoiceResponse.fromJson(json);
-    case 'multiPayInvoice':
-      return MultiPayInvoiceResponse.fromJson(json);
-    case 'payKeysend':
-      return PayKeysendResponse.fromJson(json);
-    case 'multiPayKeysend':
-      return MultiPayKeysendResponse.fromJson(json);
-    case 'lookupInvoice':
-      return LookupInvoiceResponse.fromJson(json);
-    case 'listTransactions':
-      return ListTransactionsResponse.fromJson(json);
-    case 'custom':
-      return CustomResponse.fromJson(json);
-
-    default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'Response',
-          'Invalid union type "${json['runtimeType']}"!');
-  }
-}
 
 /// @nodoc
 mixin _$Response {
   String get requestId;
   String get clientPubkey;
   ErrorCode? get error;
-  int get createdAt;
+  DateTime get createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -54,9 +26,6 @@ mixin _$Response {
   @pragma('vm:prefer-inline')
   $ResponseCopyWith<Response> get copyWith =>
       _$ResponseCopyWithImpl<Response>(this as Response, _$identity);
-
-  /// Serializes this Response to a JSON map.
-  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
@@ -72,7 +41,6 @@ mixin _$Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, requestId, clientPubkey, error, createdAt);
@@ -89,7 +57,10 @@ abstract mixin class $ResponseCopyWith<$Res> {
       _$ResponseCopyWithImpl;
   @useResult
   $Res call(
-      {String requestId, String clientPubkey, ErrorCode? error, int createdAt});
+      {String requestId,
+      String clientPubkey,
+      ErrorCode? error,
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -125,24 +96,20 @@ class _$ResponseCopyWithImpl<$Res> implements $ResponseCopyWith<$Res> {
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class GetInfoResponse implements Response {
   const GetInfoResponse(
       {required this.requestId,
       required this.clientPubkey,
       this.info,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : $type = $type ?? 'getInfo';
-  factory GetInfoResponse.fromJson(Map<String, dynamic> json) =>
-      _$GetInfoResponseFromJson(json);
+      required this.createdAt});
 
   @override
   final String requestId;
@@ -152,10 +119,7 @@ class GetInfoResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -164,13 +128,6 @@ class GetInfoResponse implements Response {
   @pragma('vm:prefer-inline')
   $GetInfoResponseCopyWith<GetInfoResponse> get copyWith =>
       _$GetInfoResponseCopyWithImpl<GetInfoResponse>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$GetInfoResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -187,7 +144,6 @@ class GetInfoResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, requestId, clientPubkey, info, error, createdAt);
@@ -211,7 +167,7 @@ abstract mixin class $GetInfoResponseCopyWith<$Res>
       String clientPubkey,
       InfoResult? info,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 
   $InfoResultCopyWith<$Res>? get info;
 }
@@ -255,7 +211,7 @@ class _$GetInfoResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 
@@ -275,18 +231,14 @@ class _$GetInfoResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class GetBalanceResponse implements Response {
   const GetBalanceResponse(
       {required this.requestId,
       required this.clientPubkey,
       this.balanceSat,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : $type = $type ?? 'getBalance';
-  factory GetBalanceResponse.fromJson(Map<String, dynamic> json) =>
-      _$GetBalanceResponseFromJson(json);
+      required this.createdAt});
 
   @override
   final String requestId;
@@ -296,10 +248,7 @@ class GetBalanceResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -308,13 +257,6 @@ class GetBalanceResponse implements Response {
   @pragma('vm:prefer-inline')
   $GetBalanceResponseCopyWith<GetBalanceResponse> get copyWith =>
       _$GetBalanceResponseCopyWithImpl<GetBalanceResponse>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$GetBalanceResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -332,7 +274,6 @@ class GetBalanceResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, requestId, clientPubkey, balanceSat, error, createdAt);
@@ -356,7 +297,7 @@ abstract mixin class $GetBalanceResponseCopyWith<$Res>
       String clientPubkey,
       int? balanceSat,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -398,24 +339,20 @@ class _$GetBalanceResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class MakeInvoiceResponse implements Response {
   const MakeInvoiceResponse(
       {required this.requestId,
       required this.clientPubkey,
       this.invoice,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : $type = $type ?? 'makeInvoice';
-  factory MakeInvoiceResponse.fromJson(Map<String, dynamic> json) =>
-      _$MakeInvoiceResponseFromJson(json);
+      required this.createdAt});
 
   @override
   final String requestId;
@@ -425,10 +362,7 @@ class MakeInvoiceResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -437,13 +371,6 @@ class MakeInvoiceResponse implements Response {
   @pragma('vm:prefer-inline')
   $MakeInvoiceResponseCopyWith<MakeInvoiceResponse> get copyWith =>
       _$MakeInvoiceResponseCopyWithImpl<MakeInvoiceResponse>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$MakeInvoiceResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -460,7 +387,6 @@ class MakeInvoiceResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, requestId, clientPubkey, invoice, error, createdAt);
@@ -484,7 +410,7 @@ abstract mixin class $MakeInvoiceResponseCopyWith<$Res>
       String clientPubkey,
       Invoice? invoice,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 
   $InvoiceCopyWith<$Res>? get invoice;
 }
@@ -528,7 +454,7 @@ class _$MakeInvoiceResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 
@@ -548,18 +474,14 @@ class _$MakeInvoiceResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class PayInvoiceResponse implements Response {
   const PayInvoiceResponse(
       {required this.requestId,
       required this.clientPubkey,
       this.payResult,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : $type = $type ?? 'payInvoice';
-  factory PayInvoiceResponse.fromJson(Map<String, dynamic> json) =>
-      _$PayInvoiceResponseFromJson(json);
+      required this.createdAt});
 
   @override
   final String requestId;
@@ -569,10 +491,7 @@ class PayInvoiceResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -581,13 +500,6 @@ class PayInvoiceResponse implements Response {
   @pragma('vm:prefer-inline')
   $PayInvoiceResponseCopyWith<PayInvoiceResponse> get copyWith =>
       _$PayInvoiceResponseCopyWithImpl<PayInvoiceResponse>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$PayInvoiceResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -605,7 +517,6 @@ class PayInvoiceResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, requestId, clientPubkey, payResult, error, createdAt);
@@ -629,7 +540,7 @@ abstract mixin class $PayInvoiceResponseCopyWith<$Res>
       String clientPubkey,
       PayResult? payResult,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 
   $PayResultCopyWith<$Res>? get payResult;
 }
@@ -673,7 +584,7 @@ class _$PayInvoiceResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 
@@ -693,7 +604,7 @@ class _$PayInvoiceResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class MultiPayInvoiceResponse implements Response {
   const MultiPayInvoiceResponse(
       {required this.requestId,
@@ -701,11 +612,7 @@ class MultiPayInvoiceResponse implements Response {
       required this.invoiceId,
       this.payResult,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : $type = $type ?? 'multiPayInvoice';
-  factory MultiPayInvoiceResponse.fromJson(Map<String, dynamic> json) =>
-      _$MultiPayInvoiceResponseFromJson(json);
+      required this.createdAt});
 
   @override
   final String requestId;
@@ -716,10 +623,7 @@ class MultiPayInvoiceResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -729,13 +633,6 @@ class MultiPayInvoiceResponse implements Response {
   $MultiPayInvoiceResponseCopyWith<MultiPayInvoiceResponse> get copyWith =>
       _$MultiPayInvoiceResponseCopyWithImpl<MultiPayInvoiceResponse>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$MultiPayInvoiceResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -755,7 +652,6 @@ class MultiPayInvoiceResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
       invoiceId, payResult, error, createdAt);
@@ -780,7 +676,7 @@ abstract mixin class $MultiPayInvoiceResponseCopyWith<$Res>
       String invoiceId,
       PayResult? payResult,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 
   $PayResultCopyWith<$Res>? get payResult;
 }
@@ -829,7 +725,7 @@ class _$MultiPayInvoiceResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 
@@ -849,18 +745,14 @@ class _$MultiPayInvoiceResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class PayKeysendResponse implements Response {
   const PayKeysendResponse(
       {required this.requestId,
       required this.clientPubkey,
       this.payResult,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : $type = $type ?? 'payKeysend';
-  factory PayKeysendResponse.fromJson(Map<String, dynamic> json) =>
-      _$PayKeysendResponseFromJson(json);
+      required this.createdAt});
 
   @override
   final String requestId;
@@ -870,10 +762,7 @@ class PayKeysendResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -882,13 +771,6 @@ class PayKeysendResponse implements Response {
   @pragma('vm:prefer-inline')
   $PayKeysendResponseCopyWith<PayKeysendResponse> get copyWith =>
       _$PayKeysendResponseCopyWithImpl<PayKeysendResponse>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$PayKeysendResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -906,7 +788,6 @@ class PayKeysendResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, requestId, clientPubkey, payResult, error, createdAt);
@@ -930,7 +811,7 @@ abstract mixin class $PayKeysendResponseCopyWith<$Res>
       String clientPubkey,
       PayResult? payResult,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 
   $PayResultCopyWith<$Res>? get payResult;
 }
@@ -974,7 +855,7 @@ class _$PayKeysendResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 
@@ -994,7 +875,7 @@ class _$PayKeysendResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class MultiPayKeysendResponse implements Response {
   const MultiPayKeysendResponse(
       {required this.requestId,
@@ -1002,11 +883,7 @@ class MultiPayKeysendResponse implements Response {
       required this.keysendId,
       this.payResult,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : $type = $type ?? 'multiPayKeysend';
-  factory MultiPayKeysendResponse.fromJson(Map<String, dynamic> json) =>
-      _$MultiPayKeysendResponseFromJson(json);
+      required this.createdAt});
 
   @override
   final String requestId;
@@ -1017,10 +894,7 @@ class MultiPayKeysendResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -1030,13 +904,6 @@ class MultiPayKeysendResponse implements Response {
   $MultiPayKeysendResponseCopyWith<MultiPayKeysendResponse> get copyWith =>
       _$MultiPayKeysendResponseCopyWithImpl<MultiPayKeysendResponse>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$MultiPayKeysendResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -1056,7 +923,6 @@ class MultiPayKeysendResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
       keysendId, payResult, error, createdAt);
@@ -1081,7 +947,7 @@ abstract mixin class $MultiPayKeysendResponseCopyWith<$Res>
       String keysendId,
       PayResult? payResult,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 
   $PayResultCopyWith<$Res>? get payResult;
 }
@@ -1130,7 +996,7 @@ class _$MultiPayKeysendResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 
@@ -1150,18 +1016,14 @@ class _$MultiPayKeysendResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class LookupInvoiceResponse implements Response {
   const LookupInvoiceResponse(
       {required this.requestId,
       required this.clientPubkey,
       this.transaction,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : $type = $type ?? 'lookupInvoice';
-  factory LookupInvoiceResponse.fromJson(Map<String, dynamic> json) =>
-      _$LookupInvoiceResponseFromJson(json);
+      required this.createdAt});
 
   @override
   final String requestId;
@@ -1171,10 +1033,7 @@ class LookupInvoiceResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -1184,13 +1043,6 @@ class LookupInvoiceResponse implements Response {
   $LookupInvoiceResponseCopyWith<LookupInvoiceResponse> get copyWith =>
       _$LookupInvoiceResponseCopyWithImpl<LookupInvoiceResponse>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$LookupInvoiceResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -1208,7 +1060,6 @@ class LookupInvoiceResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, requestId, clientPubkey, transaction, error, createdAt);
@@ -1232,7 +1083,7 @@ abstract mixin class $LookupInvoiceResponseCopyWith<$Res>
       String clientPubkey,
       Transaction? transaction,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 
   $TransactionCopyWith<$Res>? get transaction;
 }
@@ -1276,7 +1127,7 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 
@@ -1296,19 +1147,15 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class ListTransactionsResponse implements Response {
   const ListTransactionsResponse(
       {required this.requestId,
       required this.clientPubkey,
       final List<Transaction>? transactions,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : _transactions = transactions,
-        $type = $type ?? 'listTransactions';
-  factory ListTransactionsResponse.fromJson(Map<String, dynamic> json) =>
-      _$ListTransactionsResponseFromJson(json);
+      required this.createdAt})
+      : _transactions = transactions;
 
   @override
   final String requestId;
@@ -1326,10 +1173,7 @@ class ListTransactionsResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -1339,13 +1183,6 @@ class ListTransactionsResponse implements Response {
   $ListTransactionsResponseCopyWith<ListTransactionsResponse> get copyWith =>
       _$ListTransactionsResponseCopyWithImpl<ListTransactionsResponse>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$ListTransactionsResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -1363,7 +1200,6 @@ class ListTransactionsResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
       const DeepCollectionEquality().hash(_transactions), error, createdAt);
@@ -1387,7 +1223,7 @@ abstract mixin class $ListTransactionsResponseCopyWith<$Res>
       String clientPubkey,
       List<Transaction>? transactions,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -1429,13 +1265,13 @@ class _$ListTransactionsResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class CustomResponse implements Response {
   const CustomResponse(
       {required this.requestId,
@@ -1443,12 +1279,8 @@ class CustomResponse implements Response {
       required this.resultType,
       final Map<String, dynamic>? result,
       this.error,
-      required this.createdAt,
-      final String? $type})
-      : _result = result,
-        $type = $type ?? 'custom';
-  factory CustomResponse.fromJson(Map<String, dynamic> json) =>
-      _$CustomResponseFromJson(json);
+      required this.createdAt})
+      : _result = result;
 
   @override
   final String requestId;
@@ -1467,10 +1299,7 @@ class CustomResponse implements Response {
   @override
   final ErrorCode? error;
   @override
-  final int createdAt;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
+  final DateTime createdAt;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -1479,13 +1308,6 @@ class CustomResponse implements Response {
   @pragma('vm:prefer-inline')
   $CustomResponseCopyWith<CustomResponse> get copyWith =>
       _$CustomResponseCopyWithImpl<CustomResponse>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$CustomResponseToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -1504,7 +1326,6 @@ class CustomResponse implements Response {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -1535,7 +1356,7 @@ abstract mixin class $CustomResponseCopyWith<$Res>
       String resultType,
       Map<String, dynamic>? result,
       ErrorCode? error,
-      int createdAt});
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -1582,7 +1403,7 @@ class _$CustomResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
     ));
   }
 }

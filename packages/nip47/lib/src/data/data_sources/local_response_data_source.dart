@@ -7,6 +7,7 @@ abstract class LocalResponseDataSource {
   Future<void> storeResponse(ResponseEventModel response);
   Future<ResponseEventModel?> getResponse(String id);
   Future<List<ResponseEventModel>> getResponses();
+  Future<ResponseEventModel?> getResponseByRequestId(String requestId);
   Future<void> removeClientConnectionResponses(
     String clientPubkey,
   );
@@ -77,6 +78,28 @@ class SqliteLocalResponseDataSource implements LocalResponseDataSource {
         clientPubkey: requestRow.clientPubkey,
       );
     }).toList();
+  }
+
+  @override
+  Future<ResponseEventModel?> getResponseByRequestId(String requestId) async {
+    final responseWithRequest = await (_database.select(_database.responses)
+          ..where((tbl) => tbl.requestId.equals(requestId)))
+        .join([
+      innerJoin(
+        _database.requests,
+        _database.requests.id.equalsExp(_database.responses.requestId),
+      ),
+    ]).getSingleOrNull();
+
+    if (responseWithRequest == null) return null;
+
+    final responseRow = responseWithRequest.readTable(_database.responses);
+    final requestRow = responseWithRequest.readTable(_database.requests);
+
+    return ResponseMapper.modelFromTable(
+      responseRow,
+      clientPubkey: requestRow.clientPubkey,
+    );
   }
 
   @override

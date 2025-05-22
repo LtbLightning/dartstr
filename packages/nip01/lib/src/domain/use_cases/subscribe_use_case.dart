@@ -19,6 +19,7 @@ class SubscribeUseCase {
       execute({
     required List<Filters> filters,
     List<String>? relayUrls,
+    String? subscriptionId,
   }) async {
     try {
       final relays = relayUrls?.map((url) => url.toString()).toList();
@@ -26,9 +27,9 @@ class SubscribeUseCase {
         await _relayRepository.addRelays(relays);
       }
 
-      final subscriptionId = SecretGenerator.secretHex(64);
+      final id = subscriptionId ?? SecretGenerator.secretHex(64);
       final subscription = await _subscriptionRepository.subscribe(
-        subscriptionId: subscriptionId,
+        subscriptionId: id,
         filters: filters,
         relayUrls: relayUrls,
       );
@@ -40,7 +41,7 @@ class SubscribeUseCase {
           return false;
         }
         // Check if the event is from the subscription we want to listen to
-        if (event.subscriptionId != subscriptionId) {
+        if (event.subscriptionId != id) {
           return false;
         }
 

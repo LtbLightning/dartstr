@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/src/domain/entities/connection.dart';
 import 'package:nip47/src/domain/entities/method.dart';
 import 'package:nip47/src/domain/entities/notification.dart';
@@ -48,6 +49,18 @@ sealed class ConnectionUri with _$ConnectionUri {
     List<String>? customNotificationTypes,
   }) = WalletAuthConnectionUri;
   const ConnectionUri._();
+
+  String get clientPubkey {
+    switch (this) {
+      case WalletConnectConnectionUri walletConnect:
+        final keyPair = nip01.KeyPair.fromPrivateKey(
+          privateKey: walletConnect.clientSecret,
+        );
+        return keyPair.publicKey;
+      case WalletAuthConnectionUri walletAuth:
+        return walletAuth.clientPubkey;
+    }
+  }
 
   Uri get uri {
     switch (this) {

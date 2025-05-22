@@ -1,4 +1,4 @@
-import 'package:nip47/src/domain/entities/method.dart';
+/*import 'package:nip47/src/domain/entities/method.dart';
 import 'package:nip47/src/domain/entities/multi_pay_invoice_request_invoice.dart';
 import 'package:nip47/src/domain/entities/multi_pay_keysend_request_keysend.dart';
 import 'package:nip47/src/domain/entities/request.dart';
@@ -326,3 +326,4 @@ class RequestModel {
     }
   }
 }
+*/

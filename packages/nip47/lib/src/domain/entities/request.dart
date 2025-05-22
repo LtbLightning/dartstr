@@ -10,15 +10,15 @@ sealed class Request with _$Request {
     required String id,
     required String clientPubkey,
     required String walletServicePubkey,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = GetInfoRequest;
   const factory Request.getBalance({
     required String id,
     required String clientPubkey,
     required String walletServicePubkey,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = GetBalanceRequest;
   const factory Request.makeInvoice({
     required String id,
@@ -28,8 +28,8 @@ sealed class Request with _$Request {
     String? description,
     String? descriptionHash,
     int? expiry,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = MakeInvoiceRequest;
   const factory Request.payInvoice({
     required String id,
@@ -37,16 +37,16 @@ sealed class Request with _$Request {
     required String walletServicePubkey,
     required String invoice,
     int? amountSat,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = PayInvoiceRequest;
   const factory Request.multiPayInvoice({
     required String id,
     required String clientPubkey,
     required String walletServicePubkey,
     required List<MultiPayInvoiceRequestInvoice> invoices,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = MultiPayInvoiceRequest;
   const factory Request.payKeysend({
     required String id,
@@ -56,16 +56,16 @@ sealed class Request with _$Request {
     required String pubkey,
     String? preimage,
     List<TlvRecord>? tlvRecords,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = PayKeysendRequest;
   const factory Request.multiPayKeysend({
     required String id,
     required String clientPubkey,
     required String walletServicePubkey,
     required List<MultiPayKeysendRequestKeysend> keysends,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = MultiPayKeysendRequest;
   const factory Request.lookupInvoice({
     required String id,
@@ -73,8 +73,8 @@ sealed class Request with _$Request {
     required String walletServicePubkey,
     String? paymentHash,
     String? invoice,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = LookupInvoiceRequest;
   const factory Request.listTransactions({
     required String id,
@@ -86,8 +86,8 @@ sealed class Request with _$Request {
     int? offset,
     @Default(false) bool? unpaid,
     TransactionType? type,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = ListTransactionsRequest;
   const factory Request.custom({
     required String id,
@@ -95,8 +95,8 @@ sealed class Request with _$Request {
     required String walletServicePubkey,
     required String method,
     required Map<String, dynamic> params,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
   }) = CustomRequest;
   const Request._();
 

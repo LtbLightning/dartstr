@@ -3,10 +3,10 @@ import 'package:nip47/src/database/database.dart';
 import 'package:nip47/src/domain/entities/entities.dart';
 
 class WalletConnectionMapper {
-  static WalletConnection modelToEntity(WalletConnectionModel model,
-      {required String walletServicePrivateKey}) {
+  static WalletConnection modelToEntity(
+    WalletConnectionModel model,
+  ) {
     return WalletConnection(
-      walletServicePrivateKey: walletServicePrivateKey,
       walletServicePubkey: model.walletServicePubkey,
       clientPubkey: model.clientPubkey,
       relays: model.relays,

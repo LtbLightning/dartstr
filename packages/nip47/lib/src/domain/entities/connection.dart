@@ -26,7 +26,6 @@ enum BudgetRenewal {
 @freezed
 sealed class Connection with _$Connection {
   const factory Connection.wallet({
-    required String walletServicePrivateKey,
     required String walletServicePubkey,
     required String clientPubkey,
     required List<String> relays,
@@ -48,7 +47,8 @@ sealed class Connection with _$Connection {
     String? lud16,
   }) = WalletConnection;
   const factory Connection.client({
-    required String clientSecret,
+    required String clientPubkey,
+    required String walletServicePubkey,
     required List<String> relays,
     String? name,
     Uri? icon,

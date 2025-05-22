@@ -996,10 +996,7 @@ class $RequestsTable extends Requests
   @override
   late final GeneratedColumn<String> walletServicePubkey =
       GeneratedColumn<String>('wallet_service_pubkey', aliasedName, false,
-          type: DriftSqlType.string,
-          requiredDuringInsert: true,
-          defaultConstraints: GeneratedColumn.constraintIsAlways(
-              'REFERENCES wallet_connections (wallet_service_pubkey)'));
+          type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _methodMeta = const VerificationMeta('method');
   @override
   late final GeneratedColumn<String> method = GeneratedColumn<String>(
@@ -1903,24 +1900,6 @@ final class $$WalletConnectionsTableReferences extends BaseReferences<
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
-
-  static MultiTypedResultKey<$RequestsTable, List<RequestTable>>
-      _walletServiceConnectionRequestsTable(_$Nip47Database db) =>
-          MultiTypedResultKey.fromTable(db.requests,
-              aliasName: $_aliasNameGenerator(
-                  db.walletConnections.walletServicePubkey,
-                  db.requests.walletServicePubkey));
-
-  $$RequestsTableProcessedTableManager get walletServiceConnectionRequests {
-    final manager = $$RequestsTableTableManager($_db, $_db.requests).filter(
-        (f) => f.walletServicePubkey.walletServicePubkey
-            .sqlEquals($_itemColumn<String>('wallet_service_pubkey')!));
-
-    final cache = $_typedResult
-        .readTableOrNull(_walletServiceConnectionRequestsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
 }
 
 class $$WalletConnectionsTableFilterComposer
@@ -2013,27 +1992,6 @@ class $$WalletConnectionsTableFilterComposer
         getCurrentColumn: (t) => t.clientPubkey,
         referencedTable: $db.requests,
         getReferencedColumn: (t) => t.clientPubkey,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$RequestsTableFilterComposer(
-              $db: $db,
-              $table: $db.requests,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-
-  Expression<bool> walletServiceConnectionRequests(
-      Expression<bool> Function($$RequestsTableFilterComposer f) f) {
-    final $$RequestsTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.walletServicePubkey,
-        referencedTable: $db.requests,
-        getReferencedColumn: (t) => t.walletServicePubkey,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -2217,27 +2175,6 @@ class $$WalletConnectionsTableAnnotationComposer
             ));
     return f(composer);
   }
-
-  Expression<T> walletServiceConnectionRequests<T extends Object>(
-      Expression<T> Function($$RequestsTableAnnotationComposer a) f) {
-    final $$RequestsTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.walletServicePubkey,
-        referencedTable: $db.requests,
-        getReferencedColumn: (t) => t.walletServicePubkey,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$RequestsTableAnnotationComposer(
-              $db: $db,
-              $table: $db.requests,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
 }
 
 class $$WalletConnectionsTableTableManager extends RootTableManager<
@@ -2251,8 +2188,7 @@ class $$WalletConnectionsTableTableManager extends RootTableManager<
     $$WalletConnectionsTableUpdateCompanionBuilder,
     (WalletConnectionTable, $$WalletConnectionsTableReferences),
     WalletConnectionTable,
-    PrefetchHooks Function(
-        {bool requestsRefs, bool walletServiceConnectionRequests})> {
+    PrefetchHooks Function({bool requestsRefs})> {
   $$WalletConnectionsTableTableManager(
       _$Nip47Database db, $WalletConnectionsTable table)
       : super(TableManagerState(
@@ -2359,14 +2295,10 @@ class $$WalletConnectionsTableTableManager extends RootTableManager<
                     $$WalletConnectionsTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: (
-              {requestsRefs = false, walletServiceConnectionRequests = false}) {
+          prefetchHooksCallback: ({requestsRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [
-                if (requestsRefs) db.requests,
-                if (walletServiceConnectionRequests) db.requests
-              ],
+              explicitlyWatchedTables: [if (requestsRefs) db.requests],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
@@ -2382,21 +2314,6 @@ class $$WalletConnectionsTableTableManager extends RootTableManager<
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems.where(
                                 (e) => e.clientPubkey == item.clientPubkey),
-                        typedResults: items),
-                  if (walletServiceConnectionRequests)
-                    await $_getPrefetchedData<WalletConnectionTable,
-                            $WalletConnectionsTable, RequestTable>(
-                        currentTable: table,
-                        referencedTable: $$WalletConnectionsTableReferences
-                            ._walletServiceConnectionRequestsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$WalletConnectionsTableReferences(db, table, p0)
-                                .walletServiceConnectionRequests,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems.where(
-                                (e) =>
-                                    e.walletServicePubkey ==
-                                    item.walletServicePubkey),
                         typedResults: items)
                 ];
               },
@@ -2416,8 +2333,7 @@ typedef $$WalletConnectionsTableProcessedTableManager = ProcessedTableManager<
     $$WalletConnectionsTableUpdateCompanionBuilder,
     (WalletConnectionTable, $$WalletConnectionsTableReferences),
     WalletConnectionTable,
-    PrefetchHooks Function(
-        {bool requestsRefs, bool walletServiceConnectionRequests})>;
+    PrefetchHooks Function({bool requestsRefs})>;
 typedef $$RequestsTableCreateCompanionBuilder = RequestsCompanion Function({
   required String id,
   required String clientPubkey,
@@ -2459,24 +2375,6 @@ final class $$RequestsTableReferences
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static $WalletConnectionsTable _walletServicePubkeyTable(
-          _$Nip47Database db) =>
-      db.walletConnections.createAlias($_aliasNameGenerator(
-          db.requests.walletServicePubkey,
-          db.walletConnections.walletServicePubkey));
-
-  $$WalletConnectionsTableProcessedTableManager get walletServicePubkey {
-    final $_column = $_itemColumn<String>('wallet_service_pubkey')!;
-
-    final manager =
-        $$WalletConnectionsTableTableManager($_db, $_db.walletConnections)
-            .filter((f) => f.walletServicePubkey.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_walletServicePubkeyTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
   static MultiTypedResultKey<$ResponsesTable, List<ResponseTable>>
       _responsesRefsTable(_$Nip47Database db) =>
           MultiTypedResultKey.fromTable(db.responses,
@@ -2505,6 +2403,10 @@ class $$RequestsTableFilterComposer
   ColumnFilters<String> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get walletServicePubkey => $composableBuilder(
+      column: $table.walletServicePubkey,
+      builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get method => $composableBuilder(
       column: $table.method, builder: (column) => ColumnFilters(column));
 
@@ -2523,26 +2425,6 @@ class $$RequestsTableFilterComposer
         getCurrentColumn: (t) => t.clientPubkey,
         referencedTable: $db.walletConnections,
         getReferencedColumn: (t) => t.clientPubkey,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$WalletConnectionsTableFilterComposer(
-              $db: $db,
-              $table: $db.walletConnections,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$WalletConnectionsTableFilterComposer get walletServicePubkey {
-    final $$WalletConnectionsTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.walletServicePubkey,
-        referencedTable: $db.walletConnections,
-        getReferencedColumn: (t) => t.walletServicePubkey,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -2591,6 +2473,10 @@ class $$RequestsTableOrderingComposer
   ColumnOrderings<String> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get walletServicePubkey => $composableBuilder(
+      column: $table.walletServicePubkey,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get method => $composableBuilder(
       column: $table.method, builder: (column) => ColumnOrderings(column));
 
@@ -2622,26 +2508,6 @@ class $$RequestsTableOrderingComposer
             ));
     return composer;
   }
-
-  $$WalletConnectionsTableOrderingComposer get walletServicePubkey {
-    final $$WalletConnectionsTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.walletServicePubkey,
-        referencedTable: $db.walletConnections,
-        getReferencedColumn: (t) => t.walletServicePubkey,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$WalletConnectionsTableOrderingComposer(
-              $db: $db,
-              $table: $db.walletConnections,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
 }
 
 class $$RequestsTableAnnotationComposer
@@ -2655,6 +2521,9 @@ class $$RequestsTableAnnotationComposer
   });
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get walletServicePubkey => $composableBuilder(
+      column: $table.walletServicePubkey, builder: (column) => column);
 
   GeneratedColumn<String> get method =>
       $composableBuilder(column: $table.method, builder: (column) => column);
@@ -2675,27 +2544,6 @@ class $$RequestsTableAnnotationComposer
             getCurrentColumn: (t) => t.clientPubkey,
             referencedTable: $db.walletConnections,
             getReferencedColumn: (t) => t.clientPubkey,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$WalletConnectionsTableAnnotationComposer(
-                  $db: $db,
-                  $table: $db.walletConnections,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
-    return composer;
-  }
-
-  $$WalletConnectionsTableAnnotationComposer get walletServicePubkey {
-    final $$WalletConnectionsTableAnnotationComposer composer =
-        $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.walletServicePubkey,
-            referencedTable: $db.walletConnections,
-            getReferencedColumn: (t) => t.walletServicePubkey,
             builder: (joinBuilder,
                     {$addJoinBuilderToRootComposer,
                     $removeJoinBuilderFromRootComposer}) =>
@@ -2743,8 +2591,7 @@ class $$RequestsTableTableManager extends RootTableManager<
     $$RequestsTableUpdateCompanionBuilder,
     (RequestTable, $$RequestsTableReferences),
     RequestTable,
-    PrefetchHooks Function(
-        {bool clientPubkey, bool walletServicePubkey, bool responsesRefs})> {
+    PrefetchHooks Function({bool clientPubkey, bool responsesRefs})> {
   $$RequestsTableTableManager(_$Nip47Database db, $RequestsTable table)
       : super(TableManagerState(
           db: db,
@@ -2800,9 +2647,7 @@ class $$RequestsTableTableManager extends RootTableManager<
                   (e.readTable(table), $$RequestsTableReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: (
-              {clientPubkey = false,
-              walletServicePubkey = false,
-              responsesRefs = false}) {
+              {clientPubkey = false, responsesRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [if (responsesRefs) db.responses],
@@ -2828,17 +2673,6 @@ class $$RequestsTableTableManager extends RootTableManager<
                     referencedColumn: $$RequestsTableReferences
                         ._clientPubkeyTable(db)
                         .clientPubkey,
-                  ) as T;
-                }
-                if (walletServicePubkey) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.walletServicePubkey,
-                    referencedTable:
-                        $$RequestsTableReferences._walletServicePubkeyTable(db),
-                    referencedColumn: $$RequestsTableReferences
-                        ._walletServicePubkeyTable(db)
-                        .walletServicePubkey,
                   ) as T;
                 }
 
@@ -2877,8 +2711,7 @@ typedef $$RequestsTableProcessedTableManager = ProcessedTableManager<
     $$RequestsTableUpdateCompanionBuilder,
     (RequestTable, $$RequestsTableReferences),
     RequestTable,
-    PrefetchHooks Function(
-        {bool clientPubkey, bool walletServicePubkey, bool responsesRefs})>;
+    PrefetchHooks Function({bool clientPubkey, bool responsesRefs})>;
 typedef $$ResponsesTableCreateCompanionBuilder = ResponsesCompanion Function({
   required String id,
   required String requestId,

@@ -46,8 +46,8 @@ mixin _$Request {
   String get id;
   String get clientPubkey;
   String get walletServicePubkey;
-  int get createdAt;
-  int? get expiresAt;
+  DateTime get createdAt;
+  DateTime? get expiresAt;
 
   /// Create a copy of Request
   /// with the given fields replaced by the non-null parameter values.
@@ -95,8 +95,8 @@ abstract mixin class $RequestCopyWith<$Res> {
       {String id,
       String clientPubkey,
       String walletServicePubkey,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -133,11 +133,11 @@ class _$RequestCopyWithImpl<$Res> implements $RequestCopyWith<$Res> {
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -164,9 +164,9 @@ class GetInfoRequest extends Request {
   @override
   final String walletServicePubkey;
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -225,8 +225,8 @@ abstract mixin class $GetInfoRequestCopyWith<$Res>
       {String id,
       String clientPubkey,
       String walletServicePubkey,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -264,11 +264,11 @@ class _$GetInfoRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -295,9 +295,9 @@ class GetBalanceRequest extends Request {
   @override
   final String walletServicePubkey;
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -356,8 +356,8 @@ abstract mixin class $GetBalanceRequestCopyWith<$Res>
       {String id,
       String clientPubkey,
       String walletServicePubkey,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -395,11 +395,11 @@ class _$GetBalanceRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -434,9 +434,9 @@ class MakeInvoiceRequest extends Request {
   final String? descriptionHash;
   final int? expiry;
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -515,8 +515,8 @@ abstract mixin class $MakeInvoiceRequestCopyWith<$Res>
       String? description,
       String? descriptionHash,
       int? expiry,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -574,11 +574,11 @@ class _$MakeInvoiceRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -609,9 +609,9 @@ class PayInvoiceRequest extends Request {
   final String invoice;
   final int? amountSat;
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -675,8 +675,8 @@ abstract mixin class $PayInvoiceRequestCopyWith<$Res>
       String walletServicePubkey,
       String invoice,
       int? amountSat,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -724,11 +724,11 @@ class _$PayInvoiceRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -764,9 +764,9 @@ class MultiPayInvoiceRequest extends Request {
   }
 
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -834,8 +834,8 @@ abstract mixin class $MultiPayInvoiceRequestCopyWith<$Res>
       String clientPubkey,
       String walletServicePubkey,
       List<MultiPayInvoiceRequestInvoice> invoices,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -878,11 +878,11 @@ class _$MultiPayInvoiceRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -926,9 +926,9 @@ class PayKeysendRequest extends Request {
   }
 
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1007,8 +1007,8 @@ abstract mixin class $PayKeysendRequestCopyWith<$Res>
       String pubkey,
       String? preimage,
       List<TlvRecord>? tlvRecords,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -1066,11 +1066,11 @@ class _$PayKeysendRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -1106,9 +1106,9 @@ class MultiPayKeysendRequest extends Request {
   }
 
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1176,8 +1176,8 @@ abstract mixin class $MultiPayKeysendRequestCopyWith<$Res>
       String clientPubkey,
       String walletServicePubkey,
       List<MultiPayKeysendRequestKeysend> keysends,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -1220,11 +1220,11 @@ class _$MultiPayKeysendRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -1255,9 +1255,9 @@ class LookupInvoiceRequest extends Request {
   final String? paymentHash;
   final String? invoice;
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1322,8 +1322,8 @@ abstract mixin class $LookupInvoiceRequestCopyWith<$Res>
       String walletServicePubkey,
       String? paymentHash,
       String? invoice,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -1371,11 +1371,11 @@ class _$LookupInvoiceRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -1415,9 +1415,9 @@ class ListTransactionsRequest extends Request {
   final bool? unpaid;
   final TransactionType? type;
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1500,8 +1500,8 @@ abstract mixin class $ListTransactionsRequestCopyWith<$Res>
       int? offset,
       bool? unpaid,
       TransactionType? type,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -1569,11 +1569,11 @@ class _$ListTransactionsRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
@@ -1611,9 +1611,9 @@ class CustomRequest extends Request {
   }
 
   @override
-  final int createdAt;
+  final DateTime createdAt;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
@@ -1683,8 +1683,8 @@ abstract mixin class $CustomRequestCopyWith<$Res>
       String walletServicePubkey,
       String method,
       Map<String, dynamic> params,
-      int createdAt,
-      int? expiresAt});
+      DateTime createdAt,
+      DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -1732,11 +1732,11 @@ class _$CustomRequestCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
     ));
   }
 }
