@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/nip47.dart';
-import 'package:nip47/src/data/models/event_model.dart';
+import 'package:nip47/src/data/models/info_event_model.dart';
 
 class InfoEventMapper {
   static InfoEventModel modelFromEntity(InfoEvent infoEvent) {
@@ -19,9 +19,6 @@ class InfoEventMapper {
       notifications.addAll(infoEvent.customNotifications!);
     }
     return InfoEventModel(
-      id: infoEvent.id,
-      relay: infoEvent.relay,
-      createdAt: infoEvent.createdAt,
       walletServicePubkey: infoEvent.walletServicePubkey,
       methods: methods,
       notifications: notifications,
@@ -30,25 +27,40 @@ class InfoEventMapper {
     );
   }
 
-  static InfoEvent modelToEntity(
-    InfoEventModel model,
+  static InfoEventEvent modelToEntity(
+    InfoEventEventModel model,
   ) {
-    return InfoEvent(
-      id: model.id!,
-      relay: model.relay!,
+    final infoEvent = InfoEvent(
+        walletServicePubkey: model.walletServicePubkey,
+        methods: model.methods
+            .map((method) => Method.fromPlaintext(method))
+            .where((method) => method != Method.custom)
+            .toList(),
+        customMethods: model.methods
+            .where((method) => Method.fromPlaintext(method) == Method.custom)
+            .toList(),
+        notifications: model.notifications
+            ?.map(
+                (notification) => NotificationType.fromPlaintext(notification))
+            .where((notification) => notification != NotificationType.custom)
+            .toList(),
+        customNotifications: model.notifications
+            ?.where((notification) =>
+                NotificationType.fromPlaintext(notification) ==
+                NotificationType.custom)
+            .toList(),
+        clientPubkey: model.clientPubkey,
+        walletRelay: model.walletRelay);
+
+    return InfoEventEvent(
+      infoEvent: infoEvent,
+      eventId: model.eventId,
       createdAt: model.createdAt,
-      walletServicePubkey: model.walletServicePubkey,
-      methods:
-          model.methods.map((method) => Method.fromPlaintext(method)).toList(),
-      notifications: model.notifications
-          ?.map((notification) => NotificationType.fromPlaintext(notification))
-          .toList(),
-      clientPubkey: model.clientPubkey,
-      walletRelay: model.walletRelay,
+      relays: model.relays,
     );
   }
 
-  static InfoEventModel modelFromEventMessage(nip01.EventMessage event) {
+  static InfoEventEventModel modelFromEventMessage(nip01.EventMessage event) {
     final contentElements = event.event.content.split(' ');
     bool supportsNotifications = contentElements.contains('notifications');
     final methods =
@@ -74,16 +86,16 @@ class InfoEventMapper {
       log('No p tag found in event tags.');
     }
 
-    return InfoEventModel(
-      id: event.event.id,
-      relay: event.relayUrl,
-      createdAt:
-          DateTime.fromMillisecondsSinceEpoch(event.event.createdAt * 1000),
+    return InfoEventEventModel(
+      walletServicePubkey: event.event.pubkey,
       methods: methods,
       notifications: notifications,
-      walletServicePubkey: event.event.pubkey,
       clientPubkey: clientPubkey,
       walletRelay: walletRelayUrl,
+      eventId: event.event.id,
+      createdAt:
+          DateTime.fromMillisecondsSinceEpoch(event.event.createdAt * 1000),
+      relays: [event.relayUrl],
     );
   }
 
@@ -118,7 +130,7 @@ class InfoEventMapper {
     final event = nip01.Event.create(
       keyPair: walletServiceKeyPair,
       createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      kind: model.kind,
+      kind: EventKind.info.kind,
       // The info event should be a replaceable event, so add 'a' tag.
       tags: [
         replaceableEventTag,

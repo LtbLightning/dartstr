@@ -4,24 +4,35 @@ import 'package:nip01/nip01.dart';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip04/nip04.dart';
 import 'package:nip47/nip47.dart';
-import 'package:nip47/src/data/models/event_model.dart';
+import 'package:nip47/src/data/models/response_model.dart';
 import 'package:nip47/src/database/database.dart';
 
 class ResponseMapper {
-  static Response modelToEntity(ResponseEventModel model) {
-    switch (model.resultType) {
-      case 'get_balance':
-        final balanceMsat = model.result?['balance'] as int?;
-        final balanceSat = balanceMsat != null ? balanceMsat ~/ 1000 : null;
-        final errorCode = model.errorCode;
-        final error = errorCode != null ? ErrorCode.fromValue(errorCode) : null;
+  static Response modelToEntity(ResponseModel model) {
+    switch (model) {
+      case GetBalanceResponseModel _:
+        final balanceSat = model.balanceMsat ~/ 1000;
 
         return GetBalanceResponse(
           requestId: model.requestId,
           clientPubkey: model.clientPubkey,
+          walletServicePubkey: model.walletServicePubkey,
           balanceSat: balanceSat,
-          error: error,
-          createdAt: model.createdAt,
+        );
+      case GetInfoResponseModel _:
+        return GetInfoResponse(
+          requestId: model.requestId,
+          clientPubkey: model.clientPubkey,
+          walletServicePubkey: model.walletServicePubkey,
+          alias: model.alias,
+          color: model.color,
+          pubkey: model.pubkey,
+          network: model.network,
+          blockHeight: model.blockHeight,
+          blockHash: model.blockHash,
+          methods: model.methods,
+          customMethods: model.customMethods,
+          notifications: model.notifications,
         );
       default:
         throw Exception('Unknown response type');

@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip04/nip04.dart';
 import 'package:nip47/nip47.dart';
-import 'package:nip47/src/data/models/event_model.dart';
+import 'package:nip47/src/data/models/request_model.dart';
 import 'package:nip47/src/database/database.dart';
 
 class RequestMapper {
