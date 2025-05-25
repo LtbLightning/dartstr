@@ -1,5 +1,5 @@
 import 'package:nip47/src/data/mappers/request_mapper.dart';
-import 'package:nip47/src/data/models/event_model.dart';
+import 'package:nip47/src/data/models/request_model.dart';
 import 'package:nip47/src/database/database.dart';
 
 abstract class LocalRequestDataSource {

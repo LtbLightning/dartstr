@@ -2,50 +2,37 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'response_model.freezed.dart';
+part 'generated/response_model.freezed.dart';
 
 @freezed
 sealed class ResponseModel with _$ResponseModel {
-  const factory ResponseModel.getInfo({
-    required String requestId,
-    required String clientPubkey,
-    required String walletServicePubkey,
-    @Default('') String alias,
-    @Default('') String color,
-    @Default('') String pubkey,
-    @Default('mainnet') String network,
-    int? blockHeight,
-    @Default('') String blockHash,
-    @Default([]) List<String> methods,
-    @Default([]) List<String> notifications,
-  }) = GetInfoResponseModel;
-  const factory ResponseModel.getBalance({
-    required String requestId,
-    required String clientPubkey,
-    required String walletServicePubkey,
-    required int balanceMsat,
-  }) = GetBalanceResponseModel;
-  const factory ResponseModel.payInvoice({
-    required String requestId,
-    required String clientPubkey,
-    required String walletServicePubkey,
-    required String preimage,
-    int? feesPaidMsat,
-  }) = PayInvoiceResponseModel;
-  const factory ResponseModel.error({
+  const factory ResponseModel({
     required String requestId,
     required String clientPubkey,
     required String walletServicePubkey,
     required String resultType,
-    required String errorCode,
-    required String errorMessage,
-  }) = ErrorResponseModel;
+    Map<String, dynamic>? result,
+    Map<String, dynamic>? error,
+  }) = NewResponseModel;
+  const factory ResponseModel.event({
+    required String requestId,
+    required String clientPubkey,
+    required String walletServicePubkey,
+    required String resultType,
+    Map<String, dynamic>? result,
+    Map<String, dynamic>? error,
+    required String eventId,
+    required List<String> relays,
+    required DateTime createdAt,
+  }) = ResponseEventModel;
   const ResponseModel._();
 
+  /*
   String get resultType => switch (this) {
         GetInfoResponseModel() => 'get_info',
         GetBalanceResponseModel() => 'get_balance',
         PayInvoiceResponseModel() => 'pay_invoice',
+        MakeInvoiceResponseModel() => 'make_invoice',
         ErrorResponseModel(resultType: final resultType) => resultType,
       };
 
@@ -81,6 +68,26 @@ sealed class ResponseModel with _$ResponseModel {
             'preimage': preimage,
             'fees_paid': feesPaidMsat,
           },
+        MakeInvoiceResponseModel(
+          invoice: final invoice,
+          description: final description,
+          descriptionHash: final descriptionHash,
+          paymentHash: final paymentHash,
+          amountMsat: final amountMsat,
+          createdAt: final createdAt,
+          expiresAt: final expiresAt,
+          metadata: final metadata
+        ) =>
+          {
+            'invoice': invoice,
+            if (description != null) 'description': description,
+            if (descriptionHash != null) 'description_hash': descriptionHash,
+            'payment_hash': paymentHash,
+            'amount': amountMsat,
+            'created_at': createdAt,
+            if (expiresAt != null) 'expires_at': expiresAt,
+            if (metadata != null) 'metadata': metadata,
+          },
         ErrorResponseModel() => null,
       };
 
@@ -95,6 +102,7 @@ sealed class ResponseModel with _$ResponseModel {
           },
         _ => null,
       };
+  */
 
   String get plaintTextContent => jsonEncode({
         'result_type': resultType,

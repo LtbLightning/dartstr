@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:nip47/src/database/tables/request_table.dart';
+import 'package:nip47/src/database/type_converters/string_list_type_converter.dart';
 
 @DataClassName('ResponseTable')
 class Responses extends Table {
@@ -14,4 +15,5 @@ class Responses extends Table {
   TextColumn get errorMessage => text().nullable()();
   TextColumn get multiId => text().nullable()();
   DateTimeColumn get createdAt => dateTime()();
+  TextColumn get relays => text().nullable().map(StringListTypeConverter())();
 }

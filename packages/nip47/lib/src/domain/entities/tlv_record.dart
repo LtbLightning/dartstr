@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'tlv_record.freezed.dart';
-part 'tlv_record.g.dart';
+part 'generated/tlv_record.freezed.dart';
 
 @freezed
 sealed class TlvRecord with _$TlvRecord {
@@ -10,7 +9,4 @@ sealed class TlvRecord with _$TlvRecord {
     required String value,
   }) = _TlvRecord;
   const TlvRecord._();
-
-  factory TlvRecord.fromJson(Map<String, dynamic> json) =>
-      _$TlvRecordFromJson(json);
 }

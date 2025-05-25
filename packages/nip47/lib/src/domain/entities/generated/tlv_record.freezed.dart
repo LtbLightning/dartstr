@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'tlv_record.dart';
+part of '../tlv_record.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -25,9 +25,6 @@ mixin _$TlvRecord {
   $TlvRecordCopyWith<TlvRecord> get copyWith =>
       _$TlvRecordCopyWithImpl<TlvRecord>(this as TlvRecord, _$identity);
 
-  /// Serializes this TlvRecord to a JSON map.
-  Map<String, dynamic> toJson();
-
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -37,7 +34,6 @@ mixin _$TlvRecord {
             (identical(other.value, value) || other.value == value));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, type, value);
 
@@ -84,11 +80,9 @@ class _$TlvRecordCopyWithImpl<$Res> implements $TlvRecordCopyWith<$Res> {
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _TlvRecord extends TlvRecord {
   const _TlvRecord({required this.type, required this.value}) : super._();
-  factory _TlvRecord.fromJson(Map<String, dynamic> json) =>
-      _$TlvRecordFromJson(json);
 
   @override
   final int type;
@@ -104,13 +98,6 @@ class _TlvRecord extends TlvRecord {
       __$TlvRecordCopyWithImpl<_TlvRecord>(this, _$identity);
 
   @override
-  Map<String, dynamic> toJson() {
-    return _$TlvRecordToJson(
-      this,
-    );
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -119,7 +106,6 @@ class _TlvRecord extends TlvRecord {
             (identical(other.value, value) || other.value == value));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, type, value);
 

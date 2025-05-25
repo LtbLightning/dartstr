@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'notification.freezed.dart';
-part 'notification.g.dart';
+part 'generated/notification.freezed.dart';
 
 enum NotificationType {
   paymentReceived('payment_received'),
@@ -60,7 +59,4 @@ sealed class Notification with _$Notification {
     required Map<String, dynamic> notification,
   }) = CustomNotification;
   const Notification._();
-
-  factory Notification.fromJson(Map<String, dynamic> json) =>
-      _$NotificationFromJson(json);
 }

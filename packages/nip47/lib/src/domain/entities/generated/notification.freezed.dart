@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'notification.dart';
+part of '../notification.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,20 +12,6 @@ part of 'notification.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-Notification _$NotificationFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType']) {
-    case 'paymentReceived':
-      return PaymentReceivedNotification.fromJson(json);
-    case 'paymentSent':
-      return PaymentSentNotification.fromJson(json);
-    case 'custom':
-      return CustomNotification.fromJson(json);
-
-    default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'Notification',
-          'Invalid union type "${json['runtimeType']}"!');
-  }
-}
 
 /// @nodoc
 mixin _$Notification {
@@ -39,9 +25,6 @@ mixin _$Notification {
       _$NotificationCopyWithImpl<Notification>(
           this as Notification, _$identity);
 
-  /// Serializes this Notification to a JSON map.
-  Map<String, dynamic> toJson();
-
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -51,7 +34,6 @@ mixin _$Notification {
                 other.connectionPubkey == connectionPubkey));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, connectionPubkey);
 
@@ -94,7 +76,7 @@ class _$NotificationCopyWithImpl<$Res> implements $NotificationCopyWith<$Res> {
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class PaymentReceivedNotification extends Notification {
   const PaymentReceivedNotification(
       {required this.connectionPubkey,
@@ -108,13 +90,9 @@ class PaymentReceivedNotification extends Notification {
       required this.createdAt,
       this.expiresAt,
       required this.settledAt,
-      final Map<String, dynamic>? metadata,
-      final String? $type})
+      final Map<String, dynamic>? metadata})
       : _metadata = metadata,
-        $type = $type ?? 'paymentReceived',
         super._();
-  factory PaymentReceivedNotification.fromJson(Map<String, dynamic> json) =>
-      _$PaymentReceivedNotificationFromJson(json);
 
   @override
   final String connectionPubkey;
@@ -137,9 +115,6 @@ class PaymentReceivedNotification extends Notification {
     return EqualUnmodifiableMapView(value);
   }
 
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
   /// Create a copy of Notification
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -148,13 +123,6 @@ class PaymentReceivedNotification extends Notification {
   $PaymentReceivedNotificationCopyWith<PaymentReceivedNotification>
       get copyWith => _$PaymentReceivedNotificationCopyWithImpl<
           PaymentReceivedNotification>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$PaymentReceivedNotificationToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -185,7 +153,6 @@ class PaymentReceivedNotification extends Notification {
             const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -312,7 +279,7 @@ class _$PaymentReceivedNotificationCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class PaymentSentNotification extends Notification {
   PaymentSentNotification(
       {required this.connectionPubkey,
@@ -326,13 +293,9 @@ class PaymentSentNotification extends Notification {
       required this.createdAt,
       this.expiresAt,
       required this.settledAt,
-      final Map<String, dynamic>? metadata,
-      final String? $type})
+      final Map<String, dynamic>? metadata})
       : _metadata = metadata,
-        $type = $type ?? 'paymentSent',
         super._();
-  factory PaymentSentNotification.fromJson(Map<String, dynamic> json) =>
-      _$PaymentSentNotificationFromJson(json);
 
   @override
   final String connectionPubkey;
@@ -355,9 +318,6 @@ class PaymentSentNotification extends Notification {
     return EqualUnmodifiableMapView(value);
   }
 
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
   /// Create a copy of Notification
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -366,13 +326,6 @@ class PaymentSentNotification extends Notification {
   $PaymentSentNotificationCopyWith<PaymentSentNotification> get copyWith =>
       _$PaymentSentNotificationCopyWithImpl<PaymentSentNotification>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$PaymentSentNotificationToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -403,7 +356,6 @@ class PaymentSentNotification extends Notification {
             const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -529,18 +481,14 @@ class _$PaymentSentNotificationCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class CustomNotification extends Notification {
   CustomNotification(
       {required this.connectionPubkey,
       required this.notificationType,
-      required final Map<String, dynamic> notification,
-      final String? $type})
+      required final Map<String, dynamic> notification})
       : _notification = notification,
-        $type = $type ?? 'custom',
         super._();
-  factory CustomNotification.fromJson(Map<String, dynamic> json) =>
-      _$CustomNotificationFromJson(json);
 
   @override
   final String connectionPubkey;
@@ -552,9 +500,6 @@ class CustomNotification extends Notification {
     return EqualUnmodifiableMapView(_notification);
   }
 
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
   /// Create a copy of Notification
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -562,13 +507,6 @@ class CustomNotification extends Notification {
   @pragma('vm:prefer-inline')
   $CustomNotificationCopyWith<CustomNotification> get copyWith =>
       _$CustomNotificationCopyWithImpl<CustomNotification>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$CustomNotificationToJson(
-      this,
-    );
-  }
 
   @override
   bool operator ==(Object other) {
@@ -583,7 +521,6 @@ class CustomNotification extends Notification {
                 .equals(other._notification, _notification));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, connectionPubkey,
       notificationType, const DeepCollectionEquality().hash(_notification));

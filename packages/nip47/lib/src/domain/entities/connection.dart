@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nip47/src/domain/entities/method.dart';
 import 'package:nip47/src/domain/entities/notification.dart';
 
-part 'connection.freezed.dart';
+part 'generated/connection.freezed.dart';
 
 enum BudgetRenewal {
   never('never'),

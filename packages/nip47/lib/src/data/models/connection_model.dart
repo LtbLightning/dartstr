@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'connection_model.freezed.dart';
+part 'generated/connection_model.freezed.dart';
 
 @freezed
 sealed class ConnectionModel with _$ConnectionModel {

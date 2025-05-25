@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'event_subscription_model.dart';
+part of '../event_subscription_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -365,7 +365,7 @@ class InfoEventSubscriptionModel extends EventSubscriptionModel {
     return EqualUnmodifiableListView(_filters);
   }
 
-  final Stream<InfoEventModel> infoEventStream;
+  final Stream<InfoEventEventModel> infoEventStream;
   final List<String>? _relayUrls;
   @override
   List<String>? get relayUrls {
@@ -425,7 +425,7 @@ abstract mixin class $InfoEventSubscriptionModelCopyWith<$Res>
   $Res call(
       {String subscriptionId,
       List<Filters> filters,
-      Stream<InfoEventModel> infoEventStream,
+      Stream<InfoEventEventModel> infoEventStream,
       List<String>? relayUrls});
 }
 
@@ -459,7 +459,7 @@ class _$InfoEventSubscriptionModelCopyWithImpl<$Res>
       infoEventStream: null == infoEventStream
           ? _self.infoEventStream
           : infoEventStream // ignore: cast_nullable_to_non_nullable
-              as Stream<InfoEventModel>,
+              as Stream<InfoEventEventModel>,
       relayUrls: freezed == relayUrls
           ? _self._relayUrls
           : relayUrls // ignore: cast_nullable_to_non_nullable

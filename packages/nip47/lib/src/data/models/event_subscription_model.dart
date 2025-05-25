@@ -1,8 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nip01/nip01.dart';
-import 'package:nip47/src/data/models/event_model.dart';
+import 'package:nip47/src/data/models/info_event_model.dart';
+import 'package:nip47/src/data/models/request_model.dart';
+import 'package:nip47/src/data/models/response_model.dart';
 
-part 'event_subscription_model.freezed.dart';
+part 'generated/event_subscription_model.freezed.dart';
 
 @freezed
 sealed class EventSubscriptionModel with _$EventSubscriptionModel {
@@ -21,7 +23,7 @@ sealed class EventSubscriptionModel with _$EventSubscriptionModel {
   const factory EventSubscriptionModel.infoEvent({
     required String subscriptionId,
     required List<Filters> filters,
-    required Stream<InfoEventModel> infoEventStream,
+    required Stream<InfoEventEventModel> infoEventStream,
     List<String>? relayUrls,
   }) = InfoEventSubscriptionModel;
   const EventSubscriptionModel._();

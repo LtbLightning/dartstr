@@ -6,7 +6,7 @@ import 'package:nip47/src/domain/entities/connection.dart';
 import 'package:nip47/src/domain/entities/method.dart';
 import 'package:nip47/src/domain/entities/notification.dart';
 
-part 'connection_uri.freezed.dart';
+part 'generated/connection_uri.freezed.dart';
 
 enum ConnectionUriScheme {
   walletConnect('nostr+walletconnect'),

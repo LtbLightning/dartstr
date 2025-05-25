@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'transaction.dart';
+part of '../transaction.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -35,9 +35,6 @@ mixin _$Transaction {
   $TransactionCopyWith<Transaction> get copyWith =>
       _$TransactionCopyWithImpl<Transaction>(this as Transaction, _$identity);
 
-  /// Serializes this Transaction to a JSON map.
-  Map<String, dynamic> toJson();
-
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -66,7 +63,6 @@ mixin _$Transaction {
             const DeepCollectionEquality().equals(other.metadata, metadata));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -189,7 +185,7 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _Transaction extends Transaction {
   const _Transaction(
       {required this.type,
@@ -206,8 +202,6 @@ class _Transaction extends Transaction {
       final Map<dynamic, dynamic>? metadata = const {}})
       : _metadata = metadata,
         super._();
-  factory _Transaction.fromJson(Map<String, dynamic> json) =>
-      _$TransactionFromJson(json);
 
   @override
   final TransactionType type;
@@ -251,13 +245,6 @@ class _Transaction extends Transaction {
       __$TransactionCopyWithImpl<_Transaction>(this, _$identity);
 
   @override
-  Map<String, dynamic> toJson() {
-    return _$TransactionToJson(
-      this,
-    );
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -285,7 +272,6 @@ class _Transaction extends Transaction {
             const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,

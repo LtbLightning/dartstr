@@ -1,13 +1,10 @@
+export 'connection_uri.dart';
 export 'connection.dart';
+export 'event.dart';
 export 'filters.dart';
 export 'info_event.dart';
-export 'info_result.dart';
-export 'invoice.dart';
 export 'method.dart';
-export 'multi_pay_invoice_request_invoice.dart';
-export 'multi_pay_keysend_request_keysend.dart';
 export 'notification.dart';
-export 'pay_result.dart';
 export 'request.dart';
 export 'response.dart';
 export 'tlv_record.dart';

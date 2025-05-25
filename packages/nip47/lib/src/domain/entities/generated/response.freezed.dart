@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'response.dart';
+part of '../response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -438,6 +438,198 @@ class _$GetBalanceResponseCopyWithImpl<$Res>
 
 /// @nodoc
 
+class MakeInvoiceResponse extends Response {
+  const MakeInvoiceResponse(
+      {required this.requestId,
+      required this.clientPubkey,
+      required this.walletServicePubkey,
+      required this.invoice,
+      this.description,
+      this.descriptionHash,
+      required this.paymentHash,
+      required this.amountSat,
+      required this.createdAt,
+      this.expiresAt,
+      final Map<String, dynamic>? metadata})
+      : _metadata = metadata,
+        super._();
+
+  @override
+  final String requestId;
+  @override
+  final String clientPubkey;
+  @override
+  final String walletServicePubkey;
+  final String invoice;
+  final String? description;
+  final String? descriptionHash;
+  final String paymentHash;
+  final int amountSat;
+  final int createdAt;
+  final int? expiresAt;
+  final Map<String, dynamic>? _metadata;
+  Map<String, dynamic>? get metadata {
+    final value = _metadata;
+    if (value == null) return null;
+    if (_metadata is EqualUnmodifiableMapView) return _metadata;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $MakeInvoiceResponseCopyWith<MakeInvoiceResponse> get copyWith =>
+      _$MakeInvoiceResponseCopyWithImpl<MakeInvoiceResponse>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is MakeInvoiceResponse &&
+            (identical(other.requestId, requestId) ||
+                other.requestId == requestId) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
+            (identical(other.invoice, invoice) || other.invoice == invoice) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.descriptionHash, descriptionHash) ||
+                other.descriptionHash == descriptionHash) &&
+            (identical(other.paymentHash, paymentHash) ||
+                other.paymentHash == paymentHash) &&
+            (identical(other.amountSat, amountSat) ||
+                other.amountSat == amountSat) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt) &&
+            const DeepCollectionEquality().equals(other._metadata, _metadata));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      requestId,
+      clientPubkey,
+      walletServicePubkey,
+      invoice,
+      description,
+      descriptionHash,
+      paymentHash,
+      amountSat,
+      createdAt,
+      expiresAt,
+      const DeepCollectionEquality().hash(_metadata));
+
+  @override
+  String toString() {
+    return 'Response.makeInvoice(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, paymentHash: $paymentHash, amountSat: $amountSat, createdAt: $createdAt, expiresAt: $expiresAt, metadata: $metadata)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $MakeInvoiceResponseCopyWith<$Res>
+    implements $ResponseCopyWith<$Res> {
+  factory $MakeInvoiceResponseCopyWith(
+          MakeInvoiceResponse value, $Res Function(MakeInvoiceResponse) _then) =
+      _$MakeInvoiceResponseCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String requestId,
+      String clientPubkey,
+      String walletServicePubkey,
+      String invoice,
+      String? description,
+      String? descriptionHash,
+      String paymentHash,
+      int amountSat,
+      int createdAt,
+      int? expiresAt,
+      Map<String, dynamic>? metadata});
+}
+
+/// @nodoc
+class _$MakeInvoiceResponseCopyWithImpl<$Res>
+    implements $MakeInvoiceResponseCopyWith<$Res> {
+  _$MakeInvoiceResponseCopyWithImpl(this._self, this._then);
+
+  final MakeInvoiceResponse _self;
+  final $Res Function(MakeInvoiceResponse) _then;
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? requestId = null,
+    Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
+    Object? invoice = null,
+    Object? description = freezed,
+    Object? descriptionHash = freezed,
+    Object? paymentHash = null,
+    Object? amountSat = null,
+    Object? createdAt = null,
+    Object? expiresAt = freezed,
+    Object? metadata = freezed,
+  }) {
+    return _then(MakeInvoiceResponse(
+      requestId: null == requestId
+          ? _self.requestId
+          : requestId // ignore: cast_nullable_to_non_nullable
+              as String,
+      clientPubkey: null == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      invoice: null == invoice
+          ? _self.invoice
+          : invoice // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _self.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      descriptionHash: freezed == descriptionHash
+          ? _self.descriptionHash
+          : descriptionHash // ignore: cast_nullable_to_non_nullable
+              as String?,
+      paymentHash: null == paymentHash
+          ? _self.paymentHash
+          : paymentHash // ignore: cast_nullable_to_non_nullable
+              as String,
+      amountSat: null == amountSat
+          ? _self.amountSat
+          : amountSat // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      metadata: freezed == metadata
+          ? _self._metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+    ));
+  }
+}
+
+/// @nodoc
+
 class PayInvoiceResponse extends Response {
   const PayInvoiceResponse(
       {required this.requestId,
@@ -547,6 +739,231 @@ class _$PayInvoiceResponseCopyWithImpl<$Res>
           ? _self.feesPaidSat
           : feesPaidSat // ignore: cast_nullable_to_non_nullable
               as int?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class LookupInvoiceResponse extends Response {
+  const LookupInvoiceResponse(
+      {required this.requestId,
+      required this.clientPubkey,
+      required this.walletServicePubkey,
+      required this.type,
+      this.invoice,
+      this.description,
+      this.descriptionHash,
+      required this.paymentHash,
+      required this.amountSat,
+      this.feesPaidSat,
+      required this.createdAt,
+      this.expiresAt,
+      this.settledAt,
+      final Map<String, dynamic>? metadata})
+      : _metadata = metadata,
+        super._();
+
+  @override
+  final String requestId;
+  @override
+  final String clientPubkey;
+  @override
+  final String walletServicePubkey;
+  final String type;
+  final String? invoice;
+  final String? description;
+  final String? descriptionHash;
+  final String paymentHash;
+  final int amountSat;
+  final int? feesPaidSat;
+  final int createdAt;
+  final int? expiresAt;
+  final int? settledAt;
+  final Map<String, dynamic>? _metadata;
+  Map<String, dynamic>? get metadata {
+    final value = _metadata;
+    if (value == null) return null;
+    if (_metadata is EqualUnmodifiableMapView) return _metadata;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $LookupInvoiceResponseCopyWith<LookupInvoiceResponse> get copyWith =>
+      _$LookupInvoiceResponseCopyWithImpl<LookupInvoiceResponse>(
+          this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is LookupInvoiceResponse &&
+            (identical(other.requestId, requestId) ||
+                other.requestId == requestId) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.invoice, invoice) || other.invoice == invoice) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.descriptionHash, descriptionHash) ||
+                other.descriptionHash == descriptionHash) &&
+            (identical(other.paymentHash, paymentHash) ||
+                other.paymentHash == paymentHash) &&
+            (identical(other.amountSat, amountSat) ||
+                other.amountSat == amountSat) &&
+            (identical(other.feesPaidSat, feesPaidSat) ||
+                other.feesPaidSat == feesPaidSat) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt) &&
+            (identical(other.settledAt, settledAt) ||
+                other.settledAt == settledAt) &&
+            const DeepCollectionEquality().equals(other._metadata, _metadata));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      requestId,
+      clientPubkey,
+      walletServicePubkey,
+      type,
+      invoice,
+      description,
+      descriptionHash,
+      paymentHash,
+      amountSat,
+      feesPaidSat,
+      createdAt,
+      expiresAt,
+      settledAt,
+      const DeepCollectionEquality().hash(_metadata));
+
+  @override
+  String toString() {
+    return 'Response.lookupInvoice(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $LookupInvoiceResponseCopyWith<$Res>
+    implements $ResponseCopyWith<$Res> {
+  factory $LookupInvoiceResponseCopyWith(LookupInvoiceResponse value,
+          $Res Function(LookupInvoiceResponse) _then) =
+      _$LookupInvoiceResponseCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String requestId,
+      String clientPubkey,
+      String walletServicePubkey,
+      String type,
+      String? invoice,
+      String? description,
+      String? descriptionHash,
+      String paymentHash,
+      int amountSat,
+      int? feesPaidSat,
+      int createdAt,
+      int? expiresAt,
+      int? settledAt,
+      Map<String, dynamic>? metadata});
+}
+
+/// @nodoc
+class _$LookupInvoiceResponseCopyWithImpl<$Res>
+    implements $LookupInvoiceResponseCopyWith<$Res> {
+  _$LookupInvoiceResponseCopyWithImpl(this._self, this._then);
+
+  final LookupInvoiceResponse _self;
+  final $Res Function(LookupInvoiceResponse) _then;
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? requestId = null,
+    Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
+    Object? type = null,
+    Object? invoice = freezed,
+    Object? description = freezed,
+    Object? descriptionHash = freezed,
+    Object? paymentHash = null,
+    Object? amountSat = null,
+    Object? feesPaidSat = freezed,
+    Object? createdAt = null,
+    Object? expiresAt = freezed,
+    Object? settledAt = freezed,
+    Object? metadata = freezed,
+  }) {
+    return _then(LookupInvoiceResponse(
+      requestId: null == requestId
+          ? _self.requestId
+          : requestId // ignore: cast_nullable_to_non_nullable
+              as String,
+      clientPubkey: null == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: null == type
+          ? _self.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      invoice: freezed == invoice
+          ? _self.invoice
+          : invoice // ignore: cast_nullable_to_non_nullable
+              as String?,
+      description: freezed == description
+          ? _self.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      descriptionHash: freezed == descriptionHash
+          ? _self.descriptionHash
+          : descriptionHash // ignore: cast_nullable_to_non_nullable
+              as String?,
+      paymentHash: null == paymentHash
+          ? _self.paymentHash
+          : paymentHash // ignore: cast_nullable_to_non_nullable
+              as String,
+      amountSat: null == amountSat
+          ? _self.amountSat
+          : amountSat // ignore: cast_nullable_to_non_nullable
+              as int,
+      feesPaidSat: freezed == feesPaidSat
+          ? _self.feesPaidSat
+          : feesPaidSat // ignore: cast_nullable_to_non_nullable
+              as int?,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as int,
+      expiresAt: freezed == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      settledAt: freezed == settledAt
+          ? _self.settledAt
+          : settledAt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      metadata: freezed == metadata
+          ? _self._metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ));
   }
 }
@@ -663,231 +1080,6 @@ class _$ErrorResponseCopyWithImpl<$Res>
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
-  }
-}
-
-/// @nodoc
-mixin _$ResponseEvent {
-  Response get response;
-  String get eventId;
-  List<String> get relays;
-  DateTime get createdAt;
-
-  /// Create a copy of ResponseEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $ResponseEventCopyWith<ResponseEvent> get copyWith =>
-      _$ResponseEventCopyWithImpl<ResponseEvent>(
-          this as ResponseEvent, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is ResponseEvent &&
-            (identical(other.response, response) ||
-                other.response == response) &&
-            (identical(other.eventId, eventId) || other.eventId == eventId) &&
-            const DeepCollectionEquality().equals(other.relays, relays) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, response, eventId,
-      const DeepCollectionEquality().hash(relays), createdAt);
-
-  @override
-  String toString() {
-    return 'ResponseEvent(response: $response, eventId: $eventId, relays: $relays, createdAt: $createdAt)';
-  }
-}
-
-/// @nodoc
-abstract mixin class $ResponseEventCopyWith<$Res> {
-  factory $ResponseEventCopyWith(
-          ResponseEvent value, $Res Function(ResponseEvent) _then) =
-      _$ResponseEventCopyWithImpl;
-  @useResult
-  $Res call(
-      {Response response,
-      String eventId,
-      List<String> relays,
-      DateTime createdAt});
-
-  $ResponseCopyWith<$Res> get response;
-}
-
-/// @nodoc
-class _$ResponseEventCopyWithImpl<$Res>
-    implements $ResponseEventCopyWith<$Res> {
-  _$ResponseEventCopyWithImpl(this._self, this._then);
-
-  final ResponseEvent _self;
-  final $Res Function(ResponseEvent) _then;
-
-  /// Create a copy of ResponseEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? response = null,
-    Object? eventId = null,
-    Object? relays = null,
-    Object? createdAt = null,
-  }) {
-    return _then(_self.copyWith(
-      response: null == response
-          ? _self.response
-          : response // ignore: cast_nullable_to_non_nullable
-              as Response,
-      eventId: null == eventId
-          ? _self.eventId
-          : eventId // ignore: cast_nullable_to_non_nullable
-              as String,
-      relays: null == relays
-          ? _self.relays
-          : relays // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      createdAt: null == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
-  }
-
-  /// Create a copy of ResponseEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ResponseCopyWith<$Res> get response {
-    return $ResponseCopyWith<$Res>(_self.response, (value) {
-      return _then(_self.copyWith(response: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _ResponseEvent extends ResponseEvent {
-  const _ResponseEvent(this.response,
-      {required this.eventId,
-      required final List<String> relays,
-      required this.createdAt})
-      : _relays = relays,
-        super._();
-
-  @override
-  final Response response;
-  @override
-  final String eventId;
-  final List<String> _relays;
-  @override
-  List<String> get relays {
-    if (_relays is EqualUnmodifiableListView) return _relays;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_relays);
-  }
-
-  @override
-  final DateTime createdAt;
-
-  /// Create a copy of ResponseEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$ResponseEventCopyWith<_ResponseEvent> get copyWith =>
-      __$ResponseEventCopyWithImpl<_ResponseEvent>(this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _ResponseEvent &&
-            (identical(other.response, response) ||
-                other.response == response) &&
-            (identical(other.eventId, eventId) || other.eventId == eventId) &&
-            const DeepCollectionEquality().equals(other._relays, _relays) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, response, eventId,
-      const DeepCollectionEquality().hash(_relays), createdAt);
-
-  @override
-  String toString() {
-    return 'ResponseEvent(response: $response, eventId: $eventId, relays: $relays, createdAt: $createdAt)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$ResponseEventCopyWith<$Res>
-    implements $ResponseEventCopyWith<$Res> {
-  factory _$ResponseEventCopyWith(
-          _ResponseEvent value, $Res Function(_ResponseEvent) _then) =
-      __$ResponseEventCopyWithImpl;
-  @override
-  @useResult
-  $Res call(
-      {Response response,
-      String eventId,
-      List<String> relays,
-      DateTime createdAt});
-
-  @override
-  $ResponseCopyWith<$Res> get response;
-}
-
-/// @nodoc
-class __$ResponseEventCopyWithImpl<$Res>
-    implements _$ResponseEventCopyWith<$Res> {
-  __$ResponseEventCopyWithImpl(this._self, this._then);
-
-  final _ResponseEvent _self;
-  final $Res Function(_ResponseEvent) _then;
-
-  /// Create a copy of ResponseEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? response = null,
-    Object? eventId = null,
-    Object? relays = null,
-    Object? createdAt = null,
-  }) {
-    return _then(_ResponseEvent(
-      null == response
-          ? _self.response
-          : response // ignore: cast_nullable_to_non_nullable
-              as Response,
-      eventId: null == eventId
-          ? _self.eventId
-          : eventId // ignore: cast_nullable_to_non_nullable
-              as String,
-      relays: null == relays
-          ? _self._relays
-          : relays // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      createdAt: null == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
-  }
-
-  /// Create a copy of ResponseEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ResponseCopyWith<$Res> get response {
-    return $ResponseCopyWith<$Res>(_self.response, (value) {
-      return _then(_self.copyWith(response: value));
-    });
   }
 }
 

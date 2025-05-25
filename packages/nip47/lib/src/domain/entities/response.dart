@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nip47/nip47.dart';
 
-part 'response.freezed.dart';
+part 'generated/response.freezed.dart';
 
 enum Network {
   mainnet(plaintext: 'mainnet'),
@@ -37,6 +37,19 @@ sealed class Response with _$Response {
     required String walletServicePubkey,
     required int balanceSat,
   }) = GetBalanceResponse;
+  const factory Response.makeInvoice({
+    required String requestId,
+    required String clientPubkey,
+    required String walletServicePubkey,
+    required String invoice,
+    String? description,
+    String? descriptionHash,
+    required String paymentHash,
+    required int amountSat,
+    required int createdAt,
+    int? expiresAt,
+    Map<String, dynamic>? metadata,
+  }) = MakeInvoiceResponse;
   const factory Response.payInvoice({
     required String requestId,
     required String clientPubkey,
@@ -44,6 +57,22 @@ sealed class Response with _$Response {
     required String preimage,
     int? feesPaidSat,
   }) = PayInvoiceResponse;
+  const factory Response.lookupInvoice({
+    required String requestId,
+    required String clientPubkey,
+    required String walletServicePubkey,
+    required String type,
+    String? invoice,
+    String? description,
+    String? descriptionHash,
+    required String paymentHash,
+    required int amountSat,
+    int? feesPaidSat,
+    required int createdAt,
+    int? expiresAt,
+    int? settledAt,
+    Map<String, dynamic>? metadata,
+  }) = LookupInvoiceResponse;
   const factory Response.error({
     required String requestId,
     required String clientPubkey,
@@ -53,16 +82,4 @@ sealed class Response with _$Response {
   }) = ErrorResponse;
 
   const Response._();
-}
-
-@freezed
-sealed class ResponseEvent with _$ResponseEvent {
-  const factory ResponseEvent(
-    Response response, {
-    required String eventId,
-    required List<String> relays,
-    required DateTime createdAt,
-  }) = _ResponseEvent;
-
-  const ResponseEvent._();
 }

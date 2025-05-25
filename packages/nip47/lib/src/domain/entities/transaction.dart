@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'transaction.freezed.dart';
-part 'transaction.g.dart';
+part 'generated/transaction.freezed.dart';
 
 enum TransactionType {
   incoming('incoming'),
@@ -36,7 +35,4 @@ sealed class Transaction with _$Transaction {
     @Default({}) Map<dynamic, dynamic>? metadata,
   }) = _Transaction;
   const Transaction._();
-
-  factory Transaction.fromJson(Map<String, dynamic> json) =>
-      _$TransactionFromJson(json);
 }

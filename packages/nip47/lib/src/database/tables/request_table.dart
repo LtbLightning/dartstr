@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:nip47/src/database/tables/wallet_connection_table.dart';
+import 'package:nip47/src/database/type_converters/string_list_type_converter.dart';
 
 @DataClassName('RequestTable')
 class Requests extends Table {
@@ -14,4 +15,5 @@ class Requests extends Table {
   TextColumn get params => text()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get expiresAt => dateTime().nullable()();
+  TextColumn get relays => text().nullable().map(StringListTypeConverter())();
 }

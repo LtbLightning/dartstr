@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:nip47/src/data/mappers/response_mapper.dart';
-import 'package:nip47/src/data/models/event_model.dart';
+import 'package:nip47/src/data/models/response_model.dart';
 import 'package:nip47/src/database/database.dart';
 
 abstract class LocalResponseDataSource {
