@@ -90,6 +90,127 @@ class _$EventCopyWithImpl<$Res> implements $EventCopyWith<$Res> {
 
 /// @nodoc
 
+class InfoEventEvent extends Event {
+  const InfoEventEvent(
+      {required this.infoEvent,
+      required this.eventId,
+      required this.createdAt,
+      required final List<String> relays})
+      : _relays = relays,
+        super._();
+
+  final InfoEvent infoEvent;
+  @override
+  final String eventId;
+  @override
+  final DateTime createdAt;
+  final List<String> _relays;
+  @override
+  List<String> get relays {
+    if (_relays is EqualUnmodifiableListView) return _relays;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_relays);
+  }
+
+  /// Create a copy of Event
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $InfoEventEventCopyWith<InfoEventEvent> get copyWith =>
+      _$InfoEventEventCopyWithImpl<InfoEventEvent>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is InfoEventEvent &&
+            (identical(other.infoEvent, infoEvent) ||
+                other.infoEvent == infoEvent) &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            const DeepCollectionEquality().equals(other._relays, _relays));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, infoEvent, eventId, createdAt,
+      const DeepCollectionEquality().hash(_relays));
+
+  @override
+  String toString() {
+    return 'Event.info(infoEvent: $infoEvent, eventId: $eventId, createdAt: $createdAt, relays: $relays)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $InfoEventEventCopyWith<$Res>
+    implements $EventCopyWith<$Res> {
+  factory $InfoEventEventCopyWith(
+          InfoEventEvent value, $Res Function(InfoEventEvent) _then) =
+      _$InfoEventEventCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {InfoEvent infoEvent,
+      String eventId,
+      DateTime createdAt,
+      List<String> relays});
+
+  $InfoEventCopyWith<$Res> get infoEvent;
+}
+
+/// @nodoc
+class _$InfoEventEventCopyWithImpl<$Res>
+    implements $InfoEventEventCopyWith<$Res> {
+  _$InfoEventEventCopyWithImpl(this._self, this._then);
+
+  final InfoEventEvent _self;
+  final $Res Function(InfoEventEvent) _then;
+
+  /// Create a copy of Event
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? infoEvent = null,
+    Object? eventId = null,
+    Object? createdAt = null,
+    Object? relays = null,
+  }) {
+    return _then(InfoEventEvent(
+      infoEvent: null == infoEvent
+          ? _self.infoEvent
+          : infoEvent // ignore: cast_nullable_to_non_nullable
+              as InfoEvent,
+      eventId: null == eventId
+          ? _self.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      relays: null == relays
+          ? _self._relays
+          : relays // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+
+  /// Create a copy of Event
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $InfoEventCopyWith<$Res> get infoEvent {
+    return $InfoEventCopyWith<$Res>(_self.infoEvent, (value) {
+      return _then(_self.copyWith(infoEvent: value));
+    });
+  }
+}
+
+/// @nodoc
+
 class RequestEvent extends Event {
   const RequestEvent(
       {required this.request,
@@ -324,127 +445,6 @@ class _$ResponseEventCopyWithImpl<$Res>
   $ResponseCopyWith<$Res> get response {
     return $ResponseCopyWith<$Res>(_self.response, (value) {
       return _then(_self.copyWith(response: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class InfoEventEvent extends Event {
-  const InfoEventEvent(
-      {required this.infoEvent,
-      required this.eventId,
-      required this.createdAt,
-      required final List<String> relays})
-      : _relays = relays,
-        super._();
-
-  final InfoEvent infoEvent;
-  @override
-  final String eventId;
-  @override
-  final DateTime createdAt;
-  final List<String> _relays;
-  @override
-  List<String> get relays {
-    if (_relays is EqualUnmodifiableListView) return _relays;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_relays);
-  }
-
-  /// Create a copy of Event
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $InfoEventEventCopyWith<InfoEventEvent> get copyWith =>
-      _$InfoEventEventCopyWithImpl<InfoEventEvent>(this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is InfoEventEvent &&
-            (identical(other.infoEvent, infoEvent) ||
-                other.infoEvent == infoEvent) &&
-            (identical(other.eventId, eventId) || other.eventId == eventId) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            const DeepCollectionEquality().equals(other._relays, _relays));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, infoEvent, eventId, createdAt,
-      const DeepCollectionEquality().hash(_relays));
-
-  @override
-  String toString() {
-    return 'Event.info(infoEvent: $infoEvent, eventId: $eventId, createdAt: $createdAt, relays: $relays)';
-  }
-}
-
-/// @nodoc
-abstract mixin class $InfoEventEventCopyWith<$Res>
-    implements $EventCopyWith<$Res> {
-  factory $InfoEventEventCopyWith(
-          InfoEventEvent value, $Res Function(InfoEventEvent) _then) =
-      _$InfoEventEventCopyWithImpl;
-  @override
-  @useResult
-  $Res call(
-      {InfoEvent infoEvent,
-      String eventId,
-      DateTime createdAt,
-      List<String> relays});
-
-  $InfoEventCopyWith<$Res> get infoEvent;
-}
-
-/// @nodoc
-class _$InfoEventEventCopyWithImpl<$Res>
-    implements $InfoEventEventCopyWith<$Res> {
-  _$InfoEventEventCopyWithImpl(this._self, this._then);
-
-  final InfoEventEvent _self;
-  final $Res Function(InfoEventEvent) _then;
-
-  /// Create a copy of Event
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? infoEvent = null,
-    Object? eventId = null,
-    Object? createdAt = null,
-    Object? relays = null,
-  }) {
-    return _then(InfoEventEvent(
-      infoEvent: null == infoEvent
-          ? _self.infoEvent
-          : infoEvent // ignore: cast_nullable_to_non_nullable
-              as InfoEvent,
-      eventId: null == eventId
-          ? _self.eventId
-          : eventId // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      relays: null == relays
-          ? _self._relays
-          : relays // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ));
-  }
-
-  /// Create a copy of Event
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $InfoEventCopyWith<$Res> get infoEvent {
-    return $InfoEventCopyWith<$Res>(_self.infoEvent, (value) {
-      return _then(_self.copyWith(infoEvent: value));
     });
   }
 }

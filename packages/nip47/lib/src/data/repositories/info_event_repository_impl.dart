@@ -2,9 +2,8 @@ import 'dart:developer';
 
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/src/data/data_sources/nostr_data_source.dart';
-import 'package:nip47/src/data/models/event_model.dart';
-import 'package:nip47/src/domain/entities/method.dart';
-import 'package:nip47/src/domain/entities/notification.dart';
+import 'package:nip47/src/data/models/info_event_model.dart';
+import 'package:nip47/src/domain/entities/info_event.dart';
 import 'package:nip47/src/domain/repositories/info_event_repository.dart';
 
 class InfoEventRepositoryImpl implements InfoEventRepository {
@@ -15,46 +14,40 @@ class InfoEventRepositoryImpl implements InfoEventRepository {
   }) : _nostrDataSource = nostrDataSource;
 
   @override
-  Future<void> publish({
+  Future<void> publish(
+    InfoEvent infoEvent, {
     required String walletServicePrivateKey,
-    List<Method> methods = const [],
-    List<NotificationType> notifications = const [],
-    List<String> customMethods = const [],
-    List<String> customNotifications = const [],
     required List<String> relays,
-    String? clientPubkey,
-    String? walletRelay,
   }) async {
     final walletServiceKeyPair =
         nip01.KeyPair.fromPrivateKey(privateKey: walletServicePrivateKey);
 
     final allMethods = [
-      ...methods.map((method) => method.plaintext),
-      ...customMethods,
+      ...infoEvent.methods?.map((method) => method.plaintext) ?? <String>[],
+      ...infoEvent.customMethods ?? <String>[],
     ];
     final allNotifications = [
-      ...notifications.map((notification) => notification.plaintext),
-      ...customNotifications,
+      ...infoEvent.notifications
+              ?.map((notification) => notification.plaintext) ??
+          <String>[],
+      ...infoEvent.customNotifications ?? <String>[],
     ];
 
-    InfoEventModel eventModel = InfoEventModel(
+    final model = NewInfoEventModel(
       walletServicePubkey: walletServiceKeyPair.publicKey,
       methods: allMethods,
       notifications: allNotifications,
-      clientPubkey: clientPubkey,
-      walletRelay: walletRelay,
-      createdAt: DateTime.now(),
+      clientPubkey: infoEvent.clientPubkey,
+      walletRelay: infoEvent.walletRelay,
     );
 
-    final result = await _nostrDataSource.publishEvent(
-      eventModel,
+    final result = await _nostrDataSource.publishInfoEvent(
+      model,
       authorPrivateKey: walletServicePrivateKey,
       relays: relays,
     );
 
-    final relaysPublishedTo = result.relaysPublishedTo;
-
-    if (relaysPublishedTo.isEmpty) {
+    if (result.relays.isEmpty) {
       throw FailedToPublishInfoEventException(
         'No relays were published to. Please check your connection.',
       );
@@ -63,14 +56,14 @@ class InfoEventRepositoryImpl implements InfoEventRepository {
     // Publish the event to the wallet relay as well if provided, so it's
     // available there as well after the client switches to the wallet relay.
     // This isn't described in the spec, but I think it's a good idea to do it.
-    if (walletRelay != null) {
-      final walletRelayResult = await _nostrDataSource.publishEvent(
-        eventModel,
+    if (infoEvent.walletRelay != null) {
+      final walletRelayResult = await _nostrDataSource.publishInfoEvent(
+        model,
         authorPrivateKey: walletServicePrivateKey,
-        relays: [walletRelay],
+        relays: [infoEvent.walletRelay!],
       );
 
-      if (walletRelayResult.relaysPublishedTo.isEmpty) {
+      if (walletRelayResult.relays.isEmpty) {
         log('[InfoEventRepositoryImpl]: Failed to publish to wallet relay.');
       }
     }

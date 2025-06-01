@@ -6,13 +6,13 @@ enum TransactionType {
   incoming('incoming'),
   outgoing('outgoing');
 
-  final String value;
+  final String plaintext;
 
-  const TransactionType(this.value);
+  const TransactionType(this.plaintext);
 
-  factory TransactionType.fromValue(String value) {
+  factory TransactionType.fromPlainText(String value) {
     return TransactionType.values.firstWhere(
-      (transactionType) => transactionType.value == value,
+      (transactionType) => transactionType.plaintext == value,
       orElse: () => TransactionType.incoming,
     );
   }
@@ -29,9 +29,9 @@ sealed class Transaction with _$Transaction {
     required String paymentHash,
     required int amountSat,
     required int feesPaidSat,
-    required int createdAt,
-    int? expiresAt,
-    int? settledAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
+    DateTime? settledAt,
     @Default({}) Map<dynamic, dynamic>? metadata,
   }) = _Transaction;
   const Transaction._();

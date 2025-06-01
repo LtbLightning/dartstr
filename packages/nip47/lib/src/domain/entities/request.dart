@@ -21,7 +21,7 @@ sealed class Request with _$Request {
     required int amountSat,
     String? description,
     String? descriptionHash,
-    int? expiry,
+    DateTime? expiry,
     DateTime? expiresAt,
   }) = MakeInvoiceRequest;
   const factory Request.payInvoice({
@@ -41,8 +41,8 @@ sealed class Request with _$Request {
   const factory Request.listTransactions({
     required String clientPubkey,
     required String walletServicePubkey,
-    int? from,
-    int? until,
+    DateTime? from,
+    DateTime? until,
     int? limit,
     int? offset,
     @Default(false) bool? unpaid,

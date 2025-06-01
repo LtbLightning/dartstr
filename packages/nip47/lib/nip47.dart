@@ -3,9 +3,9 @@
 /// More dartdocs go here.
 library;
 
-export 'src/nip47_base.dart';
-
+export 'src/database/database.dart';
+export 'src/data/data_sources/data_sources.dart';
+export 'src/data/repositories/repositories.dart';
 export 'src/domain/entities/entities.dart';
-export 'src/domain/repositories/client_repository.dart';
-export 'src/domain/repositories/wallet_service_repository.dart';
-export 'src/data/repositories/wallet_service_repository_impl.dart';
+export 'src/domain/repositories/repositories.dart';
+export 'src/domain/use_cases/use_cases.dart';

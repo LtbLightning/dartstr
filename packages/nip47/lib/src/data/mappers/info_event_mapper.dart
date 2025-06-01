@@ -5,12 +5,14 @@ import 'package:nip47/nip47.dart';
 import 'package:nip47/src/data/models/info_event_model.dart';
 
 class InfoEventMapper {
-  static InfoEventModel modelFromEntity(InfoEvent infoEvent) {
+  static NewInfoEventModel modelFromEntity(InfoEvent infoEvent) {
+    // Add methods and custom methods.
     final methods =
         infoEvent.methods?.map((method) => method.plaintext).toList() ?? [];
     if (infoEvent.customMethods != null) {
       methods.addAll(infoEvent.customMethods!);
     }
+    // Add notifications and custom notifications.
     final notifications = infoEvent.notifications
             ?.map((notification) => notification.plaintext)
             .toList() ??
@@ -18,7 +20,8 @@ class InfoEventMapper {
     if (infoEvent.customNotifications != null) {
       notifications.addAll(infoEvent.customNotifications!);
     }
-    return InfoEventModel(
+
+    return NewInfoEventModel(
       walletServicePubkey: infoEvent.walletServicePubkey,
       methods: methods,
       notifications: notifications,
@@ -60,14 +63,17 @@ class InfoEventMapper {
     );
   }
 
-  static InfoEventEventModel modelFromEventMessage(nip01.EventMessage event) {
-    final contentElements = event.event.content.split(' ');
+  static InfoEventEventModel modelFromEvent(
+    nip01.Event event, {
+    required List<String> relays,
+  }) {
+    final contentElements = event.content.split(' ');
     bool supportsNotifications = contentElements.contains('notifications');
     final methods =
         contentElements.where((element) => element != 'notifications').toList();
 
     final notifications = supportsNotifications
-        ? event.event.tags
+        ? event.tags
             .firstWhere((tag) => tag.first == 'notifications')[1]
             .split(' ')
         : <String>[];
@@ -79,7 +85,7 @@ class InfoEventMapper {
     String? walletRelayUrl;
     String? clientPubkey;
     try {
-      pTag = event.event.tags.firstWhere((tag) => tag.first == 'p');
+      pTag = event.tags.firstWhere((tag) => tag.first == 'p');
       clientPubkey = pTag[1];
       walletRelayUrl = pTag.length > 2 ? pTag[2] : null;
     } catch (e) {
@@ -87,23 +93,24 @@ class InfoEventMapper {
     }
 
     return InfoEventEventModel(
-      walletServicePubkey: event.event.pubkey,
+      walletServicePubkey: event.pubkey,
       methods: methods,
       notifications: notifications,
       clientPubkey: clientPubkey,
       walletRelay: walletRelayUrl,
-      eventId: event.event.id,
-      createdAt:
-          DateTime.fromMillisecondsSinceEpoch(event.event.createdAt * 1000),
-      relays: [event.relayUrl],
+      eventId: event.id,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(
+        event.createdAt * 1000,
+      ),
+      relays: relays,
     );
   }
 
   static nip01.Event modelToEvent(
-    InfoEventModel model, {
+    NewInfoEventModel model, {
     required nip01.KeyPair walletServiceKeyPair,
   }) {
-    final supportedCommands = model.methods;
+    final supportedCommands = List<String>.from(model.methods);
     final replaceableEventTag = [
       'a',
       '${EventKind.info.kind}:${walletServiceKeyPair.publicKey}:',

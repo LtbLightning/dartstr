@@ -15,5 +15,5 @@ class Requests extends Table {
   TextColumn get params => text()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get expiresAt => dateTime().nullable()();
-  TextColumn get relays => text().nullable().map(StringListTypeConverter())();
+  TextColumn get relays => text().map(StringListTypeConverter())();
 }

@@ -7,7 +7,7 @@ import 'package:nip47/src/database/tables/request_table.dart';
 import 'package:nip47/src/database/tables/response_table.dart';
 import 'package:nip47/src/database/type_converters/string_list_type_converter.dart';
 
-part 'database.g.dart';
+part 'generated/database.g.dart';
 
 @DriftDatabase(tables: [
   WalletConnections,

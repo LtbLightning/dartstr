@@ -20,7 +20,7 @@ mixin _$ResponseModel {
   String get walletServicePubkey;
   String get resultType;
   Map<String, dynamic>? get result;
-  Map<String, dynamic>? get error;
+  ResponseErrorModel? get error;
 
   /// Create a copy of ResponseModel
   /// with the given fields replaced by the non-null parameter values.
@@ -44,7 +44,7 @@ mixin _$ResponseModel {
             (identical(other.resultType, resultType) ||
                 other.resultType == resultType) &&
             const DeepCollectionEquality().equals(other.result, result) &&
-            const DeepCollectionEquality().equals(other.error, error));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
@@ -55,7 +55,7 @@ mixin _$ResponseModel {
       walletServicePubkey,
       resultType,
       const DeepCollectionEquality().hash(result),
-      const DeepCollectionEquality().hash(error));
+      error);
 
   @override
   String toString() {
@@ -75,7 +75,9 @@ abstract mixin class $ResponseModelCopyWith<$Res> {
       String walletServicePubkey,
       String resultType,
       Map<String, dynamic>? result,
-      Map<String, dynamic>? error});
+      ResponseErrorModel? error});
+
+  $ResponseErrorModelCopyWith<$Res>? get error;
 }
 
 /// @nodoc
@@ -122,8 +124,22 @@ class _$ResponseModelCopyWithImpl<$Res>
       error: freezed == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
+              as ResponseErrorModel?,
     ));
+  }
+
+  /// Create a copy of ResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ResponseErrorModelCopyWith<$Res>? get error {
+    if (_self.error == null) {
+      return null;
+    }
+
+    return $ResponseErrorModelCopyWith<$Res>(_self.error!, (value) {
+      return _then(_self.copyWith(error: value));
+    });
   }
 }
 
@@ -136,9 +152,8 @@ class NewResponseModel extends ResponseModel {
       required this.walletServicePubkey,
       required this.resultType,
       final Map<String, dynamic>? result,
-      final Map<String, dynamic>? error})
+      this.error})
       : _result = result,
-        _error = error,
         super._();
 
   @override
@@ -159,15 +174,8 @@ class NewResponseModel extends ResponseModel {
     return EqualUnmodifiableMapView(value);
   }
 
-  final Map<String, dynamic>? _error;
   @override
-  Map<String, dynamic>? get error {
-    final value = _error;
-    if (value == null) return null;
-    if (_error is EqualUnmodifiableMapView) return _error;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
-  }
+  final ResponseErrorModel? error;
 
   /// Create a copy of ResponseModel
   /// with the given fields replaced by the non-null parameter values.
@@ -191,7 +199,7 @@ class NewResponseModel extends ResponseModel {
             (identical(other.resultType, resultType) ||
                 other.resultType == resultType) &&
             const DeepCollectionEquality().equals(other._result, _result) &&
-            const DeepCollectionEquality().equals(other._error, _error));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
@@ -202,7 +210,7 @@ class NewResponseModel extends ResponseModel {
       walletServicePubkey,
       resultType,
       const DeepCollectionEquality().hash(_result),
-      const DeepCollectionEquality().hash(_error));
+      error);
 
   @override
   String toString() {
@@ -224,7 +232,10 @@ abstract mixin class $NewResponseModelCopyWith<$Res>
       String walletServicePubkey,
       String resultType,
       Map<String, dynamic>? result,
-      Map<String, dynamic>? error});
+      ResponseErrorModel? error});
+
+  @override
+  $ResponseErrorModelCopyWith<$Res>? get error;
 }
 
 /// @nodoc
@@ -269,10 +280,24 @@ class _$NewResponseModelCopyWithImpl<$Res>
           : result // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>?,
       error: freezed == error
-          ? _self._error
+          ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
+              as ResponseErrorModel?,
     ));
+  }
+
+  /// Create a copy of ResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ResponseErrorModelCopyWith<$Res>? get error {
+    if (_self.error == null) {
+      return null;
+    }
+
+    return $ResponseErrorModelCopyWith<$Res>(_self.error!, (value) {
+      return _then(_self.copyWith(error: value));
+    });
   }
 }
 
@@ -285,12 +310,11 @@ class ResponseEventModel extends ResponseModel {
       required this.walletServicePubkey,
       required this.resultType,
       final Map<String, dynamic>? result,
-      final Map<String, dynamic>? error,
+      this.error,
       required this.eventId,
       required final List<String> relays,
       required this.createdAt})
       : _result = result,
-        _error = error,
         _relays = relays,
         super._();
 
@@ -312,16 +336,8 @@ class ResponseEventModel extends ResponseModel {
     return EqualUnmodifiableMapView(value);
   }
 
-  final Map<String, dynamic>? _error;
   @override
-  Map<String, dynamic>? get error {
-    final value = _error;
-    if (value == null) return null;
-    if (_error is EqualUnmodifiableMapView) return _error;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
-  }
-
+  final ResponseErrorModel? error;
   final String eventId;
   final List<String> _relays;
   List<String> get relays {
@@ -354,7 +370,7 @@ class ResponseEventModel extends ResponseModel {
             (identical(other.resultType, resultType) ||
                 other.resultType == resultType) &&
             const DeepCollectionEquality().equals(other._result, _result) &&
-            const DeepCollectionEquality().equals(other._error, _error) &&
+            (identical(other.error, error) || other.error == error) &&
             (identical(other.eventId, eventId) || other.eventId == eventId) &&
             const DeepCollectionEquality().equals(other._relays, _relays) &&
             (identical(other.createdAt, createdAt) ||
@@ -369,7 +385,7 @@ class ResponseEventModel extends ResponseModel {
       walletServicePubkey,
       resultType,
       const DeepCollectionEquality().hash(_result),
-      const DeepCollectionEquality().hash(_error),
+      error,
       eventId,
       const DeepCollectionEquality().hash(_relays),
       createdAt);
@@ -394,10 +410,13 @@ abstract mixin class $ResponseEventModelCopyWith<$Res>
       String walletServicePubkey,
       String resultType,
       Map<String, dynamic>? result,
-      Map<String, dynamic>? error,
+      ResponseErrorModel? error,
       String eventId,
       List<String> relays,
       DateTime createdAt});
+
+  @override
+  $ResponseErrorModelCopyWith<$Res>? get error;
 }
 
 /// @nodoc
@@ -445,9 +464,9 @@ class _$ResponseEventModelCopyWithImpl<$Res>
           : result // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>?,
       error: freezed == error
-          ? _self._error
+          ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
+              as ResponseErrorModel?,
       eventId: null == eventId
           ? _self.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
@@ -461,6 +480,20 @@ class _$ResponseEventModelCopyWithImpl<$Res>
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
+  }
+
+  /// Create a copy of ResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ResponseErrorModelCopyWith<$Res>? get error {
+    if (_self.error == null) {
+      return null;
+    }
+
+    return $ResponseErrorModelCopyWith<$Res>(_self.error!, (value) {
+      return _then(_self.copyWith(error: value));
+    });
   }
 }
 

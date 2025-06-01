@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'database.dart';
+part of '../database.dart';
 
 // ignore_for_file: type=lint
 class $WalletConnectionsTable extends WalletConnections
@@ -47,9 +47,9 @@ class $WalletConnectionsTable extends WalletConnections
   static const VerificationMeta _budgetRenewedAtMeta =
       const VerificationMeta('budgetRenewedAt');
   @override
-  late final GeneratedColumn<int> budgetRenewedAt = GeneratedColumn<int>(
-      'budget_renewed_at', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+  late final GeneratedColumn<DateTime> budgetRenewedAt =
+      GeneratedColumn<DateTime>('budget_renewed_at', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
   static const VerificationMeta _maxAmountSatMeta =
       const VerificationMeta('maxAmountSat');
   @override
@@ -65,9 +65,9 @@ class $WalletConnectionsTable extends WalletConnections
   static const VerificationMeta _expiresAtMeta =
       const VerificationMeta('expiresAt');
   @override
-  late final GeneratedColumn<int> expiresAt = GeneratedColumn<int>(
+  late final GeneratedColumn<DateTime> expiresAt = GeneratedColumn<DateTime>(
       'expires_at', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   late final GeneratedColumnWithTypeConverter<List<String>?, String> methods =
       GeneratedColumn<String>('methods', aliasedName, true,
@@ -255,14 +255,14 @@ class $WalletConnectionsTable extends WalletConnections
               DriftSqlType.string, data['${effectivePrefix}client_relays'])),
       budgetRenewal: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}budget_renewal'])!,
-      budgetRenewedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}budget_renewed_at']),
+      budgetRenewedAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}budget_renewed_at']),
       maxAmountSat: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}max_amount_sat']),
       remainingAmountSat: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}remaining_amount_sat']),
       expiresAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}expires_at']),
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}expires_at']),
       methods: $WalletConnectionsTable.$convertermethodsn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.string, data['${effectivePrefix}methods'])),
@@ -331,10 +331,10 @@ class WalletConnectionTable extends DataClass
   final List<String> relays;
   final List<String>? clientRelays;
   final String budgetRenewal;
-  final int? budgetRenewedAt;
+  final DateTime? budgetRenewedAt;
   final int? maxAmountSat;
   final int? remainingAmountSat;
-  final int? expiresAt;
+  final DateTime? expiresAt;
   final List<String>? methods;
   final List<String>? customMethods;
   final List<String>? notifications;
@@ -382,7 +382,7 @@ class WalletConnectionTable extends DataClass
     }
     map['budget_renewal'] = Variable<String>(budgetRenewal);
     if (!nullToAbsent || budgetRenewedAt != null) {
-      map['budget_renewed_at'] = Variable<int>(budgetRenewedAt);
+      map['budget_renewed_at'] = Variable<DateTime>(budgetRenewedAt);
     }
     if (!nullToAbsent || maxAmountSat != null) {
       map['max_amount_sat'] = Variable<int>(maxAmountSat);
@@ -391,7 +391,7 @@ class WalletConnectionTable extends DataClass
       map['remaining_amount_sat'] = Variable<int>(remainingAmountSat);
     }
     if (!nullToAbsent || expiresAt != null) {
-      map['expires_at'] = Variable<int>(expiresAt);
+      map['expires_at'] = Variable<DateTime>(expiresAt);
     }
     if (!nullToAbsent || methods != null) {
       map['methods'] = Variable<String>(
@@ -489,10 +489,10 @@ class WalletConnectionTable extends DataClass
       relays: serializer.fromJson<List<String>>(json['relays']),
       clientRelays: serializer.fromJson<List<String>?>(json['clientRelays']),
       budgetRenewal: serializer.fromJson<String>(json['budgetRenewal']),
-      budgetRenewedAt: serializer.fromJson<int?>(json['budgetRenewedAt']),
+      budgetRenewedAt: serializer.fromJson<DateTime?>(json['budgetRenewedAt']),
       maxAmountSat: serializer.fromJson<int?>(json['maxAmountSat']),
       remainingAmountSat: serializer.fromJson<int?>(json['remainingAmountSat']),
-      expiresAt: serializer.fromJson<int?>(json['expiresAt']),
+      expiresAt: serializer.fromJson<DateTime?>(json['expiresAt']),
       methods: serializer.fromJson<List<String>?>(json['methods']),
       customMethods: serializer.fromJson<List<String>?>(json['customMethods']),
       notifications: serializer.fromJson<List<String>?>(json['notifications']),
@@ -515,10 +515,10 @@ class WalletConnectionTable extends DataClass
       'relays': serializer.toJson<List<String>>(relays),
       'clientRelays': serializer.toJson<List<String>?>(clientRelays),
       'budgetRenewal': serializer.toJson<String>(budgetRenewal),
-      'budgetRenewedAt': serializer.toJson<int?>(budgetRenewedAt),
+      'budgetRenewedAt': serializer.toJson<DateTime?>(budgetRenewedAt),
       'maxAmountSat': serializer.toJson<int?>(maxAmountSat),
       'remainingAmountSat': serializer.toJson<int?>(remainingAmountSat),
-      'expiresAt': serializer.toJson<int?>(expiresAt),
+      'expiresAt': serializer.toJson<DateTime?>(expiresAt),
       'methods': serializer.toJson<List<String>?>(methods),
       'customMethods': serializer.toJson<List<String>?>(customMethods),
       'notifications': serializer.toJson<List<String>?>(notifications),
@@ -539,10 +539,10 @@ class WalletConnectionTable extends DataClass
           List<String>? relays,
           Value<List<String>?> clientRelays = const Value.absent(),
           String? budgetRenewal,
-          Value<int?> budgetRenewedAt = const Value.absent(),
+          Value<DateTime?> budgetRenewedAt = const Value.absent(),
           Value<int?> maxAmountSat = const Value.absent(),
           Value<int?> remainingAmountSat = const Value.absent(),
-          Value<int?> expiresAt = const Value.absent(),
+          Value<DateTime?> expiresAt = const Value.absent(),
           Value<List<String>?> methods = const Value.absent(),
           Value<List<String>?> customMethods = const Value.absent(),
           Value<List<String>?> notifications = const Value.absent(),
@@ -708,10 +708,10 @@ class WalletConnectionsCompanion
   final Value<List<String>> relays;
   final Value<List<String>?> clientRelays;
   final Value<String> budgetRenewal;
-  final Value<int?> budgetRenewedAt;
+  final Value<DateTime?> budgetRenewedAt;
   final Value<int?> maxAmountSat;
   final Value<int?> remainingAmountSat;
-  final Value<int?> expiresAt;
+  final Value<DateTime?> expiresAt;
   final Value<List<String>?> methods;
   final Value<List<String>?> customMethods;
   final Value<List<String>?> notifications;
@@ -777,10 +777,10 @@ class WalletConnectionsCompanion
     Expression<String>? relays,
     Expression<String>? clientRelays,
     Expression<String>? budgetRenewal,
-    Expression<int>? budgetRenewedAt,
+    Expression<DateTime>? budgetRenewedAt,
     Expression<int>? maxAmountSat,
     Expression<int>? remainingAmountSat,
-    Expression<int>? expiresAt,
+    Expression<DateTime>? expiresAt,
     Expression<String>? methods,
     Expression<String>? customMethods,
     Expression<String>? notifications,
@@ -826,10 +826,10 @@ class WalletConnectionsCompanion
       Value<List<String>>? relays,
       Value<List<String>?>? clientRelays,
       Value<String>? budgetRenewal,
-      Value<int?>? budgetRenewedAt,
+      Value<DateTime?>? budgetRenewedAt,
       Value<int?>? maxAmountSat,
       Value<int?>? remainingAmountSat,
-      Value<int?>? expiresAt,
+      Value<DateTime?>? expiresAt,
       Value<List<String>?>? methods,
       Value<List<String>?>? customMethods,
       Value<List<String>?>? notifications,
@@ -890,7 +890,7 @@ class WalletConnectionsCompanion
       map['budget_renewal'] = Variable<String>(budgetRenewal.value);
     }
     if (budgetRenewedAt.present) {
-      map['budget_renewed_at'] = Variable<int>(budgetRenewedAt.value);
+      map['budget_renewed_at'] = Variable<DateTime>(budgetRenewedAt.value);
     }
     if (maxAmountSat.present) {
       map['max_amount_sat'] = Variable<int>(maxAmountSat.value);
@@ -899,7 +899,7 @@ class WalletConnectionsCompanion
       map['remaining_amount_sat'] = Variable<int>(remainingAmountSat.value);
     }
     if (expiresAt.present) {
-      map['expires_at'] = Variable<int>(expiresAt.value);
+      map['expires_at'] = Variable<DateTime>(expiresAt.value);
     }
     if (methods.present) {
       map['methods'] = Variable<String>(
@@ -1020,6 +1020,11 @@ class $RequestsTable extends Requests
       'expires_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> relays =
+      GeneratedColumn<String>('relays', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<List<String>>($RequestsTable.$converterrelays);
+  @override
   List<GeneratedColumn> get $columns => [
         id,
         clientPubkey,
@@ -1027,7 +1032,8 @@ class $RequestsTable extends Requests
         method,
         params,
         createdAt,
-        expiresAt
+        expiresAt,
+        relays
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1106,6 +1112,9 @@ class $RequestsTable extends Requests
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       expiresAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}expires_at']),
+      relays: $RequestsTable.$converterrelays.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}relays'])!),
     );
   }
 
@@ -1113,6 +1122,9 @@ class $RequestsTable extends Requests
   $RequestsTable createAlias(String alias) {
     return $RequestsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<List<String>, String> $converterrelays =
+      StringListTypeConverter();
 }
 
 class RequestTable extends DataClass implements Insertable<RequestTable> {
@@ -1123,6 +1135,7 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
   final String params;
   final DateTime createdAt;
   final DateTime? expiresAt;
+  final List<String> relays;
   const RequestTable(
       {required this.id,
       required this.clientPubkey,
@@ -1130,7 +1143,8 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
       required this.method,
       required this.params,
       required this.createdAt,
-      this.expiresAt});
+      this.expiresAt,
+      required this.relays});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1142,6 +1156,10 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
     map['created_at'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || expiresAt != null) {
       map['expires_at'] = Variable<DateTime>(expiresAt);
+    }
+    {
+      map['relays'] =
+          Variable<String>($RequestsTable.$converterrelays.toSql(relays));
     }
     return map;
   }
@@ -1157,6 +1175,7 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
       expiresAt: expiresAt == null && nullToAbsent
           ? const Value.absent()
           : Value(expiresAt),
+      relays: Value(relays),
     );
   }
 
@@ -1172,6 +1191,7 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
       params: serializer.fromJson<String>(json['params']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       expiresAt: serializer.fromJson<DateTime?>(json['expiresAt']),
+      relays: serializer.fromJson<List<String>>(json['relays']),
     );
   }
   @override
@@ -1185,6 +1205,7 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
       'params': serializer.toJson<String>(params),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'expiresAt': serializer.toJson<DateTime?>(expiresAt),
+      'relays': serializer.toJson<List<String>>(relays),
     };
   }
 
@@ -1195,7 +1216,8 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
           String? method,
           String? params,
           DateTime? createdAt,
-          Value<DateTime?> expiresAt = const Value.absent()}) =>
+          Value<DateTime?> expiresAt = const Value.absent(),
+          List<String>? relays}) =>
       RequestTable(
         id: id ?? this.id,
         clientPubkey: clientPubkey ?? this.clientPubkey,
@@ -1204,6 +1226,7 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
         params: params ?? this.params,
         createdAt: createdAt ?? this.createdAt,
         expiresAt: expiresAt.present ? expiresAt.value : this.expiresAt,
+        relays: relays ?? this.relays,
       );
   RequestTable copyWithCompanion(RequestsCompanion data) {
     return RequestTable(
@@ -1218,6 +1241,7 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
       params: data.params.present ? data.params.value : this.params,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       expiresAt: data.expiresAt.present ? data.expiresAt.value : this.expiresAt,
+      relays: data.relays.present ? data.relays.value : this.relays,
     );
   }
 
@@ -1230,14 +1254,15 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
           ..write('method: $method, ')
           ..write('params: $params, ')
           ..write('createdAt: $createdAt, ')
-          ..write('expiresAt: $expiresAt')
+          ..write('expiresAt: $expiresAt, ')
+          ..write('relays: $relays')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, clientPubkey, walletServicePubkey, method,
-      params, createdAt, expiresAt);
+      params, createdAt, expiresAt, relays);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1248,7 +1273,8 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
           other.method == this.method &&
           other.params == this.params &&
           other.createdAt == this.createdAt &&
-          other.expiresAt == this.expiresAt);
+          other.expiresAt == this.expiresAt &&
+          other.relays == this.relays);
 }
 
 class RequestsCompanion extends UpdateCompanion<RequestTable> {
@@ -1259,6 +1285,7 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
   final Value<String> params;
   final Value<DateTime> createdAt;
   final Value<DateTime?> expiresAt;
+  final Value<List<String>> relays;
   final Value<int> rowid;
   const RequestsCompanion({
     this.id = const Value.absent(),
@@ -1268,6 +1295,7 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
     this.params = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.expiresAt = const Value.absent(),
+    this.relays = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RequestsCompanion.insert({
@@ -1278,13 +1306,15 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
     required String params,
     required DateTime createdAt,
     this.expiresAt = const Value.absent(),
+    required List<String> relays,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         clientPubkey = Value(clientPubkey),
         walletServicePubkey = Value(walletServicePubkey),
         method = Value(method),
         params = Value(params),
-        createdAt = Value(createdAt);
+        createdAt = Value(createdAt),
+        relays = Value(relays);
   static Insertable<RequestTable> custom({
     Expression<String>? id,
     Expression<String>? clientPubkey,
@@ -1293,6 +1323,7 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
     Expression<String>? params,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? expiresAt,
+    Expression<String>? relays,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1304,6 +1335,7 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
       if (params != null) 'params': params,
       if (createdAt != null) 'created_at': createdAt,
       if (expiresAt != null) 'expires_at': expiresAt,
+      if (relays != null) 'relays': relays,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1316,6 +1348,7 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
       Value<String>? params,
       Value<DateTime>? createdAt,
       Value<DateTime?>? expiresAt,
+      Value<List<String>>? relays,
       Value<int>? rowid}) {
     return RequestsCompanion(
       id: id ?? this.id,
@@ -1325,6 +1358,7 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
       params: params ?? this.params,
       createdAt: createdAt ?? this.createdAt,
       expiresAt: expiresAt ?? this.expiresAt,
+      relays: relays ?? this.relays,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1354,6 +1388,10 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
     if (expiresAt.present) {
       map['expires_at'] = Variable<DateTime>(expiresAt.value);
     }
+    if (relays.present) {
+      map['relays'] =
+          Variable<String>($RequestsTable.$converterrelays.toSql(relays.value));
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1370,6 +1408,7 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
           ..write('params: $params, ')
           ..write('createdAt: $createdAt, ')
           ..write('expiresAt: $expiresAt, ')
+          ..write('relays: $relays, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1432,6 +1471,11 @@ class $ResponsesTable extends Responses
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> relays =
+      GeneratedColumn<String>('relays', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<List<String>>($ResponsesTable.$converterrelays);
+  @override
   List<GeneratedColumn> get $columns => [
         id,
         requestId,
@@ -1440,7 +1484,8 @@ class $ResponsesTable extends Responses
         errorCode,
         errorMessage,
         multiId,
-        createdAt
+        createdAt,
+        relays
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1520,6 +1565,9 @@ class $ResponsesTable extends Responses
           .read(DriftSqlType.string, data['${effectivePrefix}multi_id']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      relays: $ResponsesTable.$converterrelays.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}relays'])!),
     );
   }
 
@@ -1527,6 +1575,9 @@ class $ResponsesTable extends Responses
   $ResponsesTable createAlias(String alias) {
     return $ResponsesTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<List<String>, String> $converterrelays =
+      StringListTypeConverter();
 }
 
 class ResponseTable extends DataClass implements Insertable<ResponseTable> {
@@ -1538,6 +1589,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
   final String? errorMessage;
   final String? multiId;
   final DateTime createdAt;
+  final List<String> relays;
   const ResponseTable(
       {required this.id,
       required this.requestId,
@@ -1546,7 +1598,8 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
       this.errorCode,
       this.errorMessage,
       this.multiId,
-      required this.createdAt});
+      required this.createdAt,
+      required this.relays});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1566,6 +1619,10 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
       map['multi_id'] = Variable<String>(multiId);
     }
     map['created_at'] = Variable<DateTime>(createdAt);
+    {
+      map['relays'] =
+          Variable<String>($ResponsesTable.$converterrelays.toSql(relays));
+    }
     return map;
   }
 
@@ -1586,6 +1643,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
           ? const Value.absent()
           : Value(multiId),
       createdAt: Value(createdAt),
+      relays: Value(relays),
     );
   }
 
@@ -1601,6 +1659,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
       errorMessage: serializer.fromJson<String?>(json['errorMessage']),
       multiId: serializer.fromJson<String?>(json['multiId']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      relays: serializer.fromJson<List<String>>(json['relays']),
     );
   }
   @override
@@ -1615,6 +1674,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
       'errorMessage': serializer.toJson<String?>(errorMessage),
       'multiId': serializer.toJson<String?>(multiId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'relays': serializer.toJson<List<String>>(relays),
     };
   }
 
@@ -1626,7 +1686,8 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
           Value<String?> errorCode = const Value.absent(),
           Value<String?> errorMessage = const Value.absent(),
           Value<String?> multiId = const Value.absent(),
-          DateTime? createdAt}) =>
+          DateTime? createdAt,
+          List<String>? relays}) =>
       ResponseTable(
         id: id ?? this.id,
         requestId: requestId ?? this.requestId,
@@ -1637,6 +1698,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
             errorMessage.present ? errorMessage.value : this.errorMessage,
         multiId: multiId.present ? multiId.value : this.multiId,
         createdAt: createdAt ?? this.createdAt,
+        relays: relays ?? this.relays,
       );
   ResponseTable copyWithCompanion(ResponsesCompanion data) {
     return ResponseTable(
@@ -1651,6 +1713,7 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
           : this.errorMessage,
       multiId: data.multiId.present ? data.multiId.value : this.multiId,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      relays: data.relays.present ? data.relays.value : this.relays,
     );
   }
 
@@ -1664,14 +1727,15 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
           ..write('errorCode: $errorCode, ')
           ..write('errorMessage: $errorMessage, ')
           ..write('multiId: $multiId, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('relays: $relays')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, requestId, resultType, result, errorCode,
-      errorMessage, multiId, createdAt);
+      errorMessage, multiId, createdAt, relays);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1683,7 +1747,8 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
           other.errorCode == this.errorCode &&
           other.errorMessage == this.errorMessage &&
           other.multiId == this.multiId &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.relays == this.relays);
 }
 
 class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
@@ -1695,6 +1760,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
   final Value<String?> errorMessage;
   final Value<String?> multiId;
   final Value<DateTime> createdAt;
+  final Value<List<String>> relays;
   final Value<int> rowid;
   const ResponsesCompanion({
     this.id = const Value.absent(),
@@ -1705,6 +1771,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
     this.errorMessage = const Value.absent(),
     this.multiId = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.relays = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ResponsesCompanion.insert({
@@ -1716,11 +1783,13 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
     this.errorMessage = const Value.absent(),
     this.multiId = const Value.absent(),
     required DateTime createdAt,
+    required List<String> relays,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         requestId = Value(requestId),
         resultType = Value(resultType),
-        createdAt = Value(createdAt);
+        createdAt = Value(createdAt),
+        relays = Value(relays);
   static Insertable<ResponseTable> custom({
     Expression<String>? id,
     Expression<String>? requestId,
@@ -1730,6 +1799,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
     Expression<String>? errorMessage,
     Expression<String>? multiId,
     Expression<DateTime>? createdAt,
+    Expression<String>? relays,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1741,6 +1811,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
       if (errorMessage != null) 'error_message': errorMessage,
       if (multiId != null) 'multi_id': multiId,
       if (createdAt != null) 'created_at': createdAt,
+      if (relays != null) 'relays': relays,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1754,6 +1825,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
       Value<String?>? errorMessage,
       Value<String?>? multiId,
       Value<DateTime>? createdAt,
+      Value<List<String>>? relays,
       Value<int>? rowid}) {
     return ResponsesCompanion(
       id: id ?? this.id,
@@ -1764,6 +1836,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
       errorMessage: errorMessage ?? this.errorMessage,
       multiId: multiId ?? this.multiId,
       createdAt: createdAt ?? this.createdAt,
+      relays: relays ?? this.relays,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1795,6 +1868,10 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (relays.present) {
+      map['relays'] = Variable<String>(
+          $ResponsesTable.$converterrelays.toSql(relays.value));
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1812,6 +1889,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
           ..write('errorMessage: $errorMessage, ')
           ..write('multiId: $multiId, ')
           ..write('createdAt: $createdAt, ')
+          ..write('relays: $relays, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1841,10 +1919,10 @@ typedef $$WalletConnectionsTableCreateCompanionBuilder
   required List<String> relays,
   Value<List<String>?> clientRelays,
   required String budgetRenewal,
-  Value<int?> budgetRenewedAt,
+  Value<DateTime?> budgetRenewedAt,
   Value<int?> maxAmountSat,
   Value<int?> remainingAmountSat,
-  Value<int?> expiresAt,
+  Value<DateTime?> expiresAt,
   Value<List<String>?> methods,
   Value<List<String>?> customMethods,
   Value<List<String>?> notifications,
@@ -1864,10 +1942,10 @@ typedef $$WalletConnectionsTableUpdateCompanionBuilder
   Value<List<String>> relays,
   Value<List<String>?> clientRelays,
   Value<String> budgetRenewal,
-  Value<int?> budgetRenewedAt,
+  Value<DateTime?> budgetRenewedAt,
   Value<int?> maxAmountSat,
   Value<int?> remainingAmountSat,
-  Value<int?> expiresAt,
+  Value<DateTime?> expiresAt,
   Value<List<String>?> methods,
   Value<List<String>?> customMethods,
   Value<List<String>?> notifications,
@@ -1934,7 +2012,7 @@ class $$WalletConnectionsTableFilterComposer
   ColumnFilters<String> get budgetRenewal => $composableBuilder(
       column: $table.budgetRenewal, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get budgetRenewedAt => $composableBuilder(
+  ColumnFilters<DateTime> get budgetRenewedAt => $composableBuilder(
       column: $table.budgetRenewedAt,
       builder: (column) => ColumnFilters(column));
 
@@ -1945,7 +2023,7 @@ class $$WalletConnectionsTableFilterComposer
       column: $table.remainingAmountSat,
       builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get expiresAt => $composableBuilder(
+  ColumnFilters<DateTime> get expiresAt => $composableBuilder(
       column: $table.expiresAt, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<List<String>?, List<String>, String>
@@ -2038,7 +2116,7 @@ class $$WalletConnectionsTableOrderingComposer
       column: $table.budgetRenewal,
       builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get budgetRenewedAt => $composableBuilder(
+  ColumnOrderings<DateTime> get budgetRenewedAt => $composableBuilder(
       column: $table.budgetRenewedAt,
       builder: (column) => ColumnOrderings(column));
 
@@ -2050,7 +2128,7 @@ class $$WalletConnectionsTableOrderingComposer
       column: $table.remainingAmountSat,
       builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get expiresAt => $composableBuilder(
+  ColumnOrderings<DateTime> get expiresAt => $composableBuilder(
       column: $table.expiresAt, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get methods => $composableBuilder(
@@ -2112,7 +2190,7 @@ class $$WalletConnectionsTableAnnotationComposer
   GeneratedColumn<String> get budgetRenewal => $composableBuilder(
       column: $table.budgetRenewal, builder: (column) => column);
 
-  GeneratedColumn<int> get budgetRenewedAt => $composableBuilder(
+  GeneratedColumn<DateTime> get budgetRenewedAt => $composableBuilder(
       column: $table.budgetRenewedAt, builder: (column) => column);
 
   GeneratedColumn<int> get maxAmountSat => $composableBuilder(
@@ -2121,7 +2199,7 @@ class $$WalletConnectionsTableAnnotationComposer
   GeneratedColumn<int> get remainingAmountSat => $composableBuilder(
       column: $table.remainingAmountSat, builder: (column) => column);
 
-  GeneratedColumn<int> get expiresAt =>
+  GeneratedColumn<DateTime> get expiresAt =>
       $composableBuilder(column: $table.expiresAt, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<List<String>?, String> get methods =>
@@ -2208,10 +2286,10 @@ class $$WalletConnectionsTableTableManager extends RootTableManager<
             Value<List<String>> relays = const Value.absent(),
             Value<List<String>?> clientRelays = const Value.absent(),
             Value<String> budgetRenewal = const Value.absent(),
-            Value<int?> budgetRenewedAt = const Value.absent(),
+            Value<DateTime?> budgetRenewedAt = const Value.absent(),
             Value<int?> maxAmountSat = const Value.absent(),
             Value<int?> remainingAmountSat = const Value.absent(),
-            Value<int?> expiresAt = const Value.absent(),
+            Value<DateTime?> expiresAt = const Value.absent(),
             Value<List<String>?> methods = const Value.absent(),
             Value<List<String>?> customMethods = const Value.absent(),
             Value<List<String>?> notifications = const Value.absent(),
@@ -2252,10 +2330,10 @@ class $$WalletConnectionsTableTableManager extends RootTableManager<
             required List<String> relays,
             Value<List<String>?> clientRelays = const Value.absent(),
             required String budgetRenewal,
-            Value<int?> budgetRenewedAt = const Value.absent(),
+            Value<DateTime?> budgetRenewedAt = const Value.absent(),
             Value<int?> maxAmountSat = const Value.absent(),
             Value<int?> remainingAmountSat = const Value.absent(),
-            Value<int?> expiresAt = const Value.absent(),
+            Value<DateTime?> expiresAt = const Value.absent(),
             Value<List<String>?> methods = const Value.absent(),
             Value<List<String>?> customMethods = const Value.absent(),
             Value<List<String>?> notifications = const Value.absent(),
@@ -2342,6 +2420,7 @@ typedef $$RequestsTableCreateCompanionBuilder = RequestsCompanion Function({
   required String params,
   required DateTime createdAt,
   Value<DateTime?> expiresAt,
+  required List<String> relays,
   Value<int> rowid,
 });
 typedef $$RequestsTableUpdateCompanionBuilder = RequestsCompanion Function({
@@ -2352,6 +2431,7 @@ typedef $$RequestsTableUpdateCompanionBuilder = RequestsCompanion Function({
   Value<String> params,
   Value<DateTime> createdAt,
   Value<DateTime?> expiresAt,
+  Value<List<String>> relays,
   Value<int> rowid,
 });
 
@@ -2418,6 +2498,11 @@ class $$RequestsTableFilterComposer
 
   ColumnFilters<DateTime> get expiresAt => $composableBuilder(
       column: $table.expiresAt, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+      get relays => $composableBuilder(
+          column: $table.relays,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   $$WalletConnectionsTableFilterComposer get clientPubkey {
     final $$WalletConnectionsTableFilterComposer composer = $composerBuilder(
@@ -2489,6 +2574,9 @@ class $$RequestsTableOrderingComposer
   ColumnOrderings<DateTime> get expiresAt => $composableBuilder(
       column: $table.expiresAt, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get relays => $composableBuilder(
+      column: $table.relays, builder: (column) => ColumnOrderings(column));
+
   $$WalletConnectionsTableOrderingComposer get clientPubkey {
     final $$WalletConnectionsTableOrderingComposer composer = $composerBuilder(
         composer: this,
@@ -2536,6 +2624,9 @@ class $$RequestsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get expiresAt =>
       $composableBuilder(column: $table.expiresAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get relays =>
+      $composableBuilder(column: $table.relays, builder: (column) => column);
 
   $$WalletConnectionsTableAnnotationComposer get clientPubkey {
     final $$WalletConnectionsTableAnnotationComposer composer =
@@ -2610,6 +2701,7 @@ class $$RequestsTableTableManager extends RootTableManager<
             Value<String> params = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime?> expiresAt = const Value.absent(),
+            Value<List<String>> relays = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               RequestsCompanion(
@@ -2620,6 +2712,7 @@ class $$RequestsTableTableManager extends RootTableManager<
             params: params,
             createdAt: createdAt,
             expiresAt: expiresAt,
+            relays: relays,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -2630,6 +2723,7 @@ class $$RequestsTableTableManager extends RootTableManager<
             required String params,
             required DateTime createdAt,
             Value<DateTime?> expiresAt = const Value.absent(),
+            required List<String> relays,
             Value<int> rowid = const Value.absent(),
           }) =>
               RequestsCompanion.insert(
@@ -2640,6 +2734,7 @@ class $$RequestsTableTableManager extends RootTableManager<
             params: params,
             createdAt: createdAt,
             expiresAt: expiresAt,
+            relays: relays,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
@@ -2721,6 +2816,7 @@ typedef $$ResponsesTableCreateCompanionBuilder = ResponsesCompanion Function({
   Value<String?> errorMessage,
   Value<String?> multiId,
   required DateTime createdAt,
+  required List<String> relays,
   Value<int> rowid,
 });
 typedef $$ResponsesTableUpdateCompanionBuilder = ResponsesCompanion Function({
@@ -2732,6 +2828,7 @@ typedef $$ResponsesTableUpdateCompanionBuilder = ResponsesCompanion Function({
   Value<String?> errorMessage,
   Value<String?> multiId,
   Value<DateTime> createdAt,
+  Value<List<String>> relays,
   Value<int> rowid,
 });
 
@@ -2785,6 +2882,11 @@ class $$ResponsesTableFilterComposer
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
 
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+      get relays => $composableBuilder(
+          column: $table.relays,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
   $$RequestsTableFilterComposer get requestId {
     final $$RequestsTableFilterComposer composer = $composerBuilder(
         composer: this,
@@ -2837,6 +2939,9 @@ class $$ResponsesTableOrderingComposer
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get relays => $composableBuilder(
+      column: $table.relays, builder: (column) => ColumnOrderings(column));
+
   $$RequestsTableOrderingComposer get requestId {
     final $$RequestsTableOrderingComposer composer = $composerBuilder(
         composer: this,
@@ -2887,6 +2992,9 @@ class $$ResponsesTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get relays =>
+      $composableBuilder(column: $table.relays, builder: (column) => column);
 
   $$RequestsTableAnnotationComposer get requestId {
     final $$RequestsTableAnnotationComposer composer = $composerBuilder(
@@ -2940,6 +3048,7 @@ class $$ResponsesTableTableManager extends RootTableManager<
             Value<String?> errorMessage = const Value.absent(),
             Value<String?> multiId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
+            Value<List<String>> relays = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ResponsesCompanion(
@@ -2951,6 +3060,7 @@ class $$ResponsesTableTableManager extends RootTableManager<
             errorMessage: errorMessage,
             multiId: multiId,
             createdAt: createdAt,
+            relays: relays,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -2962,6 +3072,7 @@ class $$ResponsesTableTableManager extends RootTableManager<
             Value<String?> errorMessage = const Value.absent(),
             Value<String?> multiId = const Value.absent(),
             required DateTime createdAt,
+            required List<String> relays,
             Value<int> rowid = const Value.absent(),
           }) =>
               ResponsesCompanion.insert(
@@ -2973,6 +3084,7 @@ class $$ResponsesTableTableManager extends RootTableManager<
             errorMessage: errorMessage,
             multiId: multiId,
             createdAt: createdAt,
+            relays: relays,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

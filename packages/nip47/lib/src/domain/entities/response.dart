@@ -12,6 +12,13 @@ enum Network {
   final String plaintext;
 
   const Network({required this.plaintext});
+
+  factory Network.fromPlainText(String value) {
+    return Network.values.firstWhere(
+      (network) => network.plaintext == value,
+      orElse: () => Network.mainnet,
+    );
+  }
 }
 
 @freezed
@@ -23,7 +30,7 @@ sealed class Response with _$Response {
     @Default('') String alias,
     @Default('') String color,
     @Default('') String pubkey,
-    @Default(Network.mainnet) Network network,
+    Network? network,
     int? blockHeight,
     @Default('') String blockHash,
     @Default([]) List<Method> methods,
@@ -73,10 +80,24 @@ sealed class Response with _$Response {
     int? settledAt,
     Map<String, dynamic>? metadata,
   }) = LookupInvoiceResponse;
+  const factory Response.listTransactions({
+    required String requestId,
+    required String clientPubkey,
+    required String walletServicePubkey,
+    @Default([]) List<Transaction> transactions,
+  }) = ListTransactionsResponse;
+  const factory Response.custom({
+    required String requestId,
+    required String clientPubkey,
+    required String walletServicePubkey,
+    required String method,
+    required Map<String, dynamic> params,
+  }) = CustomResponse;
   const factory Response.error({
     required String requestId,
     required String clientPubkey,
     required String walletServicePubkey,
+    required String method,
     required ErrorCode errorCode,
     String? errorMessage,
   }) = ErrorResponse;

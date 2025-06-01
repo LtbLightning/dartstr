@@ -6,7 +6,6 @@ import 'package:nip47/src/data/data_sources/local_response_data_source.dart';
 import 'package:nip47/src/data/data_sources/local_wallet_connection_data_source.dart';
 import 'package:nip47/src/data/data_sources/nostr_data_source.dart';
 import 'package:nip47/src/data/mappers/response_mapper.dart';
-import 'package:nip47/src/data/models/event_model.dart';
 import 'package:nip47/src/data/models/event_subscription_model.dart';
 import 'package:nip47/src/domain/repositories/response_repository.dart';
 
@@ -32,7 +31,7 @@ class ResponseRepositoryImpl implements ResponseRepository {
         _connectionClientKeyPairs = {};
 
   @override
-  Stream<Response> get responseStream => _responseStreamController.stream;
+  Stream<ResponseEvent> get responseStream => _responseStreamController.stream;
 
   @override
   Future<ResponseEvent> sendResponse({
@@ -43,19 +42,20 @@ class ResponseRepositoryImpl implements ResponseRepository {
     final connection = await _localWalletConnectionDataSource
         .getConnectionFromRequest(response.requestId);
     if (connection == null) {
-      throw Exception('No connection found for requestId: $requestId');
+      throw Exception(
+          'No connection found for requestId: ${response.requestId}');
     }
     final relays = connection.relays;
 
     final responseModel = ResponseMapper.modelFromEntity(response);
 
-    final eventModel = await _nostrDataSource.publishEvent(
+    final eventModel = await _nostrDataSource.publishResponseEvent(
       responseModel,
       authorPrivateKey: walletServicePrivateKey,
       relays: relays,
     );
 
-    final event = ResponseEventMapper.modelToEntity(eventModel);
+    final event = ResponseMapper.modelToEntity(eventModel);
 
     return event;
   }
@@ -77,15 +77,14 @@ class ResponseRepositoryImpl implements ResponseRepository {
     if (model == null) {
       return null;
     }
-    return ResponseEventMapper.modelToEntity(model);
+    return ResponseMapper.modelToEntity(model);
   }
 
   @override
   Future<List<ResponseEvent>> getResponses() async {
     final models = await _localResponseDataSource.getResponses();
-    final responses = models
-        .map((model) => ResponseEventMapper.modelToEntity(model))
-        .toList();
+    final responses =
+        models.map((model) => ResponseMapper.modelToEntity(model)).toList();
 
     return responses;
   }

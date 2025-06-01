@@ -37,7 +37,7 @@ class SqliteLocalRequestDataSource implements LocalRequestDataSource {
     if (result == null) {
       return null;
     }
-    return RequestMapper.tableToModel(result);
+    return RequestMapper.modelFromTable(result);
   }
 
   @override
@@ -47,7 +47,9 @@ class SqliteLocalRequestDataSource implements LocalRequestDataSource {
     final results = await _database.managers.requests
         .filter((f) => f.clientPubkey.clientPubkey(clientPubkey))
         .get();
-    return results.map((result) => RequestMapper.tableToModel(result)).toList();
+    return results
+        .map((result) => RequestMapper.modelFromTable(result))
+        .toList();
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nip47/nip47.dart';
 
 part 'generated/info_event_model.freezed.dart';
 

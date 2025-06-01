@@ -13,10 +13,10 @@ class WalletConnections extends Table {
   TextColumn get clientRelays =>
       text().nullable().map(const StringListTypeConverter())();
   TextColumn get budgetRenewal => text()();
-  IntColumn get budgetRenewedAt => integer().nullable()();
+  DateTimeColumn get budgetRenewedAt => dateTime().nullable()();
   IntColumn get maxAmountSat => integer().nullable()();
   IntColumn get remainingAmountSat => integer().nullable()();
-  IntColumn get expiresAt => integer().nullable()();
+  DateTimeColumn get expiresAt => dateTime().nullable()();
   TextColumn get methods => text().nullable().map(StringListTypeConverter())();
   TextColumn get customMethods =>
       text().nullable().map(const StringListTypeConverter())();

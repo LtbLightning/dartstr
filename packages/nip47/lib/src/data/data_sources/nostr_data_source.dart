@@ -9,12 +9,12 @@ import 'package:nip47/src/data/models/response_model.dart';
 
 abstract class NostrDataSource {
   Future<InfoEventEventModel> publishInfoEvent(
-    InfoEventModel infoEvent, {
+    NewInfoEventModel infoEvent, {
     required String authorPrivateKey,
     required List<String> relays,
   });
   Future<ResponseEventModel> publishResponseEvent(
-    ResponseModel response, {
+    NewResponseModel response, {
     required String authorPrivateKey,
     required List<String> relays,
     bool waitForOkMessage = true,
@@ -52,7 +52,7 @@ class NostrDataSourceImpl implements NostrDataSource {
 
   @override
   Future<InfoEventEventModel> publishInfoEvent(
-    InfoEventModel infoEvent, {
+    NewInfoEventModel infoEvent, {
     required String authorPrivateKey,
     required List<String> relays,
     bool waitForOkMessage = true,
@@ -71,14 +71,14 @@ class NostrDataSourceImpl implements NostrDataSource {
     );
 
     final eventModel =
-        InfoEventMapper.modelFromEvent(nip01Event, {relays: relaysPublishedTo});
+        InfoEventMapper.modelFromEvent(nip01Event, relays: relaysPublishedTo);
 
     return eventModel;
   }
 
   @override
   Future<ResponseEventModel> publishResponseEvent(
-    ResponseModel response, {
+    NewResponseModel response, {
     required String authorPrivateKey,
     required List<String> relays,
     bool waitForOkMessage = true,
@@ -95,10 +95,20 @@ class NostrDataSourceImpl implements NostrDataSource {
       okMessageTimeOutSeconds: okMessageTimeOutSeconds,
     );
 
-    final eventModel =
-        ResponseMapper.modelFromEvent(nip01Event, {relays: relaysPublishedTo});
+    final model = ResponseEventModel(
+      requestId: response.requestId,
+      clientPubkey: response.clientPubkey,
+      walletServicePubkey: response.walletServicePubkey,
+      resultType: response.resultType,
+      result: response.result,
+      error: response.error,
+      eventId: nip01Event.id,
+      relays: relaysPublishedTo,
+      createdAt:
+          DateTime.fromMillisecondsSinceEpoch(nip01Event.createdAt * 1000),
+    );
 
-    return eventModel;
+    return model;
   }
 
   @override
@@ -126,9 +136,10 @@ class NostrDataSourceImpl implements NostrDataSource {
       subscriptionId: result.subscription.id,
       filters: result.subscription.filters,
       requestStream: result.eventStream.map(
-        (event) => RequestMapper.modelFromEventMessage(
-          event,
+        (event) => RequestMapper.modelFromEvent(
+          event.event,
           walletServicePrivateKey: walletServiceKeyPair.privateKey,
+          relays: [event.relayUrl],
         ),
       ),
       relayUrls: result.subscription.relayUrls,
@@ -160,9 +171,10 @@ class NostrDataSourceImpl implements NostrDataSource {
       subscriptionId: result.subscription.id,
       filters: result.subscription.filters,
       responseStream: result.eventStream.map(
-        (event) => ResponseMapper.modelFromEventMessage(
-          event,
+        (event) => ResponseMapper.modelFromEvent(
+          event.event,
           clientPrivateKey: clientKeyPair.privateKey,
+          relays: [event.relayUrl],
         ),
       ),
       relayUrls: result.subscription.relayUrls,
@@ -192,7 +204,9 @@ class NostrDataSourceImpl implements NostrDataSource {
       subscriptionId: result.subscription.id,
       filters: result.subscription.filters,
       infoEventStream: result.eventStream.map(
-        (event) => InfoEventMapper.modelFromEventMessage(event),
+        (event) => InfoEventMapper.modelFromEvent(event.event, relays: [
+          event.relayUrl,
+        ]),
       ),
       relayUrls: result.subscription.relayUrls,
     );
@@ -219,7 +233,9 @@ class NostrDataSourceImpl implements NostrDataSource {
       subscriptionId: result.subscription.id,
       filters: result.subscription.filters,
       infoEventStream: result.eventStream.map(
-        (event) => InfoEventMapper.modelFromEventMessage(event),
+        (event) => InfoEventMapper.modelFromEvent(event.event, relays: [
+          event.relayUrl,
+        ]),
       ),
       relayUrls: result.subscription.relayUrls,
     );

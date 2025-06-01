@@ -101,7 +101,7 @@ class GetInfoResponse extends Response {
       this.alias = '',
       this.color = '',
       this.pubkey = '',
-      this.network = Network.mainnet,
+      this.network,
       this.blockHeight,
       this.blockHash = '',
       final List<Method> methods = const [],
@@ -126,8 +126,7 @@ class GetInfoResponse extends Response {
   final String color;
   @JsonKey()
   final String pubkey;
-  @JsonKey()
-  final Network network;
+  final Network? network;
   final int? blockHeight;
   @JsonKey()
   final String blockHash;
@@ -238,7 +237,7 @@ abstract mixin class $GetInfoResponseCopyWith<$Res>
       String alias,
       String color,
       String pubkey,
-      Network network,
+      Network? network,
       int? blockHeight,
       String blockHash,
       List<Method> methods,
@@ -266,7 +265,7 @@ class _$GetInfoResponseCopyWithImpl<$Res>
     Object? alias = null,
     Object? color = null,
     Object? pubkey = null,
-    Object? network = null,
+    Object? network = freezed,
     Object? blockHeight = freezed,
     Object? blockHash = null,
     Object? methods = null,
@@ -299,10 +298,10 @@ class _$GetInfoResponseCopyWithImpl<$Res>
           ? _self.pubkey
           : pubkey // ignore: cast_nullable_to_non_nullable
               as String,
-      network: null == network
+      network: freezed == network
           ? _self.network
           : network // ignore: cast_nullable_to_non_nullable
-              as Network,
+              as Network?,
       blockHeight: freezed == blockHeight
           ? _self.blockHeight
           : blockHeight // ignore: cast_nullable_to_non_nullable
@@ -970,11 +969,249 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
 
 /// @nodoc
 
+class ListTransactionsResponse extends Response {
+  const ListTransactionsResponse(
+      {required this.requestId,
+      required this.clientPubkey,
+      required this.walletServicePubkey,
+      final List<Transaction> transactions = const []})
+      : _transactions = transactions,
+        super._();
+
+  @override
+  final String requestId;
+  @override
+  final String clientPubkey;
+  @override
+  final String walletServicePubkey;
+  final List<Transaction> _transactions;
+  @JsonKey()
+  List<Transaction> get transactions {
+    if (_transactions is EqualUnmodifiableListView) return _transactions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_transactions);
+  }
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $ListTransactionsResponseCopyWith<ListTransactionsResponse> get copyWith =>
+      _$ListTransactionsResponseCopyWithImpl<ListTransactionsResponse>(
+          this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ListTransactionsResponse &&
+            (identical(other.requestId, requestId) ||
+                other.requestId == requestId) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
+            const DeepCollectionEquality()
+                .equals(other._transactions, _transactions));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
+      walletServicePubkey, const DeepCollectionEquality().hash(_transactions));
+
+  @override
+  String toString() {
+    return 'Response.listTransactions(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, transactions: $transactions)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $ListTransactionsResponseCopyWith<$Res>
+    implements $ResponseCopyWith<$Res> {
+  factory $ListTransactionsResponseCopyWith(ListTransactionsResponse value,
+          $Res Function(ListTransactionsResponse) _then) =
+      _$ListTransactionsResponseCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String requestId,
+      String clientPubkey,
+      String walletServicePubkey,
+      List<Transaction> transactions});
+}
+
+/// @nodoc
+class _$ListTransactionsResponseCopyWithImpl<$Res>
+    implements $ListTransactionsResponseCopyWith<$Res> {
+  _$ListTransactionsResponseCopyWithImpl(this._self, this._then);
+
+  final ListTransactionsResponse _self;
+  final $Res Function(ListTransactionsResponse) _then;
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? requestId = null,
+    Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
+    Object? transactions = null,
+  }) {
+    return _then(ListTransactionsResponse(
+      requestId: null == requestId
+          ? _self.requestId
+          : requestId // ignore: cast_nullable_to_non_nullable
+              as String,
+      clientPubkey: null == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      transactions: null == transactions
+          ? _self._transactions
+          : transactions // ignore: cast_nullable_to_non_nullable
+              as List<Transaction>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class CustomResponse extends Response {
+  const CustomResponse(
+      {required this.requestId,
+      required this.clientPubkey,
+      required this.walletServicePubkey,
+      required this.method,
+      required final Map<String, dynamic> params})
+      : _params = params,
+        super._();
+
+  @override
+  final String requestId;
+  @override
+  final String clientPubkey;
+  @override
+  final String walletServicePubkey;
+  final String method;
+  final Map<String, dynamic> _params;
+  Map<String, dynamic> get params {
+    if (_params is EqualUnmodifiableMapView) return _params;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_params);
+  }
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $CustomResponseCopyWith<CustomResponse> get copyWith =>
+      _$CustomResponseCopyWithImpl<CustomResponse>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is CustomResponse &&
+            (identical(other.requestId, requestId) ||
+                other.requestId == requestId) &&
+            (identical(other.clientPubkey, clientPubkey) ||
+                other.clientPubkey == clientPubkey) &&
+            (identical(other.walletServicePubkey, walletServicePubkey) ||
+                other.walletServicePubkey == walletServicePubkey) &&
+            (identical(other.method, method) || other.method == method) &&
+            const DeepCollectionEquality().equals(other._params, _params));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      requestId,
+      clientPubkey,
+      walletServicePubkey,
+      method,
+      const DeepCollectionEquality().hash(_params));
+
+  @override
+  String toString() {
+    return 'Response.custom(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, method: $method, params: $params)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $CustomResponseCopyWith<$Res>
+    implements $ResponseCopyWith<$Res> {
+  factory $CustomResponseCopyWith(
+          CustomResponse value, $Res Function(CustomResponse) _then) =
+      _$CustomResponseCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String requestId,
+      String clientPubkey,
+      String walletServicePubkey,
+      String method,
+      Map<String, dynamic> params});
+}
+
+/// @nodoc
+class _$CustomResponseCopyWithImpl<$Res>
+    implements $CustomResponseCopyWith<$Res> {
+  _$CustomResponseCopyWithImpl(this._self, this._then);
+
+  final CustomResponse _self;
+  final $Res Function(CustomResponse) _then;
+
+  /// Create a copy of Response
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? requestId = null,
+    Object? clientPubkey = null,
+    Object? walletServicePubkey = null,
+    Object? method = null,
+    Object? params = null,
+  }) {
+    return _then(CustomResponse(
+      requestId: null == requestId
+          ? _self.requestId
+          : requestId // ignore: cast_nullable_to_non_nullable
+              as String,
+      clientPubkey: null == clientPubkey
+          ? _self.clientPubkey
+          : clientPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      walletServicePubkey: null == walletServicePubkey
+          ? _self.walletServicePubkey
+          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      method: null == method
+          ? _self.method
+          : method // ignore: cast_nullable_to_non_nullable
+              as String,
+      params: null == params
+          ? _self._params
+          : params // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ));
+  }
+}
+
+/// @nodoc
+
 class ErrorResponse extends Response {
   const ErrorResponse(
       {required this.requestId,
       required this.clientPubkey,
       required this.walletServicePubkey,
+      required this.method,
       required this.errorCode,
       this.errorMessage})
       : super._();
@@ -985,6 +1222,7 @@ class ErrorResponse extends Response {
   final String clientPubkey;
   @override
   final String walletServicePubkey;
+  final String method;
   final ErrorCode errorCode;
   final String? errorMessage;
 
@@ -1007,6 +1245,7 @@ class ErrorResponse extends Response {
                 other.clientPubkey == clientPubkey) &&
             (identical(other.walletServicePubkey, walletServicePubkey) ||
                 other.walletServicePubkey == walletServicePubkey) &&
+            (identical(other.method, method) || other.method == method) &&
             (identical(other.errorCode, errorCode) ||
                 other.errorCode == errorCode) &&
             (identical(other.errorMessage, errorMessage) ||
@@ -1015,11 +1254,11 @@ class ErrorResponse extends Response {
 
   @override
   int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
-      walletServicePubkey, errorCode, errorMessage);
+      walletServicePubkey, method, errorCode, errorMessage);
 
   @override
   String toString() {
-    return 'Response.error(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, errorCode: $errorCode, errorMessage: $errorMessage)';
+    return 'Response.error(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, method: $method, errorCode: $errorCode, errorMessage: $errorMessage)';
   }
 }
 
@@ -1035,6 +1274,7 @@ abstract mixin class $ErrorResponseCopyWith<$Res>
       {String requestId,
       String clientPubkey,
       String walletServicePubkey,
+      String method,
       ErrorCode errorCode,
       String? errorMessage});
 }
@@ -1055,6 +1295,7 @@ class _$ErrorResponseCopyWithImpl<$Res>
     Object? requestId = null,
     Object? clientPubkey = null,
     Object? walletServicePubkey = null,
+    Object? method = null,
     Object? errorCode = null,
     Object? errorMessage = freezed,
   }) {
@@ -1070,6 +1311,10 @@ class _$ErrorResponseCopyWithImpl<$Res>
       walletServicePubkey: null == walletServicePubkey
           ? _self.walletServicePubkey
           : walletServicePubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      method: null == method
+          ? _self.method
+          : method // ignore: cast_nullable_to_non_nullable
               as String,
       errorCode: null == errorCode
           ? _self.errorCode

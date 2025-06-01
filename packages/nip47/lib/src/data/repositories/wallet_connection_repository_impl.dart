@@ -59,7 +59,9 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
       createdAt: DateTime.now(),
       name: name,
       maxAmountSat: maxAmountSat,
-      expiresAt: expiresAt,
+      expiresAt: expiresAt != null
+          ? DateTime.fromMillisecondsSinceEpoch(expiresAt)
+          : null,
       methods: methods?.map((method) => method.plaintext).toList(),
       notifications:
           notifications?.map((notification) => notification.plaintext).toList(),
@@ -109,7 +111,9 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
       createdAt: DateTime.now(),
       name: name,
       maxAmountSat: maxAmountSat,
-      expiresAt: expiresAt,
+      expiresAt: expiresAt != null
+          ? DateTime.fromMillisecondsSinceEpoch(expiresAt)
+          : null,
       methods: methods?.map((method) => method.plaintext).toList(),
       notifications:
           notifications?.map((notification) => notification.plaintext).toList(),

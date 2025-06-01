@@ -51,6 +51,7 @@ class SqliteLocalResponseDataSource implements LocalResponseDataSource {
     return ResponseMapper.modelFromTable(
       responseRow,
       clientPubkey: requestRow.clientPubkey,
+      walletServicePubkey: requestRow.walletServicePubkey,
     );
   }
 
@@ -76,6 +77,7 @@ class SqliteLocalResponseDataSource implements LocalResponseDataSource {
       return ResponseMapper.modelFromTable(
         responseRow,
         clientPubkey: requestRow.clientPubkey,
+        walletServicePubkey: requestRow.walletServicePubkey,
       );
     }).toList();
   }
@@ -99,6 +101,7 @@ class SqliteLocalResponseDataSource implements LocalResponseDataSource {
     return ResponseMapper.modelFromTable(
       responseRow,
       clientPubkey: requestRow.clientPubkey,
+      walletServicePubkey: requestRow.walletServicePubkey,
     );
   }
 

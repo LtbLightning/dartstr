@@ -12,7 +12,7 @@ import 'package:nip47/src/domain/repositories/request_repository.dart';
 class RequestRepositoryImpl implements RequestRepository {
   final NostrDataSource _nostrDataSource;
   final LocalRequestDataSource _localRequestDataSource;
-  final StreamController<Request> _requestStreamController;
+  final StreamController<RequestEvent> _requestStreamController;
   final Map<String, RequestSubscriptionModel> _requestSubscriptions;
   final Map<String, StreamSubscription> _subscriptionListeners;
   final Map<String, nip01.KeyPair> _connectionWalletServiceKeyPairs;
@@ -22,13 +22,13 @@ class RequestRepositoryImpl implements RequestRepository {
     required LocalRequestDataSource localRequestDataSource,
   })  : _nostrDataSource = nostrDataSource,
         _localRequestDataSource = localRequestDataSource,
-        _requestStreamController = StreamController<Request>.broadcast(),
+        _requestStreamController = StreamController<RequestEvent>.broadcast(),
         _requestSubscriptions = {},
         _subscriptionListeners = {},
         _connectionWalletServiceKeyPairs = {};
 
   @override
-  Stream<Request> get requestStream => _requestStreamController.stream;
+  Stream<RequestEvent> get requestStream => _requestStreamController.stream;
 
   @override
   Future<void> subscribeToRequests({
@@ -71,7 +71,7 @@ class RequestRepositoryImpl implements RequestRepository {
   }
 
   @override
-  Future<List<Request>> getRequests() async {
+  Future<List<RequestEvent>> getRequests() async {
     final models = await _localRequestDataSource.getRequests();
     final requests =
         models.map((model) => RequestMapper.modelToEntity(model)).toList();
@@ -87,7 +87,7 @@ class RequestRepositoryImpl implements RequestRepository {
     log('[RequestRepositoryImpl] Removed requests for client: $clientPubkey');
   }
 
-  bool _validateRequest(Request request) {
+  bool _validateRequest(RequestEvent request) {
     // TODO: Implement request validation logic like expiry, known, active
     //  connection, permitted method, budget etc.
     return true;

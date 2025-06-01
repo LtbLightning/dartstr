@@ -15,5 +15,5 @@ class Responses extends Table {
   TextColumn get errorMessage => text().nullable()();
   TextColumn get multiId => text().nullable()();
   DateTimeColumn get createdAt => dateTime()();
-  TextColumn get relays => text().nullable().map(StringListTypeConverter())();
+  TextColumn get relays => text().map(StringListTypeConverter())();
 }

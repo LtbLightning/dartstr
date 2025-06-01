@@ -159,10 +159,10 @@ class WalletConnectionModel extends ConnectionModel {
     return EqualUnmodifiableListView(value);
   }
 
-  final int? budgetRenewedAt;
+  final DateTime? budgetRenewedAt;
   final int? maxAmountSat;
   final int? remainingAmountSat;
-  final int? expiresAt;
+  final DateTime? expiresAt;
   final List<String>? _methods;
   List<String>? get methods {
     final value = _methods;
@@ -310,10 +310,10 @@ abstract mixin class $WalletConnectionModelCopyWith<$Res>
       DateTime createdAt,
       String? name,
       List<String>? clientRelays,
-      int? budgetRenewedAt,
+      DateTime? budgetRenewedAt,
       int? maxAmountSat,
       int? remainingAmountSat,
-      int? expiresAt,
+      DateTime? expiresAt,
       List<String>? methods,
       List<String>? customMethods,
       List<String>? notifications,
@@ -389,7 +389,7 @@ class _$WalletConnectionModelCopyWithImpl<$Res>
       budgetRenewedAt: freezed == budgetRenewedAt
           ? _self.budgetRenewedAt
           : budgetRenewedAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       maxAmountSat: freezed == maxAmountSat
           ? _self.maxAmountSat
           : maxAmountSat // ignore: cast_nullable_to_non_nullable
@@ -401,7 +401,7 @@ class _$WalletConnectionModelCopyWithImpl<$Res>
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       methods: freezed == methods
           ? _self._methods
           : methods // ignore: cast_nullable_to_non_nullable

@@ -13,14 +13,11 @@ import 'package:nip47/src/data/repositories/response_repository_impl.dart';
 import 'package:nip47/src/data/repositories/wallet_connection_repository_impl.dart';
 import 'package:nip47/src/database/database.dart';
 import 'package:nip47/src/domain/use_cases/create_wallet_connection_use_case.dart';
+import 'package:nip47/src/domain/use_cases/get_request_event_stream_use_case.dart';
+import 'package:nip47/src/domain/use_cases/send_response_use_case.dart';
 
 Future<void> main() async {
-  // Generate a key pair for the wallet
-  final walletServiceKeyPair = KeyPair.generate();
-  log('Wallet service pubkey: ${walletServiceKeyPair.publicKey}');
-  final walletServiceKeyPair2 = KeyPair.generate();
-  log('Wallet service pubkey2: ${walletServiceKeyPair2.publicKey}');
-
+  // Initialize nip01 dependencies
   final relayDataSource = nip01.WebSocketRelayDataSource();
   final relayRepository =
       nip01.RelayRepositoryImpl(relayDataSource: relayDataSource);
@@ -34,7 +31,10 @@ Future<void> main() async {
       subscriptionRepository: subscriptionRepository,
       eventRepository: eventRepository,
       relayRepository: relayRepository);
+
+  // Initialize NIP-47 database
   final nip47Database = Nip47Database();
+  // Initialize datasources
   final nostrDataSource = NostrDataSourceImpl(
     publishEventUseCase: publishEventUseCase,
     subscribeUseCase: subscribeUseCase,
@@ -43,6 +43,7 @@ Future<void> main() async {
       SqliteLocalRequestDataSource(database: nip47Database);
   final localResponseDataSource =
       SqliteLocalResponseDataSource(database: nip47Database);
+  // Initialize repositories
   final walletConnectionRepository = WalletConnectionRepositoryImpl(
     localWalletConnectionDataSource:
         SqliteLocalWalletConnectionDataSource(database: nip47Database),
@@ -60,14 +61,27 @@ Future<void> main() async {
     localWalletConnectionDataSource:
         SqliteLocalWalletConnectionDataSource(database: nip47Database),
   );
+  // Initialize use cases
   final createWalletConnectionUseCase = CreateWalletConnectionUseCase(
     walletConnectionRepository: walletConnectionRepository,
     infoEventRepository: infoEventRepository,
     requestRepository: requestRepository,
   );
+  final getRequestEventStreamUseCase = GetRequestEventStreamUseCase(
+    requestRepository: requestRepository,
+  );
+  final sendResponseUseCase = SendResponseUseCase(
+    responseRepository: responseRepository,
+  );
 
   // Choose a dedicated relay for a connection
   const relayUrl = 'wss://relay.paywithflash.com';
+
+  // Generate key pairs for wallet services
+  final walletServiceKeyPair = KeyPair.generate();
+  log('Wallet service pubkey: ${walletServiceKeyPair.publicKey}');
+  final walletServiceKeyPair2 = KeyPair.generate();
+  log('Wallet service pubkey2: ${walletServiceKeyPair2.publicKey}');
 
   final methods = [
     Method.getInfo,
@@ -86,27 +100,39 @@ Future<void> main() async {
   print('Connection URI: ${connectionUri.uri}');
 
   // Listen for nwc requests
-  final sub = requestRepository.requestStream.listen((request) async {
-    print('Request: $request');
-    switch (request) {
+  final sub = getRequestEventStreamUseCase.execute().listen((event) async {
+    print('Request event: $event');
+    switch (event.request) {
       case GetBalanceRequest request:
         try {
-          await responseRepository.sendGetBalanceResponse(
-            requestId: request.id,
+          final response = Response.getBalance(
+              requestId: event.eventId,
+              clientPubkey: request.clientPubkey,
+              walletServicePubkey: request.walletServicePubkey,
+              balanceSat: 10101);
+          await sendResponseUseCase.execute(
+            response,
             walletServicePrivateKey: walletServiceKeyPair.privateKey,
-            balanceSat: 10101,
+            waitForOkMessage: false,
           );
         } catch (e) {
           print('Error responding to GetBalanceRequest: $e');
         }
       case GetInfoRequest request:
         try {
-          await responseRepository.sendGetInfoResponse(
-            requestId: request.id,
-            walletServicePrivateKey: walletServiceKeyPair.privateKey,
+          final response = Response.getInfo(
+            requestId: event.eventId,
+            clientPubkey: request.clientPubkey,
+            walletServicePubkey: request.walletServicePubkey,
             alias: 'Dartstr Wallet',
             color: '#FF0000',
+            network: Network.mainnet,
             methods: methods,
+          );
+          await sendResponseUseCase.execute(
+            response,
+            walletServicePrivateKey: walletServiceKeyPair.privateKey,
+            waitForOkMessage: false,
           );
         } catch (e) {
           print('Error responding to GetInfoRequest: $e');

@@ -297,7 +297,7 @@ class MakeInvoiceRequest extends Request {
   final int amountSat;
   final String? description;
   final String? descriptionHash;
-  final int? expiry;
+  final DateTime? expiry;
   @override
   final DateTime? expiresAt;
 
@@ -360,7 +360,7 @@ abstract mixin class $MakeInvoiceRequestCopyWith<$Res>
       int amountSat,
       String? description,
       String? descriptionHash,
-      int? expiry,
+      DateTime? expiry,
       DateTime? expiresAt});
 }
 
@@ -409,7 +409,7 @@ class _$MakeInvoiceRequestCopyWithImpl<$Res>
       expiry: freezed == expiry
           ? _self.expiry
           : expiry // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
@@ -666,8 +666,8 @@ class ListTransactionsRequest extends Request {
   final String clientPubkey;
   @override
   final String walletServicePubkey;
-  final int? from;
-  final int? until;
+  final DateTime? from;
+  final DateTime? until;
   final int? limit;
   final int? offset;
   @JsonKey()
@@ -725,8 +725,8 @@ abstract mixin class $ListTransactionsRequestCopyWith<$Res>
   $Res call(
       {String clientPubkey,
       String walletServicePubkey,
-      int? from,
-      int? until,
+      DateTime? from,
+      DateTime? until,
       int? limit,
       int? offset,
       bool? unpaid,
@@ -769,11 +769,11 @@ class _$ListTransactionsRequestCopyWithImpl<$Res>
       from: freezed == from
           ? _self.from
           : from // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       until: freezed == until
           ? _self.until
           : until // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       limit: freezed == limit
           ? _self.limit
           : limit // ignore: cast_nullable_to_non_nullable

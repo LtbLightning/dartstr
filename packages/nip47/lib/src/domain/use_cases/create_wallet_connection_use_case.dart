@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/nip47.dart';
-import 'package:nip47/src/domain/entities/connection_uri.dart';
 import 'package:nip47/src/domain/repositories/info_event_repository.dart';
 import 'package:nip47/src/domain/repositories/request_repository.dart';
 import 'package:nip47/src/domain/repositories/wallet_connection_repository.dart';
@@ -59,13 +58,18 @@ class CreateWalletConnectionUseCase {
         relayUrls: relayUrls,
       );
 
+      final infoEvent = InfoEvent(
+        walletServicePubkey: walletServiceKeyPair.publicKey,
+        methods: methods,
+        notifications: notifications,
+        customMethods: customMethods ?? [],
+        customNotifications: customNotifications ?? [],
+      );
+
       try {
         await _infoEventRepository.publish(
+          infoEvent,
           walletServicePrivateKey: walletServiceKeyPair.privateKey,
-          methods: methods ?? [],
-          notifications: notifications ?? [],
-          customMethods: customMethods ?? [],
-          customNotifications: customNotifications ?? [],
           relays: relayUrls,
         );
       } catch (e) {

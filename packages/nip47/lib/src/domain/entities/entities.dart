@@ -1,5 +1,7 @@
 export 'connection_uri.dart';
 export 'connection.dart';
+export 'error_code.dart';
+export 'event_kind.dart';
 export 'event.dart';
 export 'filters.dart';
 export 'info_event.dart';

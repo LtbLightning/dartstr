@@ -21,7 +21,7 @@ mixin _$Connection {
   BudgetRenewal? get budgetRenewal;
   String? get name;
   int? get maxAmountSat;
-  int? get expiresAt;
+  Object? get expiresAt;
   bool? get isolated;
 
   /// Create a copy of Connection
@@ -46,8 +46,7 @@ mixin _$Connection {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.maxAmountSat, maxAmountSat) ||
                 other.maxAmountSat == maxAmountSat) &&
-            (identical(other.expiresAt, expiresAt) ||
-                other.expiresAt == expiresAt) &&
+            const DeepCollectionEquality().equals(other.expiresAt, expiresAt) &&
             (identical(other.isolated, isolated) ||
                 other.isolated == isolated));
   }
@@ -61,7 +60,7 @@ mixin _$Connection {
       budgetRenewal,
       name,
       maxAmountSat,
-      expiresAt,
+      const DeepCollectionEquality().hash(expiresAt),
       isolated);
 
   @override
@@ -83,7 +82,6 @@ abstract mixin class $ConnectionCopyWith<$Res> {
       BudgetRenewal budgetRenewal,
       String? name,
       int? maxAmountSat,
-      int? expiresAt,
       bool? isolated});
 }
 
@@ -105,7 +103,6 @@ class _$ConnectionCopyWithImpl<$Res> implements $ConnectionCopyWith<$Res> {
     Object? budgetRenewal = null,
     Object? name = freezed,
     Object? maxAmountSat = freezed,
-    Object? expiresAt = freezed,
     Object? isolated = freezed,
   }) {
     return _then(_self.copyWith(
@@ -132,10 +129,6 @@ class _$ConnectionCopyWithImpl<$Res> implements $ConnectionCopyWith<$Res> {
       maxAmountSat: freezed == maxAmountSat
           ? _self.maxAmountSat
           : maxAmountSat // ignore: cast_nullable_to_non_nullable
-              as int?,
-      expiresAt: freezed == expiresAt
-          ? _self.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
               as int?,
       isolated: freezed == isolated
           ? _self.isolated
@@ -240,12 +233,12 @@ class WalletConnection extends Connection {
     return EqualUnmodifiableListView(value);
   }
 
-  final int? budgetRenewedAt;
+  final DateTime? budgetRenewedAt;
   @override
   final int? maxAmountSat;
   final int? remainingAmountSat;
   @override
-  final int? expiresAt;
+  final DateTime? expiresAt;
   @override
   final bool? isolated;
   final bool? isFrozen;
@@ -359,10 +352,10 @@ abstract mixin class $WalletConnectionCopyWith<$Res>
       List<NotificationType>? notifications,
       List<String>? customMethods,
       List<String>? customNotifications,
-      int? budgetRenewedAt,
+      DateTime? budgetRenewedAt,
       int? maxAmountSat,
       int? remainingAmountSat,
-      int? expiresAt,
+      DateTime? expiresAt,
       bool? isolated,
       bool? isFrozen,
       List<String>? categories,
@@ -450,7 +443,7 @@ class _$WalletConnectionCopyWithImpl<$Res>
       budgetRenewedAt: freezed == budgetRenewedAt
           ? _self.budgetRenewedAt
           : budgetRenewedAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       maxAmountSat: freezed == maxAmountSat
           ? _self.maxAmountSat
           : maxAmountSat // ignore: cast_nullable_to_non_nullable
@@ -462,7 +455,7 @@ class _$WalletConnectionCopyWithImpl<$Res>
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       isolated: freezed == isolated
           ? _self.isolated
           : isolated // ignore: cast_nullable_to_non_nullable

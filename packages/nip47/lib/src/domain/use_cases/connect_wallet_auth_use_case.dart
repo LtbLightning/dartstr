@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/nip47.dart';
-import 'package:nip47/src/domain/entities/connection_uri.dart';
 import 'package:nip47/src/domain/repositories/info_event_repository.dart';
 import 'package:nip47/src/domain/repositories/request_repository.dart';
 import 'package:nip47/src/domain/repositories/wallet_connection_repository.dart';
@@ -72,16 +71,21 @@ class ConnectWalletAuthUseCase {
         relayUrls: relays,
       );
 
+      final infoEvent = InfoEvent(
+        walletServicePubkey: walletServiceKeyPair.publicKey,
+        methods: meths ?? [],
+        customMethods: customMeths ?? [],
+        notifications: notifs ?? [],
+        customNotifications: customNotifs ?? [],
+        clientPubkey: walletAuthUri.clientPubkey,
+        walletRelay: walletRelay,
+      );
+
       try {
         await _infoEventRepository.publish(
+          infoEvent,
           walletServicePrivateKey: walletServiceKeyPair.privateKey,
-          methods: meths ?? [],
-          notifications: notifs ?? [],
-          customMethods: customMeths ?? [],
-          customNotifications: customNotifs ?? [],
           relays: clientRelays,
-          clientPubkey: walletAuthUri.clientPubkey,
-          walletRelay: walletRelay,
         );
       } catch (e) {
         log('Error publishing info event for walletServicePubkey ${walletServiceKeyPair.publicKey}: $e');

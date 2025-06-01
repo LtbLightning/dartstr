@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of '../transaction.dart';
+part of '../transaction_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,32 +14,33 @@ part of '../transaction.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$Transaction {
-  TransactionType get type;
+mixin _$TransactionModel {
+  String get type;
   String? get invoice;
   String? get description;
   String? get descriptionHash;
   String? get preimage;
   String get paymentHash;
   int get amountSat;
-  int get feesPaidSat;
-  DateTime get createdAt;
-  DateTime? get expiresAt;
-  DateTime? get settledAt;
+  int? get feesPaidSat;
+  int get createdAt;
+  int? get expiresAt;
+  int? get settledAt;
   Map<dynamic, dynamic>? get metadata;
 
-  /// Create a copy of Transaction
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $TransactionCopyWith<Transaction> get copyWith =>
-      _$TransactionCopyWithImpl<Transaction>(this as Transaction, _$identity);
+  $TransactionModelCopyWith<TransactionModel> get copyWith =>
+      _$TransactionModelCopyWithImpl<TransactionModel>(
+          this as TransactionModel, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is Transaction &&
+            other is TransactionModel &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.description, description) ||
@@ -81,39 +82,40 @@ mixin _$Transaction {
 
   @override
   String toString() {
-    return 'Transaction(type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, preimage: $preimage, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
+    return 'TransactionModel(type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, preimage: $preimage, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
   }
 }
 
 /// @nodoc
-abstract mixin class $TransactionCopyWith<$Res> {
-  factory $TransactionCopyWith(
-          Transaction value, $Res Function(Transaction) _then) =
-      _$TransactionCopyWithImpl;
+abstract mixin class $TransactionModelCopyWith<$Res> {
+  factory $TransactionModelCopyWith(
+          TransactionModel value, $Res Function(TransactionModel) _then) =
+      _$TransactionModelCopyWithImpl;
   @useResult
   $Res call(
-      {TransactionType type,
+      {String type,
       String? invoice,
       String? description,
       String? descriptionHash,
       String? preimage,
       String paymentHash,
       int amountSat,
-      int feesPaidSat,
-      DateTime createdAt,
-      DateTime? expiresAt,
-      DateTime? settledAt,
+      int? feesPaidSat,
+      int createdAt,
+      int? expiresAt,
+      int? settledAt,
       Map<dynamic, dynamic>? metadata});
 }
 
 /// @nodoc
-class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
-  _$TransactionCopyWithImpl(this._self, this._then);
+class _$TransactionModelCopyWithImpl<$Res>
+    implements $TransactionModelCopyWith<$Res> {
+  _$TransactionModelCopyWithImpl(this._self, this._then);
 
-  final Transaction _self;
-  final $Res Function(Transaction) _then;
+  final TransactionModel _self;
+  final $Res Function(TransactionModel) _then;
 
-  /// Create a copy of Transaction
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -125,7 +127,7 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
     Object? preimage = freezed,
     Object? paymentHash = null,
     Object? amountSat = null,
-    Object? feesPaidSat = null,
+    Object? feesPaidSat = freezed,
     Object? createdAt = null,
     Object? expiresAt = freezed,
     Object? settledAt = freezed,
@@ -135,7 +137,7 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
       type: null == type
           ? _self.type
           : type // ignore: cast_nullable_to_non_nullable
-              as TransactionType,
+              as String,
       invoice: freezed == invoice
           ? _self.invoice
           : invoice // ignore: cast_nullable_to_non_nullable
@@ -160,22 +162,22 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
               as int,
-      feesPaidSat: null == feesPaidSat
+      feesPaidSat: freezed == feesPaidSat
           ? _self.feesPaidSat
           : feesPaidSat // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as int,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as int?,
       settledAt: freezed == settledAt
           ? _self.settledAt
           : settledAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as int?,
       metadata: freezed == metadata
           ? _self.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -186,8 +188,8 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
 
 /// @nodoc
 
-class _Transaction extends Transaction {
-  const _Transaction(
+class _TransactionModel extends TransactionModel {
+  const _TransactionModel(
       {required this.type,
       this.invoice,
       this.description,
@@ -195,7 +197,7 @@ class _Transaction extends Transaction {
       this.preimage,
       required this.paymentHash,
       required this.amountSat,
-      required this.feesPaidSat,
+      this.feesPaidSat,
       required this.createdAt,
       this.expiresAt,
       this.settledAt,
@@ -204,7 +206,7 @@ class _Transaction extends Transaction {
         super._();
 
   @override
-  final TransactionType type;
+  final String type;
   @override
   final String? invoice;
   @override
@@ -218,13 +220,13 @@ class _Transaction extends Transaction {
   @override
   final int amountSat;
   @override
-  final int feesPaidSat;
+  final int? feesPaidSat;
   @override
-  final DateTime createdAt;
+  final int createdAt;
   @override
-  final DateTime? expiresAt;
+  final int? expiresAt;
   @override
-  final DateTime? settledAt;
+  final int? settledAt;
   final Map<dynamic, dynamic>? _metadata;
   @override
   @JsonKey()
@@ -236,19 +238,19 @@ class _Transaction extends Transaction {
     return EqualUnmodifiableMapView(value);
   }
 
-  /// Create a copy of Transaction
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TransactionCopyWith<_Transaction> get copyWith =>
-      __$TransactionCopyWithImpl<_Transaction>(this, _$identity);
+  _$TransactionModelCopyWith<_TransactionModel> get copyWith =>
+      __$TransactionModelCopyWithImpl<_TransactionModel>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Transaction &&
+            other is _TransactionModel &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.description, description) ||
@@ -290,41 +292,42 @@ class _Transaction extends Transaction {
 
   @override
   String toString() {
-    return 'Transaction(type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, preimage: $preimage, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
+    return 'TransactionModel(type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, preimage: $preimage, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$TransactionCopyWith<$Res>
-    implements $TransactionCopyWith<$Res> {
-  factory _$TransactionCopyWith(
-          _Transaction value, $Res Function(_Transaction) _then) =
-      __$TransactionCopyWithImpl;
+abstract mixin class _$TransactionModelCopyWith<$Res>
+    implements $TransactionModelCopyWith<$Res> {
+  factory _$TransactionModelCopyWith(
+          _TransactionModel value, $Res Function(_TransactionModel) _then) =
+      __$TransactionModelCopyWithImpl;
   @override
   @useResult
   $Res call(
-      {TransactionType type,
+      {String type,
       String? invoice,
       String? description,
       String? descriptionHash,
       String? preimage,
       String paymentHash,
       int amountSat,
-      int feesPaidSat,
-      DateTime createdAt,
-      DateTime? expiresAt,
-      DateTime? settledAt,
+      int? feesPaidSat,
+      int createdAt,
+      int? expiresAt,
+      int? settledAt,
       Map<dynamic, dynamic>? metadata});
 }
 
 /// @nodoc
-class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
-  __$TransactionCopyWithImpl(this._self, this._then);
+class __$TransactionModelCopyWithImpl<$Res>
+    implements _$TransactionModelCopyWith<$Res> {
+  __$TransactionModelCopyWithImpl(this._self, this._then);
 
-  final _Transaction _self;
-  final $Res Function(_Transaction) _then;
+  final _TransactionModel _self;
+  final $Res Function(_TransactionModel) _then;
 
-  /// Create a copy of Transaction
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -336,17 +339,17 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
     Object? preimage = freezed,
     Object? paymentHash = null,
     Object? amountSat = null,
-    Object? feesPaidSat = null,
+    Object? feesPaidSat = freezed,
     Object? createdAt = null,
     Object? expiresAt = freezed,
     Object? settledAt = freezed,
     Object? metadata = freezed,
   }) {
-    return _then(_Transaction(
+    return _then(_TransactionModel(
       type: null == type
           ? _self.type
           : type // ignore: cast_nullable_to_non_nullable
-              as TransactionType,
+              as String,
       invoice: freezed == invoice
           ? _self.invoice
           : invoice // ignore: cast_nullable_to_non_nullable
@@ -371,22 +374,22 @@ class __$TransactionCopyWithImpl<$Res> implements _$TransactionCopyWith<$Res> {
           ? _self.amountSat
           : amountSat // ignore: cast_nullable_to_non_nullable
               as int,
-      feesPaidSat: null == feesPaidSat
+      feesPaidSat: freezed == feesPaidSat
           ? _self.feesPaidSat
           : feesPaidSat // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as int,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as int?,
       settledAt: freezed == settledAt
           ? _self.settledAt
           : settledAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as int?,
       metadata: freezed == metadata
           ? _self._metadata
           : metadata // ignore: cast_nullable_to_non_nullable

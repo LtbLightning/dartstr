@@ -5,6 +5,13 @@ part 'generated/event.freezed.dart';
 
 @freezed
 sealed class Event with _$Event {
+  const factory Event.info({
+    required InfoEvent infoEvent,
+    required String eventId,
+    required DateTime createdAt,
+    required List<String> relays,
+  }) = InfoEventEvent;
+
   const factory Event.request({
     required Request request,
     required String eventId,
@@ -18,13 +25,6 @@ sealed class Event with _$Event {
     required DateTime createdAt,
     required List<String> relays,
   }) = ResponseEvent;
-
-  const factory Event.info({
-    required InfoEvent infoEvent,
-    required String eventId,
-    required DateTime createdAt,
-    required List<String> relays,
-  }) = InfoEventEvent;
 
   const Event._();
 }

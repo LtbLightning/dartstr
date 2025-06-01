@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:nip47/nip47.dart';
+import 'package:nip47/src/data/models/response_error_model.dart';
 
 part 'generated/response_model.freezed.dart';
 
@@ -12,7 +14,7 @@ sealed class ResponseModel with _$ResponseModel {
     required String walletServicePubkey,
     required String resultType,
     Map<String, dynamic>? result,
-    Map<String, dynamic>? error,
+    ResponseErrorModel? error,
   }) = NewResponseModel;
   const factory ResponseModel.event({
     required String requestId,
@@ -20,22 +22,21 @@ sealed class ResponseModel with _$ResponseModel {
     required String walletServicePubkey,
     required String resultType,
     Map<String, dynamic>? result,
-    Map<String, dynamic>? error,
+    ResponseErrorModel? error,
     required String eventId,
     required List<String> relays,
     required DateTime createdAt,
   }) = ResponseEventModel;
   const ResponseModel._();
 
-  /*
-  String get resultType => switch (this) {
-        GetInfoResponseModel() => 'get_info',
-        GetBalanceResponseModel() => 'get_balance',
-        PayInvoiceResponseModel() => 'pay_invoice',
-        MakeInvoiceResponseModel() => 'make_invoice',
-        ErrorResponseModel(resultType: final resultType) => resultType,
-      };
+  Method get method => Method.fromPlaintext(resultType);
 
+  String get plaintextContent => jsonEncode({
+        'result_type': resultType,
+        if (error != null) 'error': error!.toJson(),
+        if (result != null) 'result': result,
+      });
+/*
   Map<String, dynamic>? get result => switch (this) {
         GetInfoResponseModel(
           alias: final alias,
@@ -103,10 +104,4 @@ sealed class ResponseModel with _$ResponseModel {
         _ => null,
       };
   */
-
-  String get plaintTextContent => jsonEncode({
-        'result_type': resultType,
-        if (error != null) 'error': error,
-        if (result != null) 'result': result,
-      });
 }
