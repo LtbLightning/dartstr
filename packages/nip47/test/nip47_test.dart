@@ -25,6 +25,8 @@ void main() {
         subscriptionRepository: subscriptionRepository,
         eventRepository: eventRepository,
         relayRepository: relayRepository);
+    final unsubscribeUseCase = nip01.UnsubscribeUseCase(
+        subscriptionRepository: subscriptionRepository);
 
     // Initialize NIP-47 database
     final nip47Database = Nip47Database();
@@ -32,6 +34,7 @@ void main() {
     final nostrDataSource = NostrDataSourceImpl(
       publishEventUseCase: publishEventUseCase,
       subscribeUseCase: subscribeUseCase,
+      unsubscribeUseCase: unsubscribeUseCase,
     );
     final localRequestDataSource =
         SqliteLocalRequestDataSource(database: nip47Database);
@@ -48,6 +51,8 @@ void main() {
     final requestRepository = RequestRepositoryImpl(
       nostrDataSource: nostrDataSource,
       localRequestDataSource: localRequestDataSource,
+      localWalletConnectionDataSource:
+          SqliteLocalWalletConnectionDataSource(database: nip47Database),
     );
     final responseRepository = ResponseRepositoryImpl(
       nostrDataSource: nostrDataSource,

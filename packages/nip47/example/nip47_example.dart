@@ -3,18 +3,6 @@ import 'dart:developer';
 import 'package:nip01/nip01.dart';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/nip47.dart';
-import 'package:nip47/src/data/data_sources/local_request_data_source.dart';
-import 'package:nip47/src/data/data_sources/local_response_data_source.dart';
-import 'package:nip47/src/data/data_sources/local_wallet_connection_data_source.dart';
-import 'package:nip47/src/data/data_sources/nostr_data_source.dart';
-import 'package:nip47/src/data/repositories/info_event_repository_impl.dart';
-import 'package:nip47/src/data/repositories/request_repository_impl.dart';
-import 'package:nip47/src/data/repositories/response_repository_impl.dart';
-import 'package:nip47/src/data/repositories/wallet_connection_repository_impl.dart';
-import 'package:nip47/src/database/database.dart';
-import 'package:nip47/src/domain/use_cases/create_wallet_connection_use_case.dart';
-import 'package:nip47/src/domain/use_cases/get_request_event_stream_use_case.dart';
-import 'package:nip47/src/domain/use_cases/send_response_use_case.dart';
 
 Future<void> main() async {
   // Initialize nip01 dependencies
@@ -31,6 +19,8 @@ Future<void> main() async {
       subscriptionRepository: subscriptionRepository,
       eventRepository: eventRepository,
       relayRepository: relayRepository);
+  final unsubscribeUseCase =
+      nip01.UnsubscribeUseCase(subscriptionRepository: subscriptionRepository);
 
   // Initialize NIP-47 database
   final nip47Database = Nip47Database();
@@ -38,6 +28,7 @@ Future<void> main() async {
   final nostrDataSource = NostrDataSourceImpl(
     publishEventUseCase: publishEventUseCase,
     subscribeUseCase: subscribeUseCase,
+    unsubscribeUseCase: unsubscribeUseCase,
   );
   final localRequestDataSource =
       SqliteLocalRequestDataSource(database: nip47Database);
@@ -54,6 +45,8 @@ Future<void> main() async {
   final requestRepository = RequestRepositoryImpl(
     nostrDataSource: nostrDataSource,
     localRequestDataSource: localRequestDataSource,
+    localWalletConnectionDataSource:
+        SqliteLocalWalletConnectionDataSource(database: nip47Database),
   );
   final responseRepository = ResponseRepositoryImpl(
     nostrDataSource: nostrDataSource,
@@ -75,7 +68,7 @@ Future<void> main() async {
   );
 
   // Choose a dedicated relay for a connection
-  const relayUrl = 'wss://relay.paywithflash.com';
+  const relayUrl = 'wss://nwclay.paywithflash.com';
 
   // Generate key pairs for wallet services
   final walletServiceKeyPair = KeyPair.generate();
@@ -88,13 +81,14 @@ Future<void> main() async {
     Method.getBalance,
     Method.listTransactions,
   ];
-  //final customMethods = ['make_liquid_address', 'pay_liquid'];
+  final customMethods = ['make_liquid_address', 'pay_liquid'];
 
   // Add a new connection
   final connectionUri = await createWalletConnectionUseCase.execute(
     walletServiceKeyPair: walletServiceKeyPair,
     relays: [Uri.parse(relayUrl)],
     methods: methods,
+    customMethods: customMethods,
   );
   log('Connection created: ${connectionUri.clientPubkey}');
   print('Connection URI: ${connectionUri.uri}');
@@ -108,7 +102,6 @@ Future<void> main() async {
           final response = Response.getBalance(
               requestId: event.eventId,
               clientPubkey: request.clientPubkey,
-              walletServicePubkey: request.walletServicePubkey,
               balanceSat: 10101);
           await sendResponseUseCase.execute(
             response,
@@ -123,7 +116,6 @@ Future<void> main() async {
           final response = Response.getInfo(
             requestId: event.eventId,
             clientPubkey: request.clientPubkey,
-            walletServicePubkey: request.walletServicePubkey,
             alias: 'Dartstr Wallet',
             color: '#FF0000',
             network: Network.mainnet,

@@ -26,7 +26,6 @@ sealed class Response with _$Response {
   const factory Response.getInfo({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     @Default('') String alias,
     @Default('') String color,
     @Default('') String pubkey,
@@ -41,33 +40,29 @@ sealed class Response with _$Response {
   const factory Response.getBalance({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required int balanceSat,
   }) = GetBalanceResponse;
   const factory Response.makeInvoice({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required String invoice,
     String? description,
     String? descriptionHash,
     required String paymentHash,
     required int amountSat,
-    required int createdAt,
-    int? expiresAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
     Map<String, dynamic>? metadata,
   }) = MakeInvoiceResponse;
   const factory Response.payInvoice({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required String preimage,
     int? feesPaidSat,
   }) = PayInvoiceResponse;
   const factory Response.lookupInvoice({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required String type,
     String? invoice,
     String? description,
@@ -75,28 +70,25 @@ sealed class Response with _$Response {
     required String paymentHash,
     required int amountSat,
     int? feesPaidSat,
-    required int createdAt,
-    int? expiresAt,
-    int? settledAt,
+    required DateTime createdAt,
+    DateTime? expiresAt,
+    DateTime? settledAt,
     Map<String, dynamic>? metadata,
   }) = LookupInvoiceResponse;
   const factory Response.listTransactions({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     @Default([]) List<Transaction> transactions,
   }) = ListTransactionsResponse;
   const factory Response.custom({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required String method,
     required Map<String, dynamic> params,
   }) = CustomResponse;
   const factory Response.error({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required String method,
     required ErrorCode errorCode,
     String? errorMessage,

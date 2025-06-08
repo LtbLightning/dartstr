@@ -8,6 +8,9 @@ abstract class RequestRepository {
     required nip01.KeyPair walletServiceKeyPair,
     List<String>? relayUrls,
   });
+  Future<void> unsubscribeFromRequests({
+    required String clientPubkey,
+  });
   Future<List<RequestEvent>> getRequests();
   Future<void> removeRequests({
     required String clientPubkey,

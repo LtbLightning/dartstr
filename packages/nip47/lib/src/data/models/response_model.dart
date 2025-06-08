@@ -11,7 +11,6 @@ sealed class ResponseModel with _$ResponseModel {
   const factory ResponseModel({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required String resultType,
     Map<String, dynamic>? result,
     ResponseErrorModel? error,
@@ -19,7 +18,6 @@ sealed class ResponseModel with _$ResponseModel {
   const factory ResponseModel.event({
     required String requestId,
     required String clientPubkey,
-    required String walletServicePubkey,
     required String resultType,
     Map<String, dynamic>? result,
     ResponseErrorModel? error,

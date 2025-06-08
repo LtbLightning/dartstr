@@ -12,19 +12,19 @@ sealed class EventSubscriptionModel with _$EventSubscriptionModel {
     required String subscriptionId,
     required List<Filters> filters,
     required Stream<RequestEventModel> requestStream,
-    List<String>? relayUrls,
+    required List<String> relayUrls,
   }) = RequestSubscriptionModel;
   const factory EventSubscriptionModel.response({
     required String subscriptionId,
     required List<Filters> filters,
     required Stream<ResponseEventModel> responseStream,
-    List<String>? relayUrls,
+    required List<String> relayUrls,
   }) = ResponseSubscriptionModel;
   const factory EventSubscriptionModel.infoEvent({
     required String subscriptionId,
     required List<Filters> filters,
     required Stream<InfoEventEventModel> infoEventStream,
-    List<String>? relayUrls,
+    required List<String> relayUrls,
   }) = InfoEventSubscriptionModel;
   const EventSubscriptionModel._();
 }

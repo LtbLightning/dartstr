@@ -17,7 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$EventSubscriptionModel {
   String get subscriptionId;
   List<Filters> get filters;
-  List<String>? get relayUrls;
+  List<String> get relayUrls;
 
   /// Create a copy of EventSubscriptionModel
   /// with the given fields replaced by the non-null parameter values.
@@ -58,7 +58,7 @@ abstract mixin class $EventSubscriptionModelCopyWith<$Res> {
       _$EventSubscriptionModelCopyWithImpl;
   @useResult
   $Res call(
-      {String subscriptionId, List<Filters> filters, List<String>? relayUrls});
+      {String subscriptionId, List<Filters> filters, List<String> relayUrls});
 }
 
 /// @nodoc
@@ -76,7 +76,7 @@ class _$EventSubscriptionModelCopyWithImpl<$Res>
   $Res call({
     Object? subscriptionId = null,
     Object? filters = null,
-    Object? relayUrls = freezed,
+    Object? relayUrls = null,
   }) {
     return _then(_self.copyWith(
       subscriptionId: null == subscriptionId
@@ -87,10 +87,10 @@ class _$EventSubscriptionModelCopyWithImpl<$Res>
           ? _self.filters
           : filters // ignore: cast_nullable_to_non_nullable
               as List<Filters>,
-      relayUrls: freezed == relayUrls
+      relayUrls: null == relayUrls
           ? _self.relayUrls
           : relayUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
     ));
   }
 }
@@ -102,7 +102,7 @@ class RequestSubscriptionModel extends EventSubscriptionModel {
       {required this.subscriptionId,
       required final List<Filters> filters,
       required this.requestStream,
-      final List<String>? relayUrls})
+      required final List<String> relayUrls})
       : _filters = filters,
         _relayUrls = relayUrls,
         super._();
@@ -118,14 +118,12 @@ class RequestSubscriptionModel extends EventSubscriptionModel {
   }
 
   final Stream<RequestEventModel> requestStream;
-  final List<String>? _relayUrls;
+  final List<String> _relayUrls;
   @override
-  List<String>? get relayUrls {
-    final value = _relayUrls;
-    if (value == null) return null;
+  List<String> get relayUrls {
     if (_relayUrls is EqualUnmodifiableListView) return _relayUrls;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_relayUrls);
   }
 
   /// Create a copy of EventSubscriptionModel
@@ -177,7 +175,7 @@ abstract mixin class $RequestSubscriptionModelCopyWith<$Res>
       {String subscriptionId,
       List<Filters> filters,
       Stream<RequestEventModel> requestStream,
-      List<String>? relayUrls});
+      List<String> relayUrls});
 }
 
 /// @nodoc
@@ -196,7 +194,7 @@ class _$RequestSubscriptionModelCopyWithImpl<$Res>
     Object? subscriptionId = null,
     Object? filters = null,
     Object? requestStream = null,
-    Object? relayUrls = freezed,
+    Object? relayUrls = null,
   }) {
     return _then(RequestSubscriptionModel(
       subscriptionId: null == subscriptionId
@@ -211,10 +209,10 @@ class _$RequestSubscriptionModelCopyWithImpl<$Res>
           ? _self.requestStream
           : requestStream // ignore: cast_nullable_to_non_nullable
               as Stream<RequestEventModel>,
-      relayUrls: freezed == relayUrls
+      relayUrls: null == relayUrls
           ? _self._relayUrls
           : relayUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
     ));
   }
 }
@@ -226,7 +224,7 @@ class ResponseSubscriptionModel extends EventSubscriptionModel {
       {required this.subscriptionId,
       required final List<Filters> filters,
       required this.responseStream,
-      final List<String>? relayUrls})
+      required final List<String> relayUrls})
       : _filters = filters,
         _relayUrls = relayUrls,
         super._();
@@ -242,14 +240,12 @@ class ResponseSubscriptionModel extends EventSubscriptionModel {
   }
 
   final Stream<ResponseEventModel> responseStream;
-  final List<String>? _relayUrls;
+  final List<String> _relayUrls;
   @override
-  List<String>? get relayUrls {
-    final value = _relayUrls;
-    if (value == null) return null;
+  List<String> get relayUrls {
     if (_relayUrls is EqualUnmodifiableListView) return _relayUrls;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_relayUrls);
   }
 
   /// Create a copy of EventSubscriptionModel
@@ -301,7 +297,7 @@ abstract mixin class $ResponseSubscriptionModelCopyWith<$Res>
       {String subscriptionId,
       List<Filters> filters,
       Stream<ResponseEventModel> responseStream,
-      List<String>? relayUrls});
+      List<String> relayUrls});
 }
 
 /// @nodoc
@@ -320,7 +316,7 @@ class _$ResponseSubscriptionModelCopyWithImpl<$Res>
     Object? subscriptionId = null,
     Object? filters = null,
     Object? responseStream = null,
-    Object? relayUrls = freezed,
+    Object? relayUrls = null,
   }) {
     return _then(ResponseSubscriptionModel(
       subscriptionId: null == subscriptionId
@@ -335,10 +331,10 @@ class _$ResponseSubscriptionModelCopyWithImpl<$Res>
           ? _self.responseStream
           : responseStream // ignore: cast_nullable_to_non_nullable
               as Stream<ResponseEventModel>,
-      relayUrls: freezed == relayUrls
+      relayUrls: null == relayUrls
           ? _self._relayUrls
           : relayUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
     ));
   }
 }
@@ -350,7 +346,7 @@ class InfoEventSubscriptionModel extends EventSubscriptionModel {
       {required this.subscriptionId,
       required final List<Filters> filters,
       required this.infoEventStream,
-      final List<String>? relayUrls})
+      required final List<String> relayUrls})
       : _filters = filters,
         _relayUrls = relayUrls,
         super._();
@@ -366,14 +362,12 @@ class InfoEventSubscriptionModel extends EventSubscriptionModel {
   }
 
   final Stream<InfoEventEventModel> infoEventStream;
-  final List<String>? _relayUrls;
+  final List<String> _relayUrls;
   @override
-  List<String>? get relayUrls {
-    final value = _relayUrls;
-    if (value == null) return null;
+  List<String> get relayUrls {
     if (_relayUrls is EqualUnmodifiableListView) return _relayUrls;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_relayUrls);
   }
 
   /// Create a copy of EventSubscriptionModel
@@ -426,7 +420,7 @@ abstract mixin class $InfoEventSubscriptionModelCopyWith<$Res>
       {String subscriptionId,
       List<Filters> filters,
       Stream<InfoEventEventModel> infoEventStream,
-      List<String>? relayUrls});
+      List<String> relayUrls});
 }
 
 /// @nodoc
@@ -445,7 +439,7 @@ class _$InfoEventSubscriptionModelCopyWithImpl<$Res>
     Object? subscriptionId = null,
     Object? filters = null,
     Object? infoEventStream = null,
-    Object? relayUrls = freezed,
+    Object? relayUrls = null,
   }) {
     return _then(InfoEventSubscriptionModel(
       subscriptionId: null == subscriptionId
@@ -460,10 +454,10 @@ class _$InfoEventSubscriptionModelCopyWithImpl<$Res>
           ? _self.infoEventStream
           : infoEventStream // ignore: cast_nullable_to_non_nullable
               as Stream<InfoEventEventModel>,
-      relayUrls: freezed == relayUrls
+      relayUrls: null == relayUrls
           ? _self._relayUrls
           : relayUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
     ));
   }
 }

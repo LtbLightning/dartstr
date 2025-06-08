@@ -2,9 +2,6 @@ import 'dart:developer';
 
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip47/nip47.dart';
-import 'package:nip47/src/domain/repositories/info_event_repository.dart';
-import 'package:nip47/src/domain/repositories/request_repository.dart';
-import 'package:nip47/src/domain/repositories/wallet_connection_repository.dart';
 
 class CreateWalletConnectionUseCase {
   final WalletConnectionRepository _walletConnectionRepository;

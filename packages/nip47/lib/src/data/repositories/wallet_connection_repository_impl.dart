@@ -19,18 +19,6 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
   }) : _localWalletConnectionDataSource = localWalletConnectionDataSource;
 
   @override
-  Future<List<WalletConnection>> getConnections() async {
-    final connectionModels =
-        await _localWalletConnectionDataSource.getConnections();
-
-    final connections = connectionModels
-        .map((model) => WalletConnectionMapper.modelToEntity(model))
-        .toList();
-
-    return connections;
-  }
-
-  @override
   Future<WalletConnectConnectionUri> createConnection({
     required String walletServicePubkey,
     required List<String> relays,
@@ -133,22 +121,42 @@ class WalletConnectionRepositoryImpl implements WalletConnectionRepository {
   }
 
   @override
-  Future<void> disconnect(String clientPubkey) async {
-    // TODO: implement disconnect
-    throw UnimplementedError();
+  Future<WalletConnection?> getConnectionByClientPubkey(
+      String clientPubkey) async {
+    final connectionModel =
+        await _localWalletConnectionDataSource.getConnection(clientPubkey);
+
+    if (connectionModel == null) {
+      return null;
+    }
+
+    final connection = WalletConnectionMapper.modelToEntity(connectionModel);
+
+    return connection;
+  }
+
+  @override
+  Future<List<WalletConnection>> getConnections() async {
+    final connectionModels =
+        await _localWalletConnectionDataSource.getConnections();
+
+    final connections = connectionModels
+        .map((model) => WalletConnectionMapper.modelToEntity(model))
+        .toList();
+
+    return connections;
+  }
+
+  @override
+  Future<void> updateConnection(WalletConnection connection) async {
+    final connectionModel = WalletConnectionMapper.entityToModel(connection);
+    await _localWalletConnectionDataSource.store(connectionModel);
+    log('[WalletConnectionRepositoryImpl] Updated connection for client: ${connection.clientPubkey}');
   }
 
   @override
   Future<void> removeConnection(String clientPubkey) async {
     await _localWalletConnectionDataSource.removeConnection(clientPubkey);
     log('[WalletConnectionRepositoryImpl] Removed connection for client: $clientPubkey');
-  }
-
-  @override
-  Future<void> resumeConnections({
-    required List<nip01.KeyPair> walletServiceKeyPairs,
-  }) {
-    // TODO: implement resumeConnections
-    throw UnimplementedError();
   }
 }

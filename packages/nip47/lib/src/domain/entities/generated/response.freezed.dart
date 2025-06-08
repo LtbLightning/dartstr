@@ -17,7 +17,6 @@ T _$identity<T>(T value) => value;
 mixin _$Response {
   String get requestId;
   String get clientPubkey;
-  String get walletServicePubkey;
 
   /// Create a copy of Response
   /// with the given fields replaced by the non-null parameter values.
@@ -34,18 +33,15 @@ mixin _$Response {
             (identical(other.requestId, requestId) ||
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
-                other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey));
+                other.clientPubkey == clientPubkey));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, requestId, clientPubkey, walletServicePubkey);
+  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey);
 
   @override
   String toString() {
-    return 'Response(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey)';
+    return 'Response(requestId: $requestId, clientPubkey: $clientPubkey)';
   }
 }
 
@@ -54,8 +50,7 @@ abstract mixin class $ResponseCopyWith<$Res> {
   factory $ResponseCopyWith(Response value, $Res Function(Response) _then) =
       _$ResponseCopyWithImpl;
   @useResult
-  $Res call(
-      {String requestId, String clientPubkey, String walletServicePubkey});
+  $Res call({String requestId, String clientPubkey});
 }
 
 /// @nodoc
@@ -72,7 +67,6 @@ class _$ResponseCopyWithImpl<$Res> implements $ResponseCopyWith<$Res> {
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
   }) {
     return _then(_self.copyWith(
       requestId: null == requestId
@@ -82,10 +76,6 @@ class _$ResponseCopyWithImpl<$Res> implements $ResponseCopyWith<$Res> {
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -97,7 +87,6 @@ class GetInfoResponse extends Response {
   const GetInfoResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       this.alias = '',
       this.color = '',
       this.pubkey = '',
@@ -118,8 +107,6 @@ class GetInfoResponse extends Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   @JsonKey()
   final String alias;
   @JsonKey()
@@ -180,8 +167,6 @@ class GetInfoResponse extends Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.alias, alias) || other.alias == alias) &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.pubkey, pubkey) || other.pubkey == pubkey) &&
@@ -204,7 +189,6 @@ class GetInfoResponse extends Response {
       runtimeType,
       requestId,
       clientPubkey,
-      walletServicePubkey,
       alias,
       color,
       pubkey,
@@ -218,7 +202,7 @@ class GetInfoResponse extends Response {
 
   @override
   String toString() {
-    return 'Response.getInfo(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, alias: $alias, color: $color, pubkey: $pubkey, network: $network, blockHeight: $blockHeight, blockHash: $blockHash, methods: $methods, customMethods: $customMethods, notifications: $notifications, customNotifications: $customNotifications)';
+    return 'Response.getInfo(requestId: $requestId, clientPubkey: $clientPubkey, alias: $alias, color: $color, pubkey: $pubkey, network: $network, blockHeight: $blockHeight, blockHash: $blockHash, methods: $methods, customMethods: $customMethods, notifications: $notifications, customNotifications: $customNotifications)';
   }
 }
 
@@ -233,7 +217,6 @@ abstract mixin class $GetInfoResponseCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String alias,
       String color,
       String pubkey,
@@ -261,7 +244,6 @@ class _$GetInfoResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? alias = null,
     Object? color = null,
     Object? pubkey = null,
@@ -281,10 +263,6 @@ class _$GetInfoResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       alias: null == alias
           ? _self.alias
@@ -336,7 +314,6 @@ class GetBalanceResponse extends Response {
   const GetBalanceResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.balanceSat})
       : super._();
 
@@ -344,8 +321,6 @@ class GetBalanceResponse extends Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   final int balanceSat;
 
   /// Create a copy of Response
@@ -365,19 +340,17 @@ class GetBalanceResponse extends Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.balanceSat, balanceSat) ||
                 other.balanceSat == balanceSat));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, requestId, clientPubkey, walletServicePubkey, balanceSat);
+  int get hashCode =>
+      Object.hash(runtimeType, requestId, clientPubkey, balanceSat);
 
   @override
   String toString() {
-    return 'Response.getBalance(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, balanceSat: $balanceSat)';
+    return 'Response.getBalance(requestId: $requestId, clientPubkey: $clientPubkey, balanceSat: $balanceSat)';
   }
 }
 
@@ -389,11 +362,7 @@ abstract mixin class $GetBalanceResponseCopyWith<$Res>
       _$GetBalanceResponseCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {String requestId,
-      String clientPubkey,
-      String walletServicePubkey,
-      int balanceSat});
+  $Res call({String requestId, String clientPubkey, int balanceSat});
 }
 
 /// @nodoc
@@ -411,7 +380,6 @@ class _$GetBalanceResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? balanceSat = null,
   }) {
     return _then(GetBalanceResponse(
@@ -422,10 +390,6 @@ class _$GetBalanceResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       balanceSat: null == balanceSat
           ? _self.balanceSat
@@ -441,7 +405,6 @@ class MakeInvoiceResponse extends Response {
   const MakeInvoiceResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.invoice,
       this.description,
       this.descriptionHash,
@@ -457,15 +420,13 @@ class MakeInvoiceResponse extends Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   final String invoice;
   final String? description;
   final String? descriptionHash;
   final String paymentHash;
   final int amountSat;
-  final int createdAt;
-  final int? expiresAt;
+  final DateTime createdAt;
+  final DateTime? expiresAt;
   final Map<String, dynamic>? _metadata;
   Map<String, dynamic>? get metadata {
     final value = _metadata;
@@ -492,8 +453,6 @@ class MakeInvoiceResponse extends Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -515,7 +474,6 @@ class MakeInvoiceResponse extends Response {
       runtimeType,
       requestId,
       clientPubkey,
-      walletServicePubkey,
       invoice,
       description,
       descriptionHash,
@@ -527,7 +485,7 @@ class MakeInvoiceResponse extends Response {
 
   @override
   String toString() {
-    return 'Response.makeInvoice(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, paymentHash: $paymentHash, amountSat: $amountSat, createdAt: $createdAt, expiresAt: $expiresAt, metadata: $metadata)';
+    return 'Response.makeInvoice(requestId: $requestId, clientPubkey: $clientPubkey, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, paymentHash: $paymentHash, amountSat: $amountSat, createdAt: $createdAt, expiresAt: $expiresAt, metadata: $metadata)';
   }
 }
 
@@ -542,14 +500,13 @@ abstract mixin class $MakeInvoiceResponseCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String invoice,
       String? description,
       String? descriptionHash,
       String paymentHash,
       int amountSat,
-      int createdAt,
-      int? expiresAt,
+      DateTime createdAt,
+      DateTime? expiresAt,
       Map<String, dynamic>? metadata});
 }
 
@@ -568,7 +525,6 @@ class _$MakeInvoiceResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? invoice = null,
     Object? description = freezed,
     Object? descriptionHash = freezed,
@@ -586,10 +542,6 @@ class _$MakeInvoiceResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       invoice: null == invoice
           ? _self.invoice
@@ -614,11 +566,11 @@ class _$MakeInvoiceResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       metadata: freezed == metadata
           ? _self._metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -633,7 +585,6 @@ class PayInvoiceResponse extends Response {
   const PayInvoiceResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.preimage,
       this.feesPaidSat})
       : super._();
@@ -642,8 +593,6 @@ class PayInvoiceResponse extends Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   final String preimage;
   final int? feesPaidSat;
 
@@ -664,8 +613,6 @@ class PayInvoiceResponse extends Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.preimage, preimage) ||
                 other.preimage == preimage) &&
             (identical(other.feesPaidSat, feesPaidSat) ||
@@ -673,12 +620,12 @@ class PayInvoiceResponse extends Response {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
-      walletServicePubkey, preimage, feesPaidSat);
+  int get hashCode =>
+      Object.hash(runtimeType, requestId, clientPubkey, preimage, feesPaidSat);
 
   @override
   String toString() {
-    return 'Response.payInvoice(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, preimage: $preimage, feesPaidSat: $feesPaidSat)';
+    return 'Response.payInvoice(requestId: $requestId, clientPubkey: $clientPubkey, preimage: $preimage, feesPaidSat: $feesPaidSat)';
   }
 }
 
@@ -693,7 +640,6 @@ abstract mixin class $PayInvoiceResponseCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String preimage,
       int? feesPaidSat});
 }
@@ -713,7 +659,6 @@ class _$PayInvoiceResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? preimage = null,
     Object? feesPaidSat = freezed,
   }) {
@@ -725,10 +670,6 @@ class _$PayInvoiceResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       preimage: null == preimage
           ? _self.preimage
@@ -748,7 +689,6 @@ class LookupInvoiceResponse extends Response {
   const LookupInvoiceResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.type,
       this.invoice,
       this.description,
@@ -767,8 +707,6 @@ class LookupInvoiceResponse extends Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   final String type;
   final String? invoice;
   final String? description;
@@ -776,9 +714,9 @@ class LookupInvoiceResponse extends Response {
   final String paymentHash;
   final int amountSat;
   final int? feesPaidSat;
-  final int createdAt;
-  final int? expiresAt;
-  final int? settledAt;
+  final DateTime createdAt;
+  final DateTime? expiresAt;
+  final DateTime? settledAt;
   final Map<String, dynamic>? _metadata;
   Map<String, dynamic>? get metadata {
     final value = _metadata;
@@ -806,8 +744,6 @@ class LookupInvoiceResponse extends Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.description, description) ||
@@ -834,7 +770,6 @@ class LookupInvoiceResponse extends Response {
       runtimeType,
       requestId,
       clientPubkey,
-      walletServicePubkey,
       type,
       invoice,
       description,
@@ -849,7 +784,7 @@ class LookupInvoiceResponse extends Response {
 
   @override
   String toString() {
-    return 'Response.lookupInvoice(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
+    return 'Response.lookupInvoice(requestId: $requestId, clientPubkey: $clientPubkey, type: $type, invoice: $invoice, description: $description, descriptionHash: $descriptionHash, paymentHash: $paymentHash, amountSat: $amountSat, feesPaidSat: $feesPaidSat, createdAt: $createdAt, expiresAt: $expiresAt, settledAt: $settledAt, metadata: $metadata)';
   }
 }
 
@@ -864,7 +799,6 @@ abstract mixin class $LookupInvoiceResponseCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String type,
       String? invoice,
       String? description,
@@ -872,9 +806,9 @@ abstract mixin class $LookupInvoiceResponseCopyWith<$Res>
       String paymentHash,
       int amountSat,
       int? feesPaidSat,
-      int createdAt,
-      int? expiresAt,
-      int? settledAt,
+      DateTime createdAt,
+      DateTime? expiresAt,
+      DateTime? settledAt,
       Map<String, dynamic>? metadata});
 }
 
@@ -893,7 +827,6 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? type = null,
     Object? invoice = freezed,
     Object? description = freezed,
@@ -914,10 +847,6 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       type: null == type
           ? _self.type
@@ -950,15 +879,15 @@ class _$LookupInvoiceResponseCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as DateTime,
       expiresAt: freezed == expiresAt
           ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       settledAt: freezed == settledAt
           ? _self.settledAt
           : settledAt // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as DateTime?,
       metadata: freezed == metadata
           ? _self._metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -973,7 +902,6 @@ class ListTransactionsResponse extends Response {
   const ListTransactionsResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       final List<Transaction> transactions = const []})
       : _transactions = transactions,
         super._();
@@ -982,8 +910,6 @@ class ListTransactionsResponse extends Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   final List<Transaction> _transactions;
   @JsonKey()
   List<Transaction> get transactions {
@@ -1010,19 +936,17 @@ class ListTransactionsResponse extends Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             const DeepCollectionEquality()
                 .equals(other._transactions, _transactions));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
-      walletServicePubkey, const DeepCollectionEquality().hash(_transactions));
+      const DeepCollectionEquality().hash(_transactions));
 
   @override
   String toString() {
-    return 'Response.listTransactions(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, transactions: $transactions)';
+    return 'Response.listTransactions(requestId: $requestId, clientPubkey: $clientPubkey, transactions: $transactions)';
   }
 }
 
@@ -1035,10 +959,7 @@ abstract mixin class $ListTransactionsResponseCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String requestId,
-      String clientPubkey,
-      String walletServicePubkey,
-      List<Transaction> transactions});
+      {String requestId, String clientPubkey, List<Transaction> transactions});
 }
 
 /// @nodoc
@@ -1056,7 +977,6 @@ class _$ListTransactionsResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? transactions = null,
   }) {
     return _then(ListTransactionsResponse(
@@ -1067,10 +987,6 @@ class _$ListTransactionsResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       transactions: null == transactions
           ? _self._transactions
@@ -1086,7 +1002,6 @@ class CustomResponse extends Response {
   const CustomResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.method,
       required final Map<String, dynamic> params})
       : _params = params,
@@ -1096,8 +1011,6 @@ class CustomResponse extends Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   final String method;
   final Map<String, dynamic> _params;
   Map<String, dynamic> get params {
@@ -1123,24 +1036,17 @@ class CustomResponse extends Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.method, method) || other.method == method) &&
             const DeepCollectionEquality().equals(other._params, _params));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      requestId,
-      clientPubkey,
-      walletServicePubkey,
-      method,
+  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey, method,
       const DeepCollectionEquality().hash(_params));
 
   @override
   String toString() {
-    return 'Response.custom(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, method: $method, params: $params)';
+    return 'Response.custom(requestId: $requestId, clientPubkey: $clientPubkey, method: $method, params: $params)';
   }
 }
 
@@ -1155,7 +1061,6 @@ abstract mixin class $CustomResponseCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String method,
       Map<String, dynamic> params});
 }
@@ -1175,7 +1080,6 @@ class _$CustomResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? method = null,
     Object? params = null,
   }) {
@@ -1187,10 +1091,6 @@ class _$CustomResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       method: null == method
           ? _self.method
@@ -1210,7 +1110,6 @@ class ErrorResponse extends Response {
   const ErrorResponse(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.method,
       required this.errorCode,
       this.errorMessage})
@@ -1220,8 +1119,6 @@ class ErrorResponse extends Response {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   final String method;
   final ErrorCode errorCode;
   final String? errorMessage;
@@ -1243,8 +1140,6 @@ class ErrorResponse extends Response {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.method, method) || other.method == method) &&
             (identical(other.errorCode, errorCode) ||
                 other.errorCode == errorCode) &&
@@ -1253,12 +1148,12 @@ class ErrorResponse extends Response {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
-      walletServicePubkey, method, errorCode, errorMessage);
+  int get hashCode => Object.hash(
+      runtimeType, requestId, clientPubkey, method, errorCode, errorMessage);
 
   @override
   String toString() {
-    return 'Response.error(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, method: $method, errorCode: $errorCode, errorMessage: $errorMessage)';
+    return 'Response.error(requestId: $requestId, clientPubkey: $clientPubkey, method: $method, errorCode: $errorCode, errorMessage: $errorMessage)';
   }
 }
 
@@ -1273,7 +1168,6 @@ abstract mixin class $ErrorResponseCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String method,
       ErrorCode errorCode,
       String? errorMessage});
@@ -1294,7 +1188,6 @@ class _$ErrorResponseCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? method = null,
     Object? errorCode = null,
     Object? errorMessage = freezed,
@@ -1307,10 +1200,6 @@ class _$ErrorResponseCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       method: null == method
           ? _self.method

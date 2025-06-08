@@ -19,7 +19,6 @@ enum ConnectionUriScheme {
   static ConnectionUriScheme fromScheme(String scheme) {
     return ConnectionUriScheme.values.firstWhere(
       (type) => type.scheme == scheme,
-      orElse: () => ConnectionUriScheme.walletConnect,
     );
   }
 }
@@ -49,6 +48,68 @@ sealed class ConnectionUri with _$ConnectionUri {
     List<String>? customNotificationTypes,
   }) = WalletAuthConnectionUri;
   const ConnectionUri._();
+
+  factory ConnectionUri.fromUri(Uri uri) {
+    final scheme = ConnectionUriScheme.fromScheme(uri.scheme);
+    switch (scheme) {
+      case ConnectionUriScheme.walletConnect:
+        return WalletConnectConnectionUri(
+          clientSecret: uri.queryParameters['secret']!,
+          walletServicePubkey: uri.host,
+          relays: uri.queryParametersAll['relay'] ?? [],
+          lud16: uri.queryParameters['lud16'],
+        );
+      case ConnectionUriScheme.walletAuth:
+        return WalletAuthConnectionUri(
+          clientPubkey: uri.host,
+          relays: uri.queryParametersAll['relay'] ?? [],
+          name: uri.queryParameters['name'],
+          icon: uri.queryParameters['icon'] != null
+              ? Uri.parse(uri.queryParameters['icon']!)
+              : null,
+          returnTo: uri.queryParameters['return_to'] != null
+              ? Uri.parse(uri.queryParameters['return_to']!)
+              : null,
+          expiresAt: uri.queryParameters['expires_at'] != null
+              ? int.tryParse(uri.queryParameters['expires_at']!)
+              : null,
+          maxAmountSat: uri.queryParameters['max_amount'] != null
+              ? int.tryParse(uri.queryParameters['max_amount']!)! ~/ 1000
+              : null,
+          budgetRenewal: BudgetRenewal.fromPlaintext(
+            uri.queryParameters['budget_renewal'] ??
+                BudgetRenewal.never.plaintext,
+          ),
+          requestMethods: uri.queryParameters['request_methods']
+              ?.split(' ')
+              .map(
+                (m) => Method.fromPlaintext(m),
+              )
+              .where((m) => m != Method.custom)
+              .toList(),
+          notificationTypes: uri.queryParameters['notification_types']
+              ?.split(' ')
+              .map(
+                (n) => NotificationType.fromPlaintext(n),
+              )
+              .where((n) => n != NotificationType.custom)
+              .toList(),
+          isolated: uri.queryParameters.containsKey('isolated')
+              ? (uri.queryParameters['isolated'] == 'true')
+              : null,
+          metadata: jsonDecode(uri.queryParameters['metadata'] ?? '{}'),
+          customRequestMethods: uri.queryParameters['request_methods']
+              ?.split(' ')
+              .where((m) => Method.fromPlaintext(m) == Method.custom)
+              .toList(),
+          customNotificationTypes: uri.queryParameters['notification_types']
+              ?.split(' ')
+              .where((n) =>
+                  NotificationType.fromPlaintext(n) == NotificationType.custom)
+              .toList(),
+        );
+    }
+  }
 
   String get clientPubkey {
     switch (this) {

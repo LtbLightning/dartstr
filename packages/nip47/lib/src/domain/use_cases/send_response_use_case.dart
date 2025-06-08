@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:nip47/nip47.dart';
-import 'package:nip47/src/domain/repositories/response_repository.dart';
 
 class SendResponseUseCase {
   final ResponseRepository _responseRepository;

@@ -18,6 +18,7 @@ class RemoveConnectionUseCase {
   Future<void> execute(String clientPubkey) async {
     try {
       await Future.wait([
+        _requestRepository.unsubscribeFromRequests(clientPubkey: clientPubkey),
         _walletConnectionRepository.removeConnection(clientPubkey),
         _requestRepository.removeRequests(clientPubkey: clientPubkey),
         _responseRepository.removeResponses(clientPubkey: clientPubkey),

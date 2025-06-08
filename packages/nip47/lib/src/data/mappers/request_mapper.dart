@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:bolt11_decoder/bolt11_decoder.dart';
+import 'package:decimal/decimal.dart';
 import 'package:nip01/nip01.dart' as nip01;
 import 'package:nip04/nip04.dart';
 import 'package:nip47/nip47.dart';
 import 'package:nip47/src/data/models/request_model.dart';
-import 'package:nip47/src/database/database.dart';
 
 class RequestMapper {
   static NewRequestModel modelFromEntity(Request request) {
@@ -93,12 +94,14 @@ class RequestMapper {
           expiresAt: expiresAt,
         );
       case Method.payInvoice:
-        final amount = params['amount'] as int?;
+        final invoice = params['invoice'] as String;
+        final decodedInvoice = Bolt11PaymentRequest(invoice);
+        final amountSat = decodedInvoice.amount * Decimal.fromInt(100000000);
         request = PayInvoiceRequest(
           clientPubkey: clientPubkey,
           walletServicePubkey: walletServicePubkey,
-          invoice: params['invoice'] as String,
-          amountSat: amount == null ? null : amount ~/ 1000,
+          invoice: invoice,
+          amountSat: amountSat.toBigInt().toInt(),
           expiresAt: expiresAt,
         );
       case Method.lookupInvoice:

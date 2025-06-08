@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:dartstr_utils/dartstr_utils.dart';
 import 'package:nip01/nip01.dart';
-import 'package:nip01/src/data/data_sources/relay_data_source.dart';
 import 'package:nip01/src/data/models/client_message_model.dart';
 import 'package:nip01/src/data/models/filters_model.dart';
 import 'package:nip01/src/data/models/relay_message_model.dart';
 import 'package:nip01/src/data/models/relay_state.dart';
-import 'package:nip01/src/domain/entities/closed_message.dart';
-import 'package:nip01/src/domain/repositories/subscription_repository.dart';
 
 class SubscriptionRepositoryImpl implements SubscriptionRepository {
   final RelayDataSource _relayDataSource;

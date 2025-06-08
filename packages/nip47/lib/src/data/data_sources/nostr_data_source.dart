@@ -25,6 +25,9 @@ abstract class NostrDataSource {
     required nip01.KeyPair walletServiceKeyPair,
     List<String>? relayUrls,
   });
+  Future<void> unsubscribeFromRequests(
+    RequestSubscriptionModel requestSubscription,
+  );
   Future<ResponseSubscriptionModel> subscribeToResponses({
     required nip01.KeyPair clientKeyPair,
     required String walletServicePubkey,
@@ -43,12 +46,15 @@ abstract class NostrDataSource {
 class NostrDataSourceImpl implements NostrDataSource {
   final nip01.PublishEventUseCase _publishEventUseCase;
   final nip01.SubscribeUseCase _subscribeUseCase;
+  final nip01.UnsubscribeUseCase _unsubscribeUseCase;
 
   NostrDataSourceImpl({
     required nip01.PublishEventUseCase publishEventUseCase,
     required nip01.SubscribeUseCase subscribeUseCase,
+    required nip01.UnsubscribeUseCase unsubscribeUseCase,
   })  : _publishEventUseCase = publishEventUseCase,
-        _subscribeUseCase = subscribeUseCase;
+        _subscribeUseCase = subscribeUseCase,
+        _unsubscribeUseCase = unsubscribeUseCase;
 
   @override
   Future<InfoEventEventModel> publishInfoEvent(
@@ -98,7 +104,6 @@ class NostrDataSourceImpl implements NostrDataSource {
     final model = ResponseEventModel(
       requestId: response.requestId,
       clientPubkey: response.clientPubkey,
-      walletServicePubkey: response.walletServicePubkey,
       resultType: response.resultType,
       result: response.result,
       error: response.error,
@@ -132,6 +137,11 @@ class NostrDataSourceImpl implements NostrDataSource {
       relayUrls: relayUrls,
     );
 
+    if (result.subscription.relayUrls == null ||
+        result.subscription.relayUrls!.isEmpty) {
+      throw Exception('Failed to subscribe on any relays');
+    }
+
     return RequestSubscriptionModel(
       subscriptionId: result.subscription.id,
       filters: result.subscription.filters,
@@ -142,7 +152,17 @@ class NostrDataSourceImpl implements NostrDataSource {
           relays: [event.relayUrl],
         ),
       ),
-      relayUrls: result.subscription.relayUrls,
+      relayUrls: result.subscription.relayUrls!,
+    );
+  }
+
+  @override
+  Future<void> unsubscribeFromRequests(
+    RequestSubscriptionModel requestSubscription,
+  ) async {
+    await _unsubscribeUseCase.execute(
+      requestSubscription.subscriptionId,
+      relayUrls: requestSubscription.relayUrls,
     );
   }
 
@@ -167,6 +187,11 @@ class NostrDataSourceImpl implements NostrDataSource {
       relayUrls: relayUrls,
     );
 
+    if (result.subscription.relayUrls == null ||
+        result.subscription.relayUrls!.isEmpty) {
+      throw Exception('Failed to subscribe on any relays');
+    }
+
     return ResponseSubscriptionModel(
       subscriptionId: result.subscription.id,
       filters: result.subscription.filters,
@@ -177,7 +202,7 @@ class NostrDataSourceImpl implements NostrDataSource {
           relays: [event.relayUrl],
         ),
       ),
-      relayUrls: result.subscription.relayUrls,
+      relayUrls: result.subscription.relayUrls!,
     );
   }
 
@@ -200,6 +225,11 @@ class NostrDataSourceImpl implements NostrDataSource {
       relayUrls: relayUrls,
     );
 
+    if (result.subscription.relayUrls == null ||
+        result.subscription.relayUrls!.isEmpty) {
+      throw Exception('Failed to subscribe on any relays');
+    }
+
     return InfoEventSubscriptionModel(
       subscriptionId: result.subscription.id,
       filters: result.subscription.filters,
@@ -208,7 +238,7 @@ class NostrDataSourceImpl implements NostrDataSource {
           event.relayUrl,
         ]),
       ),
-      relayUrls: result.subscription.relayUrls,
+      relayUrls: result.subscription.relayUrls!,
     );
   }
 
@@ -229,6 +259,11 @@ class NostrDataSourceImpl implements NostrDataSource {
       relayUrls: relayUrls,
     );
 
+    if (result.subscription.relayUrls == null ||
+        result.subscription.relayUrls!.isEmpty) {
+      throw Exception('Failed to subscribe on any relays');
+    }
+
     return InfoEventSubscriptionModel(
       subscriptionId: result.subscription.id,
       filters: result.subscription.filters,
@@ -237,7 +272,7 @@ class NostrDataSourceImpl implements NostrDataSource {
           event.relayUrl,
         ]),
       ),
-      relayUrls: result.subscription.relayUrls,
+      relayUrls: result.subscription.relayUrls!,
     );
   }
 }

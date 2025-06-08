@@ -53,6 +53,5 @@ sealed class RelayState with _$RelayState {
       case _:
         return null;
     }
-    ;
   }
 }

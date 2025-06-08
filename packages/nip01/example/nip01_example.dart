@@ -1,6 +1,4 @@
 import 'package:nip01/nip01.dart';
-import 'package:nip01/src/domain/use_cases/subscribe_use_case.dart';
-import 'package:nip01/src/domain/use_cases/unsubscribe_use_case.dart';
 
 void main() async {
   final keyPair = KeyPair.generate();
@@ -101,8 +99,10 @@ void main() async {
   print('Profile metadata from stored events: $profileMetadataResult');
 
   // Unsubscribe from events
-  await unsubscribeUseCase.execute(textNoteSubscription.subscription);
-  await unsubscribeUseCase.execute(userMetadataSubscription.subscription);
+  await unsubscribeUseCase.execute(textNoteSubscription.subscription.id,
+      relayUrls: textNoteSubscription.subscription.relayUrls!);
+  await unsubscribeUseCase.execute(userMetadataSubscription.subscription.id,
+      relayUrls: userMetadataSubscription.subscription.relayUrls!);
 
   // Publish a new event and it should not be received and printed anymore
   final newEvent = Event.create(

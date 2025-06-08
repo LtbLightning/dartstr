@@ -6,7 +6,6 @@ import 'package:nip47/nip47.dart';
 import 'package:nip47/src/data/models/response_error_model.dart';
 import 'package:nip47/src/data/models/response_model.dart';
 import 'package:nip47/src/data/models/transaction_model.dart';
-import 'package:nip47/src/database/database.dart';
 
 class ResponseMapper {
   static NewResponseModel modelFromEntity(Response response) {
@@ -32,7 +31,6 @@ class ResponseMapper {
         return NewResponseModel(
           requestId: response.requestId,
           clientPubkey: response.clientPubkey,
-          walletServicePubkey: response.walletServicePubkey,
           resultType: Method.getInfo.plaintext,
           result: {
             if (response.alias.isNotEmpty) 'alias': response.alias,
@@ -50,7 +48,6 @@ class ResponseMapper {
         return NewResponseModel(
           requestId: response.requestId,
           clientPubkey: response.clientPubkey,
-          walletServicePubkey: response.walletServicePubkey,
           resultType: Method.getBalance.plaintext,
           result: {'balance': response.balanceSat * 1000},
         );
@@ -58,7 +55,6 @@ class ResponseMapper {
         return NewResponseModel(
           requestId: response.requestId,
           clientPubkey: response.clientPubkey,
-          walletServicePubkey: response.walletServicePubkey,
           resultType: Method.makeInvoice.plaintext,
           result: {
             'invoice': response.invoice,
@@ -77,7 +73,6 @@ class ResponseMapper {
         return NewResponseModel(
           requestId: response.requestId,
           clientPubkey: response.clientPubkey,
-          walletServicePubkey: response.walletServicePubkey,
           resultType: Method.payInvoice.plaintext,
           result: {
             'preimage': response.preimage,
@@ -89,7 +84,6 @@ class ResponseMapper {
         return NewResponseModel(
           requestId: response.requestId,
           clientPubkey: response.clientPubkey,
-          walletServicePubkey: response.walletServicePubkey,
           resultType: Method.lookupInvoice.plaintext,
           result: {
             'type': response.type,
@@ -116,7 +110,6 @@ class ResponseMapper {
         return NewResponseModel(
           requestId: response.requestId,
           clientPubkey: response.clientPubkey,
-          walletServicePubkey: response.walletServicePubkey,
           resultType: Method.listTransactions.plaintext,
           result: {'transactions': transactions},
         );
@@ -124,7 +117,6 @@ class ResponseMapper {
         return NewResponseModel(
           requestId: response.requestId,
           clientPubkey: response.clientPubkey,
-          walletServicePubkey: response.walletServicePubkey,
           resultType: Method.custom.plaintext,
           result: response.params,
         );
@@ -136,7 +128,6 @@ class ResponseMapper {
         return NewResponseModel(
           requestId: response.requestId,
           clientPubkey: response.clientPubkey,
-          walletServicePubkey: response.walletServicePubkey,
           resultType: response.method,
           error: responseErrorModel,
         );
@@ -150,7 +141,6 @@ class ResponseMapper {
       response = Response.error(
         requestId: model.requestId,
         clientPubkey: model.clientPubkey,
-        walletServicePubkey: model.walletServicePubkey,
         method: model.resultType,
         errorCode: ErrorCode.fromPlaintext(error.code),
         errorMessage: error.message,
@@ -168,7 +158,6 @@ class ResponseMapper {
           response = GetBalanceResponse(
             requestId: model.requestId,
             clientPubkey: model.clientPubkey,
-            walletServicePubkey: model.walletServicePubkey,
             balanceSat: balanceSat,
           );
         case Method.getInfo:
@@ -200,10 +189,9 @@ class ResponseMapper {
           response = GetInfoResponse(
             requestId: model.requestId,
             clientPubkey: model.clientPubkey,
-            walletServicePubkey: model.walletServicePubkey,
             alias: result['alias'] as String? ?? '',
             color: result['color'] as String? ?? '',
-            pubkey: result['pubkey'] as String,
+            pubkey: result['pubkey'] as String? ?? '',
             network: network,
             blockHeight: result['block_height'] as int?,
             blockHash: result['block_hash'] as String? ?? '',
@@ -215,18 +203,20 @@ class ResponseMapper {
         case Method.makeInvoice:
           final amount = result['amount'] as int;
           final amountSat = amount ~/ 1000;
-
+          final expiresAt = result['expires_at'] as int?;
           response = MakeInvoiceResponse(
             requestId: model.requestId,
             clientPubkey: model.clientPubkey,
-            walletServicePubkey: model.walletServicePubkey,
             invoice: result['invoice'] as String,
             description: result['description'] as String?,
             descriptionHash: result['description_hash'] as String?,
             paymentHash: result['payment_hash'] as String,
             amountSat: amountSat,
-            createdAt: result['created_at'] as int,
-            expiresAt: result['expires_at'] as int?,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(
+                (result['created_at'] as int) * 1000),
+            expiresAt: expiresAt == null
+                ? null
+                : DateTime.fromMillisecondsSinceEpoch(expiresAt * 1000),
             metadata: result['metadata'] as Map<String, dynamic>?,
           );
         case Method.payInvoice:
@@ -236,7 +226,6 @@ class ResponseMapper {
           response = PayInvoiceResponse(
             requestId: model.requestId,
             clientPubkey: model.clientPubkey,
-            walletServicePubkey: model.walletServicePubkey,
             preimage: preimage,
             feesPaidSat: feesPaidMsat != null ? feesPaidMsat ~/ 1000 : null,
           );
@@ -255,10 +244,11 @@ class ResponseMapper {
           final feesPaidMsat = result['fees_paid'] as int?;
           final feesPaidSat =
               feesPaidMsat != null ? feesPaidMsat ~/ 1000 : null;
+          final expiresAt = result['expires_at'] as int?;
+          final settledAt = result['settled_at'] as int?;
           response = LookupInvoiceResponse(
             requestId: model.requestId,
             clientPubkey: model.clientPubkey,
-            walletServicePubkey: model.walletServicePubkey,
             type: result['type'] as String,
             invoice: result['invoice'] as String?,
             description: result['description'] as String?,
@@ -266,9 +256,14 @@ class ResponseMapper {
             paymentHash: result['payment_hash'] as String,
             amountSat: amountSat,
             feesPaidSat: feesPaidSat,
-            createdAt: result['created_at'] as int,
-            expiresAt: result['expires_at'] as int?,
-            settledAt: result['settled_at'] as int?,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(
+                (result['created_at'] as int) * 1000),
+            expiresAt: expiresAt == null
+                ? null
+                : DateTime.fromMillisecondsSinceEpoch(expiresAt * 1000),
+            settledAt: settledAt == null
+                ? null
+                : DateTime.fromMillisecondsSinceEpoch(settledAt * 1000),
             metadata: result['metadata'] as Map<String, dynamic>?,
           );
         case Method.listTransactions:
@@ -281,14 +276,12 @@ class ResponseMapper {
           response = ListTransactionsResponse(
             requestId: model.requestId,
             clientPubkey: model.clientPubkey,
-            walletServicePubkey: model.walletServicePubkey,
             transactions: transactions.map((t) => t.toEntity()).toList(),
           );
         case Method.custom:
           response = CustomResponse(
             requestId: model.requestId,
             clientPubkey: model.clientPubkey,
-            walletServicePubkey: model.walletServicePubkey,
             method: model.resultType,
             params: model.result as Map<String, dynamic>,
           );
@@ -338,7 +331,6 @@ class ResponseMapper {
     return ResponseEventModel(
       requestId: event.tags.firstWhere((tag) => tag[0] == 'e')[1],
       clientPubkey: clientPubkey,
-      walletServicePubkey: event.pubkey,
       resultType: resultType,
       result: result,
       error: error,
@@ -384,7 +376,6 @@ class ResponseMapper {
   static ResponseEventModel modelFromTable(
     ResponseTable responseTable, {
     required String clientPubkey,
-    required String walletServicePubkey,
   }) {
     final error = responseTable.errorCode != null
         ? ResponseErrorModel(
@@ -395,7 +386,6 @@ class ResponseMapper {
     return ResponseEventModel(
       requestId: responseTable.requestId,
       clientPubkey: clientPubkey,
-      walletServicePubkey: walletServicePubkey,
       resultType: responseTable.resultType,
       result: responseTable.result != null
           ? jsonDecode(responseTable.result!)

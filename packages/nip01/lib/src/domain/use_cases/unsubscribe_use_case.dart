@@ -1,4 +1,3 @@
-import 'package:nip01/src/domain/entities/subscription.dart';
 import 'package:nip01/src/domain/repositories/subscription_repository.dart';
 
 class UnsubscribeUseCase {
@@ -8,11 +7,12 @@ class UnsubscribeUseCase {
     required SubscriptionRepository subscriptionRepository,
   }) : _subscriptionRepository = subscriptionRepository;
 
-  Future<List<String>> execute(Subscription subscription) async {
+  Future<List<String>> execute(String subscriptionId,
+      {required List<String> relayUrls}) async {
     try {
       final unsubscribedFromRelays = await _subscriptionRepository.unsubscribe(
-        subscription.id,
-        relayUrls: subscription.relayUrls,
+        subscriptionId,
+        relayUrls: relayUrls,
       );
 
       return unsubscribedFromRelays;

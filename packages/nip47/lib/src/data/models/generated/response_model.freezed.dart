@@ -17,7 +17,6 @@ T _$identity<T>(T value) => value;
 mixin _$ResponseModel {
   String get requestId;
   String get clientPubkey;
-  String get walletServicePubkey;
   String get resultType;
   Map<String, dynamic>? get result;
   ResponseErrorModel? get error;
@@ -39,8 +38,6 @@ mixin _$ResponseModel {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.resultType, resultType) ||
                 other.resultType == resultType) &&
             const DeepCollectionEquality().equals(other.result, result) &&
@@ -48,18 +45,12 @@ mixin _$ResponseModel {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      requestId,
-      clientPubkey,
-      walletServicePubkey,
-      resultType,
-      const DeepCollectionEquality().hash(result),
-      error);
+  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
+      resultType, const DeepCollectionEquality().hash(result), error);
 
   @override
   String toString() {
-    return 'ResponseModel(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, resultType: $resultType, result: $result, error: $error)';
+    return 'ResponseModel(requestId: $requestId, clientPubkey: $clientPubkey, resultType: $resultType, result: $result, error: $error)';
   }
 }
 
@@ -72,7 +63,6 @@ abstract mixin class $ResponseModelCopyWith<$Res> {
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String resultType,
       Map<String, dynamic>? result,
       ResponseErrorModel? error});
@@ -95,7 +85,6 @@ class _$ResponseModelCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? resultType = null,
     Object? result = freezed,
     Object? error = freezed,
@@ -108,10 +97,6 @@ class _$ResponseModelCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       resultType: null == resultType
           ? _self.resultType
@@ -149,7 +134,6 @@ class NewResponseModel extends ResponseModel {
   const NewResponseModel(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.resultType,
       final Map<String, dynamic>? result,
       this.error})
@@ -160,8 +144,6 @@ class NewResponseModel extends ResponseModel {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   @override
   final String resultType;
   final Map<String, dynamic>? _result;
@@ -194,8 +176,6 @@ class NewResponseModel extends ResponseModel {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.resultType, resultType) ||
                 other.resultType == resultType) &&
             const DeepCollectionEquality().equals(other._result, _result) &&
@@ -203,18 +183,12 @@ class NewResponseModel extends ResponseModel {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      requestId,
-      clientPubkey,
-      walletServicePubkey,
-      resultType,
-      const DeepCollectionEquality().hash(_result),
-      error);
+  int get hashCode => Object.hash(runtimeType, requestId, clientPubkey,
+      resultType, const DeepCollectionEquality().hash(_result), error);
 
   @override
   String toString() {
-    return 'ResponseModel(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, resultType: $resultType, result: $result, error: $error)';
+    return 'ResponseModel(requestId: $requestId, clientPubkey: $clientPubkey, resultType: $resultType, result: $result, error: $error)';
   }
 }
 
@@ -229,7 +203,6 @@ abstract mixin class $NewResponseModelCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String resultType,
       Map<String, dynamic>? result,
       ResponseErrorModel? error});
@@ -253,7 +226,6 @@ class _$NewResponseModelCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? resultType = null,
     Object? result = freezed,
     Object? error = freezed,
@@ -266,10 +238,6 @@ class _$NewResponseModelCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       resultType: null == resultType
           ? _self.resultType
@@ -307,7 +275,6 @@ class ResponseEventModel extends ResponseModel {
   const ResponseEventModel(
       {required this.requestId,
       required this.clientPubkey,
-      required this.walletServicePubkey,
       required this.resultType,
       final Map<String, dynamic>? result,
       this.error,
@@ -322,8 +289,6 @@ class ResponseEventModel extends ResponseModel {
   final String requestId;
   @override
   final String clientPubkey;
-  @override
-  final String walletServicePubkey;
   @override
   final String resultType;
   final Map<String, dynamic>? _result;
@@ -365,8 +330,6 @@ class ResponseEventModel extends ResponseModel {
                 other.requestId == requestId) &&
             (identical(other.clientPubkey, clientPubkey) ||
                 other.clientPubkey == clientPubkey) &&
-            (identical(other.walletServicePubkey, walletServicePubkey) ||
-                other.walletServicePubkey == walletServicePubkey) &&
             (identical(other.resultType, resultType) ||
                 other.resultType == resultType) &&
             const DeepCollectionEquality().equals(other._result, _result) &&
@@ -382,7 +345,6 @@ class ResponseEventModel extends ResponseModel {
       runtimeType,
       requestId,
       clientPubkey,
-      walletServicePubkey,
       resultType,
       const DeepCollectionEquality().hash(_result),
       error,
@@ -392,7 +354,7 @@ class ResponseEventModel extends ResponseModel {
 
   @override
   String toString() {
-    return 'ResponseModel.event(requestId: $requestId, clientPubkey: $clientPubkey, walletServicePubkey: $walletServicePubkey, resultType: $resultType, result: $result, error: $error, eventId: $eventId, relays: $relays, createdAt: $createdAt)';
+    return 'ResponseModel.event(requestId: $requestId, clientPubkey: $clientPubkey, resultType: $resultType, result: $result, error: $error, eventId: $eventId, relays: $relays, createdAt: $createdAt)';
   }
 }
 
@@ -407,7 +369,6 @@ abstract mixin class $ResponseEventModelCopyWith<$Res>
   $Res call(
       {String requestId,
       String clientPubkey,
-      String walletServicePubkey,
       String resultType,
       Map<String, dynamic>? result,
       ResponseErrorModel? error,
@@ -434,7 +395,6 @@ class _$ResponseEventModelCopyWithImpl<$Res>
   $Res call({
     Object? requestId = null,
     Object? clientPubkey = null,
-    Object? walletServicePubkey = null,
     Object? resultType = null,
     Object? result = freezed,
     Object? error = freezed,
@@ -450,10 +410,6 @@ class _$ResponseEventModelCopyWithImpl<$Res>
       clientPubkey: null == clientPubkey
           ? _self.clientPubkey
           : clientPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      walletServicePubkey: null == walletServicePubkey
-          ? _self.walletServicePubkey
-          : walletServicePubkey // ignore: cast_nullable_to_non_nullable
               as String,
       resultType: null == resultType
           ? _self.resultType
