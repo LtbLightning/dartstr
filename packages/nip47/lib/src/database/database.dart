@@ -18,8 +18,8 @@ class Nip47Database extends _$Nip47Database {
   // After generating code, this class needs to define a `schemaVersion` getter
   // and a constructor telling drift where the database should be stored.
   // These are described in the getting started guide: https://drift.simonbinder.eu/setup/
-  Nip47Database([QueryExecutor? executor])
-      : super(executor ?? _openConnection());
+  Nip47Database({String? filePath, QueryExecutor? executor})
+      : super(executor ?? _openConnection(filePath ?? 'dartstr_nip47.db'));
 
   @override
   int get schemaVersion => 1;
@@ -35,7 +35,7 @@ class Nip47Database extends _$Nip47Database {
     });
   }
 
-  static QueryExecutor _openConnection() {
-    return NativeDatabase.createInBackground(File('dartstr_nip47.db'));
+  static QueryExecutor _openConnection(String filePath) {
+    return NativeDatabase.createInBackground(File(filePath));
   }
 }

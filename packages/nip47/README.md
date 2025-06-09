@@ -50,6 +50,12 @@ To use this package, your app should already have a Lightning Network node or wa
 
 ## Usage
 
+To use this package in a Flutter app, make sure to add the `sqlite3_flutter_libs` package to your `pubspec.yaml` file:
+
+`flutter pub add sqlite3_flutter_libs`
+
+This is needed to persist the connections, requests and responses in an SQLite database.
+
 Next, you can follow the steps below to integrate Nostr Wallet Connect into your app:
 
 ### 1. Generate or import a Nostr keypair for the wallet service\*
