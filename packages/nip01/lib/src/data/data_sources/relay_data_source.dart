@@ -50,14 +50,31 @@ class WebSocketRelayDataSource implements RelayDataSource {
           log('[WebSocketRelayDataSource] Connecting to relay: ${state.relayUrl}');
         case ConnectedRelayState _:
           log('[WebSocketRelayDataSource] Connected to relay: ${state.relayUrl}');
-          // Reset retry count on a successful connection
-          _retryCounts[state.relayUrl] = 0;
+          // Attempt to reconnect automatically after disconnection
+          final lock = _locks[state.relayUrl];
+          if (lock == null) {
+            log('[WebSocketRelayDataSource] Relay ${state.relayUrl} not found to reconnect');
+            return;
+          }
+
+          await lock.synchronized(() async {
+            // Reset retry count on a successful connection
+            _retryCounts[state.relayUrl] = 0;
+          });
         case DisconnectingRelayState _:
           log('[WebSocketRelayDataSource] Disconnecting from relay: ${state.relayUrl}');
         case DisconnectedRelayState _:
           log('[WebSocketRelayDataSource] Disconnected from relay: ${state.relayUrl}');
           // Attempt to reconnect automatically after disconnection
-          await _reconnect(state.relayUrl);
+          final lock = _locks[state.relayUrl];
+          if (lock == null) {
+            log('[WebSocketRelayDataSource] Relay ${state.relayUrl} not found to reconnect');
+            return;
+          }
+
+          await lock.synchronized(() async {
+            await _reconnect(state.relayUrl);
+          });
         case DisposingRelayState _:
           log('[WebSocketRelayDataSource] Disposing relay: ${state.relayUrl}');
         case DisposedRelayState _:
@@ -85,46 +102,7 @@ class WebSocketRelayDataSource implements RelayDataSource {
   Future<void> connect(String relayUrl) async {
     final lock = _locks.putIfAbsent(relayUrl, () => Lock());
     await lock.synchronized(() async {
-      final existingState = _states[relayUrl];
-      if (existingState != null) {
-        if (existingState is ConnectedRelayState) {
-          log('[WebSocketRelayDataSource] Relay $relayUrl is already connected');
-          return;
-        } else {
-          log('[WebSocketRelayDataSource] Relay $relayUrl is already in ${existingState.status} state');
-          // Disconnect the existing connection before reconnecting so we
-          // are in a clean state
-          await _disconnect(relayUrl);
-        }
-      }
-
-      _changeState(ConnectingRelayState(relayUrl: relayUrl));
-
-      try {
-        final channel = channelFactory?.call(relayUrl) ??
-            WebSocketChannel.connect(Uri.parse(relayUrl));
-        _channels[relayUrl] = channel;
-
-        _subscriptions[relayUrl] = channel.stream.listen(
-          (message) {
-            log('[WebSocketRelayDataSource] Received message: $message from relay $relayUrl');
-            final relayMessage =
-                RelayMessageModel.fromString(message, relayUrl: relayUrl);
-            _messageBroadcast.add(relayMessage);
-          },
-          onError: (Object error) =>
-              _disconnect(relayUrl, reason: error.toString()),
-          onDone: () => _disconnect(relayUrl, reason: 'WebSocket closed'),
-        );
-
-        // Make sure the channel is really connected before proceeding
-        await channel.ready;
-
-        _changeState(ConnectedRelayState(relayUrl: relayUrl));
-      } catch (e) {
-        log('[WebSocketRelayDataSource] Failed to add relay $relayUrl: $e');
-        throw RelayDataSourceConnectException('$e');
-      }
+      await _connect(relayUrl);
     });
   }
 
@@ -152,26 +130,6 @@ class WebSocketRelayDataSource implements RelayDataSource {
     return sentTo;
   }
 
-  Future<void> _disconnect(String relayUrl, {String? reason}) async {
-    final lock = _locks[relayUrl];
-    if (lock == null) {
-      log('[WebSocketRelayDataSource] Relay $relayUrl not found to disconnect');
-      return;
-    }
-
-    await lock.synchronized(() async {
-      _changeState(DisconnectingRelayState(relayUrl: relayUrl, reason: reason));
-
-      final channel = _channels.remove(relayUrl);
-      final subscription = _subscriptions.remove(relayUrl);
-
-      await subscription?.cancel();
-      await channel?.sink.close(status.goingAway);
-
-      _changeState(DisconnectedRelayState(relayUrl: relayUrl, reason: reason));
-    });
-  }
-
   @override
   Future<void> dispose(String relayUrl) async {
     final lock = _locks[relayUrl];
@@ -188,6 +146,80 @@ class WebSocketRelayDataSource implements RelayDataSource {
 
       _changeState(DisposedRelayState(relayUrl: relayUrl));
     });
+  }
+
+  Future<void> _connect(String relayUrl) async {
+    final existingState = _states[relayUrl];
+    if (existingState != null) {
+      if (existingState is ConnectedRelayState) {
+        log('[WebSocketRelayDataSource] Relay $relayUrl is already connected');
+        return;
+      } else {
+        log('[WebSocketRelayDataSource] Relay $relayUrl is already in ${existingState.status} state');
+        // Disconnect the existing connection before reconnecting so we
+        // are in a clean state
+        await _disconnect(relayUrl);
+      }
+    }
+
+    _changeState(ConnectingRelayState(relayUrl: relayUrl));
+
+    try {
+      final channel = channelFactory?.call(relayUrl) ??
+          WebSocketChannel.connect(Uri.parse(relayUrl));
+      _channels[relayUrl] = channel;
+
+      _subscriptions[relayUrl] = channel.stream.listen(
+        (message) {
+          log('[WebSocketRelayDataSource] Received message: $message from relay $relayUrl');
+          final relayMessage =
+              RelayMessageModel.fromString(message, relayUrl: relayUrl);
+          _messageBroadcast.add(relayMessage);
+        },
+        onError: (Object error) async {
+          final lock = _locks[relayUrl];
+          if (lock == null) {
+            log('[WebSocketRelayDataSource] Relay $relayUrl not found to dispose');
+            return;
+          }
+
+          await lock.synchronized(() async {
+            _disconnect(relayUrl, reason: error.toString());
+          });
+        },
+        onDone: () async {
+          final lock = _locks[relayUrl];
+          if (lock == null) {
+            log('[WebSocketRelayDataSource] Relay $relayUrl not found to dispose');
+            return;
+          }
+
+          await lock.synchronized(() async {
+            _disconnect(relayUrl);
+          });
+        },
+      );
+
+      // Make sure the channel is really connected before proceeding
+      await channel.ready;
+
+      _changeState(ConnectedRelayState(relayUrl: relayUrl));
+    } catch (e) {
+      log('[WebSocketRelayDataSource] Failed to add relay $relayUrl: $e');
+      throw RelayDataSourceConnectException('$e');
+    }
+  }
+
+  Future<void> _disconnect(String relayUrl, {String? reason}) async {
+    _changeState(DisconnectingRelayState(relayUrl: relayUrl, reason: reason));
+
+    final channel = _channels.remove(relayUrl);
+    final subscription = _subscriptions.remove(relayUrl);
+
+    await subscription?.cancel();
+    await channel?.sink.close(status.normalClosure);
+
+    _changeState(DisconnectedRelayState(relayUrl: relayUrl, reason: reason));
   }
 
   void _changeState(RelayState newState) {
@@ -209,12 +241,6 @@ class WebSocketRelayDataSource implements RelayDataSource {
   }
 
   Future<void> _reconnect(String relayUrl) async {
-    final lock = _locks[relayUrl];
-    if (lock == null) {
-      log('[WebSocketRelayDataSource] Relay $relayUrl not found to reconnect');
-      return;
-    }
-
     final retryCount = _retryCounts[relayUrl] ?? 0;
 
     if (retryCount >= _maxRetries) {
@@ -227,19 +253,17 @@ class WebSocketRelayDataSource implements RelayDataSource {
 
     await Future.delayed(delay);
 
-    await lock.synchronized(() async {
-      _retryCounts[relayUrl] = retryCount + 1;
+    _retryCounts[relayUrl] = retryCount + 1;
 
-      // Try to reconnect
-      try {
-        await connect(relayUrl);
-        log('[WebSocketRelayDataSource] Reconnected to $relayUrl');
-      } catch (e) {
-        log('[WebSocketRelayDataSource] Failed to reconnect to $relayUrl: $e');
-        // If the connection fails, we will retry again
-        await _disconnect(relayUrl);
-      }
-    });
+    // Try to reconnect
+    try {
+      await _connect(relayUrl);
+      log('[WebSocketRelayDataSource] Reconnected to $relayUrl');
+    } catch (e) {
+      log('[WebSocketRelayDataSource] Failed to reconnect to $relayUrl: $e');
+      // If the connection fails, we will retry again
+      await _disconnect(relayUrl);
+    }
   }
 
   Duration _getBackoffDelay(int retryCount) {
