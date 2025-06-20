@@ -137,8 +137,7 @@ class NostrDataSourceImpl implements NostrDataSource {
       relayUrls: relayUrls,
     );
 
-    if (result.subscription.relayUrls == null ||
-        result.subscription.relayUrls!.isEmpty) {
+    if (result.subscription.relayUrls.isEmpty) {
       throw Exception('Failed to subscribe on any relays');
     }
 
@@ -152,7 +151,7 @@ class NostrDataSourceImpl implements NostrDataSource {
           relays: [event.relayUrl],
         ),
       ),
-      relayUrls: result.subscription.relayUrls!,
+      relayUrls: result.subscription.relayUrls,
     );
   }
 
@@ -187,8 +186,7 @@ class NostrDataSourceImpl implements NostrDataSource {
       relayUrls: relayUrls,
     );
 
-    if (result.subscription.relayUrls == null ||
-        result.subscription.relayUrls!.isEmpty) {
+    if (result.subscription.relayUrls.isEmpty) {
       throw Exception('Failed to subscribe on any relays');
     }
 
@@ -202,7 +200,7 @@ class NostrDataSourceImpl implements NostrDataSource {
           relays: [event.relayUrl],
         ),
       ),
-      relayUrls: result.subscription.relayUrls!,
+      relayUrls: result.subscription.relayUrls,
     );
   }
 
@@ -225,8 +223,7 @@ class NostrDataSourceImpl implements NostrDataSource {
       relayUrls: relayUrls,
     );
 
-    if (result.subscription.relayUrls == null ||
-        result.subscription.relayUrls!.isEmpty) {
+    if (result.subscription.relayUrls.isEmpty) {
       throw Exception('Failed to subscribe on any relays');
     }
 
@@ -238,7 +235,7 @@ class NostrDataSourceImpl implements NostrDataSource {
           event.relayUrl,
         ]),
       ),
-      relayUrls: result.subscription.relayUrls!,
+      relayUrls: result.subscription.relayUrls,
     );
   }
 
@@ -259,8 +256,7 @@ class NostrDataSourceImpl implements NostrDataSource {
       relayUrls: relayUrls,
     );
 
-    if (result.subscription.relayUrls == null ||
-        result.subscription.relayUrls!.isEmpty) {
+    if (result.subscription.relayUrls.isEmpty) {
       throw Exception('Failed to subscribe on any relays');
     }
 
@@ -272,7 +268,7 @@ class NostrDataSourceImpl implements NostrDataSource {
           event.relayUrl,
         ]),
       ),
-      relayUrls: result.subscription.relayUrls!,
+      relayUrls: result.subscription.relayUrls,
     );
   }
 }

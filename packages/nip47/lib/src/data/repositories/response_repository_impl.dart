@@ -10,8 +10,11 @@ class ResponseRepositoryImpl implements ResponseRepository {
   final LocalResponseDataSource _localResponseDataSource;
   final LocalWalletConnectionDataSource _localWalletConnectionDataSource;
   final StreamController<ResponseEvent> _responseStreamController;
+  // ignore: unused_field
   final Map<String, ResponseSubscriptionModel> _responseSubscriptions;
+  // ignore: unused_field
   final Map<String, StreamSubscription> _subscriptionListeners;
+  // ignore: unused_field
   final Map<String, nip01.KeyPair> _connectionClientKeyPairs;
 
   ResponseRepositoryImpl({
@@ -57,6 +60,7 @@ class ResponseRepositoryImpl implements ResponseRepository {
   }
 
   @override
+  // ignore: override_on_non_overriding_member
   Future<void> subscribeToResponses(
       {required String walletServicePubkey,
       required nip01.KeyPair clientKeyPair,
