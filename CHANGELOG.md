@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip01` - `v0.3.0+1`](#nip01---v0301)
+
+---
+
+#### `nip01` - `v0.3.0+1`
+
+ - Fix analyzer warning for melos publishing
+
+
+## 2025-06-20
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip47` - `v0.5.0`](#nip47---v050)
 
 ---

@@ -1,3 +1,7 @@
+## 0.3.0+1
+
+ - Fix analyzer warning for melos publishing
+
 ## 0.3.0
 
  - Clean(er) Architecture
