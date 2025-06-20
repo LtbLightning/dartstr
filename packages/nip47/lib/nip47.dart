@@ -3,21 +3,9 @@
 /// More dartdocs go here.
 library;
 
-export 'src/nip47_base.dart';
-
-export 'src/data/models/connection.dart';
-export 'src/data/models/filters.dart';
-export 'src/data/models/info_event.dart';
-export 'src/data/models/request.dart';
-export 'src/data/models/response.dart';
-export 'src/data/models/tlv_record.dart';
-export 'src/data/models/transaction.dart';
-
-export 'src/enums/bitcoin_network.dart';
-export 'src/enums/error_code.dart';
-export 'src/enums/event_kind.dart';
-export 'src/data/models/method.dart';
-export 'src/enums/transaction_type.dart';
-export 'src/enums/notification_type.dart';
-
-export 'src/constants.dart';
+export 'src/database/database.dart';
+export 'src/data/data_sources/data_sources.dart';
+export 'src/data/repositories/repositories.dart';
+export 'src/domain/entities/entities.dart';
+export 'src/domain/repositories/repositories.dart';
+export 'src/domain/use_cases/use_cases.dart';

@@ -15,7 +15,7 @@ void main() {
     late Kind0ExtraMetadata metadata;
 
     setUp(() {
-      metadata = const Kind0ExtraMetadata(
+      metadata = Kind0ExtraMetadata(
         name: name,
         about: about,
         picture: picture,
@@ -62,18 +62,6 @@ void main() {
       expect(parsedMetadata.website, website);
       expect(parsedMetadata.banner, banner);
       expect(parsedMetadata.bot, bot);
-    });
-
-    test('should have correct props', () {
-      expect(metadata.props, [
-        name,
-        about,
-        picture,
-        displayName,
-        website,
-        banner,
-        bot,
-      ]);
     });
 
     test('should set default bot to false if not provided', () {

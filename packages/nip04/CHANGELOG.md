@@ -1,3 +1,7 @@
+## 0.1.0
+
+ - **REFACTOR**: nip01 with Clean Architecture.
+
 ## 0.0.2
 
 - Update repository URL in pubspec.yaml.

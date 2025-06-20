@@ -16,4 +16,10 @@ void main() {
   metadata = Kind0ExtraMetadata.fromContent(metadata.content);
 
   print(metadata.name);
+  print(metadata.about);
+  print(metadata.picture);
+  print(metadata.displayName);
+  print(metadata.website);
+  print(metadata.banner);
+  print(metadata.bot);
 }

@@ -1,3 +1,16 @@
+## 0.2.0+2
+
+ - Bump "nip01" to `0.2.0+2`.
+
+## 0.2.0+1
+
+ - **FIX**: bugs.
+
+## 0.2.0
+
+ - **REFACTOR**: nip01 with Clean Architecture.
+ - **REFACTOR**: nip01 to clean architecture.
+
 ## 0.1.1+3
 
  - **FIX**: unneccessary default switch case.

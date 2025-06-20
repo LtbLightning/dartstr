@@ -1,44 +1,126 @@
-import 'package:dartstr_utils/dartstr_utils.dart';
 import 'package:nip01/nip01.dart';
 
 void main() async {
   final keyPair = KeyPair.generate();
   print('privateKey: ${keyPair.privateKey}');
 
-  final nip01Repository = Nip01RepositoryImpl(
-    relayClientsManager: RelayClientsManagerImpl(['wss://example.relay.org']),
+  final relayDataSource = WebSocketRelayDataSource();
+  final relayRepository = RelayRepositoryImpl(
+    relayDataSource: relayDataSource,
+  );
+  final eventRepository = EventRepositoryImpl(
+    relayDataSource: relayDataSource,
+  );
+  final subscriptionRepository = SubscriptionRepositoryImpl(
+    relayDataSource: relayDataSource,
   );
 
-  final partialEvent = Event(
-    pubkey: '981cc2078af05b62ee1f98cff325aac755bf5c5836a265c254447b5933c6223b',
-    createdAt: 1672175320,
+  final AddRelaysUseCase addRelaysUseCase = AddRelaysUseCase(
+    relayRepository: relayRepository,
+  );
+  final SubscribeUseCase subscribeUseCase = SubscribeUseCase(
+    subscriptionRepository: subscriptionRepository,
+    eventRepository: eventRepository,
+    relayRepository: relayRepository,
+  );
+  final UnsubscribeUseCase unsubscribeUseCase = UnsubscribeUseCase(
+    subscriptionRepository: subscriptionRepository,
+  );
+  final GetProfileMetadataUseCase getProfileMetadataUseCase =
+      GetProfileMetadataUseCase(
+    eventRepository: eventRepository,
+    relayRepository: relayRepository,
+  );
+  final PublishEventUseCase publishEventUseCase = PublishEventUseCase(
+    eventRepository: eventRepository,
+    relayRepository: relayRepository,
+  );
+  await addRelaysUseCase.execute(
+    [Uri.parse('wss://relay.paywithflash.com')],
+  );
+
+  // Subscribe and listen to events
+  final textNoteFilters = [
+    Filters(
+      authors: [keyPair.publicKey],
+      kinds: [EventKind.textNote.value],
+    ),
+  ];
+  final userMetadataFilters = [
+    Filters(
+      authors: [keyPair.publicKey],
+      kinds: [EventKind.userMetadata.value],
+    ),
+  ];
+  final textNoteSubscription = await subscribeUseCase.execute(
+    filters: textNoteFilters,
+  );
+  final userMetadataSubscription = await subscribeUseCase.execute(
+    filters: userMetadataFilters,
+  );
+  final textNoteListener = textNoteSubscription.eventStream.listen((event) {
+    print('Received text note event: $event');
+  });
+  final userMetadataListener =
+      userMetadataSubscription.eventStream.listen((event) {
+    print('Received user metadata event: $event');
+  });
+
+  // Publish an event
+  final event = Event.create(
+    keyPair: keyPair,
+    createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
     kind: EventKind.textNote.value,
     tags: [],
     content: "This is an event.",
   );
-
-  final signedEvent = partialEvent.sign(keyPair);
-
-  final isPublished = await nip01Repository.publishEvent(signedEvent);
-  if (!isPublished) {
+  final publishedToRelays = await publishEventUseCase.execute(event);
+  if (publishedToRelays.isEmpty) {
     throw Exception('Failed to publish event');
   }
 
-  // Subscribe to events on the relay
-  final String subscriptionId = SecretGenerator.secretHex(
-    64,
-  ); // SecretGenerator is part of the dartstr_utils package
-  final eventsStream = await nip01Repository.subscribeToEvents(
-    subscriptionId,
-    [
-      Filters(
-        authors: [keyPair.publicKey],
-        since: 1672175320,
-      ),
-    ],
+  // Set profile metadata
+  final profileMetadata = Kind0Metadata(name: 'Alice');
+  final profileEvent = Event.create(
+    keyPair: keyPair,
+    createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    kind: EventKind.userMetadata.value,
+    content: profileMetadata.content,
   );
+  final setOnRelays = await publishEventUseCase.execute(profileEvent);
+  if (setOnRelays.isEmpty) {
+    throw Exception('Failed to set profile metadata');
+  }
 
-  eventsStream.listen((event) {
-    print('Received event: $event');
-  });
+  // Get profile metadata
+  final profileMetadataResult = await getProfileMetadataUseCase.execute(
+    keyPair.publicKey,
+  );
+  print('Profile metadata from stored events: $profileMetadataResult');
+
+  // Unsubscribe from events
+  await unsubscribeUseCase.execute(textNoteSubscription.subscription.id,
+      relayUrls: textNoteSubscription.subscription.relayUrls!);
+  await unsubscribeUseCase.execute(userMetadataSubscription.subscription.id,
+      relayUrls: userMetadataSubscription.subscription.relayUrls!);
+
+  // Publish a new event and it should not be received and printed anymore
+  final newEvent = Event.create(
+    keyPair: keyPair,
+    createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    kind: EventKind.textNote.value,
+    tags: [],
+    content: "This is a new event.",
+  );
+  final newPublishedToRelays = await publishEventUseCase.execute(newEvent);
+  if (newPublishedToRelays.isEmpty) {
+    throw Exception('Failed to publish new event');
+  }
+
+  // Delay to allow the event to be processed
+  await Future.delayed(Duration(seconds: 5));
+
+  // Cancel the listeners
+  await textNoteListener.cancel();
+  await userMetadataListener.cancel();
 }

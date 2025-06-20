@@ -44,15 +44,15 @@ class Delegatee {
     required String content,
   }) {
     List<List<String>> tagsWithDelegationTag = [...tags, _delegationTag.tag];
-    final event = Event(
-      pubkey: _keyPair.publicKey,
+    final event = Event.create(
+      keyPair: _keyPair,
       createdAt: createdAt,
       kind: kind,
       tags: tagsWithDelegationTag,
       content: content,
     );
 
-    return event.sign(_keyPair);
+    return event;
   }
 }
 

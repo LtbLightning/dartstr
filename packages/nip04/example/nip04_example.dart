@@ -2,7 +2,7 @@ import 'package:nip01/nip01.dart';
 import 'package:nip04/nip04.dart';
 
 void main() {
-  final keyPair = KeyPair(
+  final keyPair = KeyPair.fromPrivateKey(
     privateKey:
         '9bdc0737ecc9b7871b21537cc707c972389c829028f9fa8e6c95b331768ee4ac',
   );
