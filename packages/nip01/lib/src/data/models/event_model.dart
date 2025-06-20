@@ -7,6 +7,7 @@ part 'event_model.g.dart';
 
 @freezed
 sealed class EventModel with _$EventModel {
+  // ignore: invalid_annotation_target
   @JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
   const factory EventModel({
     required String id,
