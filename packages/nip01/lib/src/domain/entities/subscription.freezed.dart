@@ -17,7 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$Subscription {
   String get id;
   List<Filters> get filters;
-  List<String>? get relayUrls;
+  List<String> get relayUrls;
 
   /// Create a copy of Subscription
   /// with the given fields replaced by the non-null parameter values.
@@ -56,7 +56,7 @@ abstract mixin class $SubscriptionCopyWith<$Res> {
           Subscription value, $Res Function(Subscription) _then) =
       _$SubscriptionCopyWithImpl;
   @useResult
-  $Res call({String id, List<Filters> filters, List<String>? relayUrls});
+  $Res call({String id, List<Filters> filters, List<String> relayUrls});
 }
 
 /// @nodoc
@@ -73,7 +73,7 @@ class _$SubscriptionCopyWithImpl<$Res> implements $SubscriptionCopyWith<$Res> {
   $Res call({
     Object? id = null,
     Object? filters = null,
-    Object? relayUrls = freezed,
+    Object? relayUrls = null,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -84,10 +84,10 @@ class _$SubscriptionCopyWithImpl<$Res> implements $SubscriptionCopyWith<$Res> {
           ? _self.filters
           : filters // ignore: cast_nullable_to_non_nullable
               as List<Filters>,
-      relayUrls: freezed == relayUrls
+      relayUrls: null == relayUrls
           ? _self.relayUrls
           : relayUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
     ));
   }
 }
@@ -98,7 +98,7 @@ class _Subscription extends Subscription {
   const _Subscription(
       {required this.id,
       required final List<Filters> filters,
-      final List<String>? relayUrls})
+      required final List<String> relayUrls})
       : _filters = filters,
         _relayUrls = relayUrls,
         super._();
@@ -113,14 +113,12 @@ class _Subscription extends Subscription {
     return EqualUnmodifiableListView(_filters);
   }
 
-  final List<String>? _relayUrls;
+  final List<String> _relayUrls;
   @override
-  List<String>? get relayUrls {
-    final value = _relayUrls;
-    if (value == null) return null;
+  List<String> get relayUrls {
     if (_relayUrls is EqualUnmodifiableListView) return _relayUrls;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_relayUrls);
   }
 
   /// Create a copy of Subscription
@@ -163,7 +161,7 @@ abstract mixin class _$SubscriptionCopyWith<$Res>
       __$SubscriptionCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, List<Filters> filters, List<String>? relayUrls});
+  $Res call({String id, List<Filters> filters, List<String> relayUrls});
 }
 
 /// @nodoc
@@ -181,7 +179,7 @@ class __$SubscriptionCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? filters = null,
-    Object? relayUrls = freezed,
+    Object? relayUrls = null,
   }) {
     return _then(_Subscription(
       id: null == id
@@ -192,10 +190,10 @@ class __$SubscriptionCopyWithImpl<$Res>
           ? _self._filters
           : filters // ignore: cast_nullable_to_non_nullable
               as List<Filters>,
-      relayUrls: freezed == relayUrls
+      relayUrls: null == relayUrls
           ? _self._relayUrls
           : relayUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
     ));
   }
 }
