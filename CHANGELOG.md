@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-06-20
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip01` - `v0.3.0`](#nip01---v030)
+
+---
+
+#### `nip01` - `v0.3.0`
+
+ - Clean(er) Architecture
+
+
 ## 2025-05-07
 
 ### Changes

@@ -12,7 +12,7 @@ dependencies:
   convert: ^3.1.2
   crypto: ^3.0.6
   equatable: ^2.0.5
-  nip01: ^0.2.0+2
+  nip01: ^0.3.0
   # path: ^1.8.0
 
 dev_dependencies:

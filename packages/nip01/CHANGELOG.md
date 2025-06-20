@@ -1,3 +1,7 @@
+## 0.3.0
+
+ - Clean(er) Architecture
+
 ## 0.2.0+2
 
  - Bump "nip01" to `0.2.0+2`.
