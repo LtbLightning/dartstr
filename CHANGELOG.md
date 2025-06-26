@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-06-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip47` - `v0.5.0+2`](#nip47---v0502)
+
+---
+
+#### `nip47` - `v0.5.0+2`
+
+ - **REFACTOR**: use iso timestamps for drift datetimes.
+
+
 ## 2025-06-20
 
 ### Changes

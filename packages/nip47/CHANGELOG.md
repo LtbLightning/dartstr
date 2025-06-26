@@ -1,3 +1,7 @@
+## 0.5.0+2
+
+ - **REFACTOR**: use iso timestamps for drift datetimes.
+
 ## 0.5.0+1
 
 ## 0.5.0
