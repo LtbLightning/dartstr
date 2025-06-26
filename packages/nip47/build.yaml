@@ -5,8 +5,6 @@ targets:
         options:
           databases:
             nip47_database: lib/src/database/database.dart
-            # True to use ISO 8601 strings, false to use Unix timestamps.
-            store_date_time_values_as_text: true
       freezed:
         options:
           build_extensions:

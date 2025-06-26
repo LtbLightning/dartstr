@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:nip47/src/database/type_converters/date_time_converter.dart';
 import 'package:nip47/src/database/type_converters/string_list_type_converter.dart';
 
 @DataClassName('WalletConnectionTable')
@@ -13,10 +14,12 @@ class WalletConnections extends Table {
   TextColumn get clientRelays =>
       text().nullable().map(const StringListTypeConverter())();
   TextColumn get budgetRenewal => text()();
-  DateTimeColumn get budgetRenewedAt => dateTime().nullable()();
+  TextColumn get budgetRenewedAt =>
+      text().map(const DateTimeConverter()).nullable()();
   IntColumn get maxAmountSat => integer().nullable()();
   IntColumn get remainingAmountSat => integer().nullable()();
-  DateTimeColumn get expiresAt => dateTime().nullable()();
+  TextColumn get expiresAt =>
+      text().map(const DateTimeConverter()).nullable()();
   TextColumn get methods => text().nullable().map(StringListTypeConverter())();
   TextColumn get customMethods =>
       text().nullable().map(const StringListTypeConverter())();
@@ -28,6 +31,6 @@ class WalletConnections extends Table {
   BoolColumn get isFrozen => boolean().nullable()();
   TextColumn get categories =>
       text().nullable().map(const StringListTypeConverter())();
-  DateTimeColumn get createdAt => dateTime()();
+  TextColumn get createdAt => text().map(const DateTimeConverter())();
   TextColumn get lud16 => text().nullable()();
 }

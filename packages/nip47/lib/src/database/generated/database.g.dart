@@ -44,12 +44,13 @@ class $WalletConnectionsTable extends WalletConnections
   late final GeneratedColumn<String> budgetRenewal = GeneratedColumn<String>(
       'budget_renewal', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _budgetRenewedAtMeta =
-      const VerificationMeta('budgetRenewedAt');
   @override
-  late final GeneratedColumn<DateTime> budgetRenewedAt =
-      GeneratedColumn<DateTime>('budget_renewed_at', aliasedName, true,
-          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  late final GeneratedColumnWithTypeConverter<DateTime?, String>
+      budgetRenewedAt = GeneratedColumn<String>(
+              'budget_renewed_at', aliasedName, true,
+              type: DriftSqlType.string, requiredDuringInsert: false)
+          .withConverter<DateTime?>(
+              $WalletConnectionsTable.$converterbudgetRenewedAtn);
   static const VerificationMeta _maxAmountSatMeta =
       const VerificationMeta('maxAmountSat');
   @override
@@ -62,12 +63,12 @@ class $WalletConnectionsTable extends WalletConnections
   late final GeneratedColumn<int> remainingAmountSat = GeneratedColumn<int>(
       'remaining_amount_sat', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _expiresAtMeta =
-      const VerificationMeta('expiresAt');
   @override
-  late final GeneratedColumn<DateTime> expiresAt = GeneratedColumn<DateTime>(
-      'expires_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  late final GeneratedColumnWithTypeConverter<DateTime?, String> expiresAt =
+      GeneratedColumn<String>('expires_at', aliasedName, true,
+              type: DriftSqlType.string, requiredDuringInsert: false)
+          .withConverter<DateTime?>(
+              $WalletConnectionsTable.$converterexpiresAtn);
   @override
   late final GeneratedColumnWithTypeConverter<List<String>?, String> methods =
       GeneratedColumn<String>('methods', aliasedName, true,
@@ -119,12 +120,11 @@ class $WalletConnectionsTable extends WalletConnections
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>(
               $WalletConnectionsTable.$convertercategoriesn);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
   @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
+      GeneratedColumn<String>('created_at', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<DateTime>($WalletConnectionsTable.$convertercreatedAt);
   static const VerificationMeta _lud16Meta = const VerificationMeta('lud16');
   @override
   late final GeneratedColumn<String> lud16 = GeneratedColumn<String>(
@@ -191,12 +191,6 @@ class $WalletConnectionsTable extends WalletConnections
     } else if (isInserting) {
       context.missing(_budgetRenewalMeta);
     }
-    if (data.containsKey('budget_renewed_at')) {
-      context.handle(
-          _budgetRenewedAtMeta,
-          budgetRenewedAt.isAcceptableOrUnknown(
-              data['budget_renewed_at']!, _budgetRenewedAtMeta));
-    }
     if (data.containsKey('max_amount_sat')) {
       context.handle(
           _maxAmountSatMeta,
@@ -209,10 +203,6 @@ class $WalletConnectionsTable extends WalletConnections
           remainingAmountSat.isAcceptableOrUnknown(
               data['remaining_amount_sat']!, _remainingAmountSatMeta));
     }
-    if (data.containsKey('expires_at')) {
-      context.handle(_expiresAtMeta,
-          expiresAt.isAcceptableOrUnknown(data['expires_at']!, _expiresAtMeta));
-    }
     if (data.containsKey('isolated')) {
       context.handle(_isolatedMeta,
           isolated.isAcceptableOrUnknown(data['isolated']!, _isolatedMeta));
@@ -220,12 +210,6 @@ class $WalletConnectionsTable extends WalletConnections
     if (data.containsKey('is_frozen')) {
       context.handle(_isFrozenMeta,
           isFrozen.isAcceptableOrUnknown(data['is_frozen']!, _isFrozenMeta));
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
     }
     if (data.containsKey('lud16')) {
       context.handle(
@@ -255,14 +239,16 @@ class $WalletConnectionsTable extends WalletConnections
               DriftSqlType.string, data['${effectivePrefix}client_relays'])),
       budgetRenewal: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}budget_renewal'])!,
-      budgetRenewedAt: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}budget_renewed_at']),
+      budgetRenewedAt: $WalletConnectionsTable.$converterbudgetRenewedAtn
+          .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
+              data['${effectivePrefix}budget_renewed_at'])),
       maxAmountSat: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}max_amount_sat']),
       remainingAmountSat: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}remaining_amount_sat']),
-      expiresAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}expires_at']),
+      expiresAt: $WalletConnectionsTable.$converterexpiresAtn.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.string, data['${effectivePrefix}expires_at'])),
       methods: $WalletConnectionsTable.$convertermethodsn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.string, data['${effectivePrefix}methods'])),
@@ -283,8 +269,9 @@ class $WalletConnectionsTable extends WalletConnections
       categories: $WalletConnectionsTable.$convertercategoriesn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.string, data['${effectivePrefix}categories'])),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      createdAt: $WalletConnectionsTable.$convertercreatedAt.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}created_at'])!),
       lud16: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}lud16']),
     );
@@ -301,6 +288,14 @@ class $WalletConnectionsTable extends WalletConnections
       const StringListTypeConverter();
   static TypeConverter<List<String>?, String?> $converterclientRelaysn =
       NullAwareTypeConverter.wrap($converterclientRelays);
+  static TypeConverter<DateTime, String> $converterbudgetRenewedAt =
+      const DateTimeConverter();
+  static TypeConverter<DateTime?, String?> $converterbudgetRenewedAtn =
+      NullAwareTypeConverter.wrap($converterbudgetRenewedAt);
+  static TypeConverter<DateTime, String> $converterexpiresAt =
+      const DateTimeConverter();
+  static TypeConverter<DateTime?, String?> $converterexpiresAtn =
+      NullAwareTypeConverter.wrap($converterexpiresAt);
   static TypeConverter<List<String>, String> $convertermethods =
       StringListTypeConverter();
   static TypeConverter<List<String>?, String?> $convertermethodsn =
@@ -321,6 +316,8 @@ class $WalletConnectionsTable extends WalletConnections
       const StringListTypeConverter();
   static TypeConverter<List<String>?, String?> $convertercategoriesn =
       NullAwareTypeConverter.wrap($convertercategories);
+  static TypeConverter<DateTime, String> $convertercreatedAt =
+      const DateTimeConverter();
 }
 
 class WalletConnectionTable extends DataClass
@@ -382,7 +379,9 @@ class WalletConnectionTable extends DataClass
     }
     map['budget_renewal'] = Variable<String>(budgetRenewal);
     if (!nullToAbsent || budgetRenewedAt != null) {
-      map['budget_renewed_at'] = Variable<DateTime>(budgetRenewedAt);
+      map['budget_renewed_at'] = Variable<String>($WalletConnectionsTable
+          .$converterbudgetRenewedAtn
+          .toSql(budgetRenewedAt));
     }
     if (!nullToAbsent || maxAmountSat != null) {
       map['max_amount_sat'] = Variable<int>(maxAmountSat);
@@ -391,7 +390,8 @@ class WalletConnectionTable extends DataClass
       map['remaining_amount_sat'] = Variable<int>(remainingAmountSat);
     }
     if (!nullToAbsent || expiresAt != null) {
-      map['expires_at'] = Variable<DateTime>(expiresAt);
+      map['expires_at'] = Variable<String>(
+          $WalletConnectionsTable.$converterexpiresAtn.toSql(expiresAt));
     }
     if (!nullToAbsent || methods != null) {
       map['methods'] = Variable<String>(
@@ -422,7 +422,10 @@ class WalletConnectionTable extends DataClass
       map['categories'] = Variable<String>(
           $WalletConnectionsTable.$convertercategoriesn.toSql(categories));
     }
-    map['created_at'] = Variable<DateTime>(createdAt);
+    {
+      map['created_at'] = Variable<String>(
+          $WalletConnectionsTable.$convertercreatedAt.toSql(createdAt));
+    }
     if (!nullToAbsent || lud16 != null) {
       map['lud16'] = Variable<String>(lud16);
     }
@@ -777,10 +780,10 @@ class WalletConnectionsCompanion
     Expression<String>? relays,
     Expression<String>? clientRelays,
     Expression<String>? budgetRenewal,
-    Expression<DateTime>? budgetRenewedAt,
+    Expression<String>? budgetRenewedAt,
     Expression<int>? maxAmountSat,
     Expression<int>? remainingAmountSat,
-    Expression<DateTime>? expiresAt,
+    Expression<String>? expiresAt,
     Expression<String>? methods,
     Expression<String>? customMethods,
     Expression<String>? notifications,
@@ -788,7 +791,7 @@ class WalletConnectionsCompanion
     Expression<bool>? isolated,
     Expression<bool>? isFrozen,
     Expression<String>? categories,
-    Expression<DateTime>? createdAt,
+    Expression<String>? createdAt,
     Expression<String>? lud16,
     Expression<int>? rowid,
   }) {
@@ -890,7 +893,9 @@ class WalletConnectionsCompanion
       map['budget_renewal'] = Variable<String>(budgetRenewal.value);
     }
     if (budgetRenewedAt.present) {
-      map['budget_renewed_at'] = Variable<DateTime>(budgetRenewedAt.value);
+      map['budget_renewed_at'] = Variable<String>($WalletConnectionsTable
+          .$converterbudgetRenewedAtn
+          .toSql(budgetRenewedAt.value));
     }
     if (maxAmountSat.present) {
       map['max_amount_sat'] = Variable<int>(maxAmountSat.value);
@@ -899,7 +904,8 @@ class WalletConnectionsCompanion
       map['remaining_amount_sat'] = Variable<int>(remainingAmountSat.value);
     }
     if (expiresAt.present) {
-      map['expires_at'] = Variable<DateTime>(expiresAt.value);
+      map['expires_at'] = Variable<String>(
+          $WalletConnectionsTable.$converterexpiresAtn.toSql(expiresAt.value));
     }
     if (methods.present) {
       map['methods'] = Variable<String>(
@@ -932,7 +938,8 @@ class WalletConnectionsCompanion
           .toSql(categories.value));
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['created_at'] = Variable<String>(
+          $WalletConnectionsTable.$convertercreatedAt.toSql(createdAt.value));
     }
     if (lud16.present) {
       map['lud16'] = Variable<String>(lud16.value);
@@ -1007,18 +1014,16 @@ class $RequestsTable extends Requests
   late final GeneratedColumn<String> params = GeneratedColumn<String>(
       'params', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
   @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _expiresAtMeta =
-      const VerificationMeta('expiresAt');
+  late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
+      GeneratedColumn<String>('created_at', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<DateTime>($RequestsTable.$convertercreatedAt);
   @override
-  late final GeneratedColumn<DateTime> expiresAt = GeneratedColumn<DateTime>(
-      'expires_at', aliasedName, true,
-      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  late final GeneratedColumnWithTypeConverter<DateTime?, String> expiresAt =
+      GeneratedColumn<String>('expires_at', aliasedName, true,
+              type: DriftSqlType.string, requiredDuringInsert: false)
+          .withConverter<DateTime?>($RequestsTable.$converterexpiresAtn);
   @override
   late final GeneratedColumnWithTypeConverter<List<String>, String> relays =
       GeneratedColumn<String>('relays', aliasedName, false,
@@ -1078,16 +1083,6 @@ class $RequestsTable extends Requests
     } else if (isInserting) {
       context.missing(_paramsMeta);
     }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('expires_at')) {
-      context.handle(_expiresAtMeta,
-          expiresAt.isAcceptableOrUnknown(data['expires_at']!, _expiresAtMeta));
-    }
     return context;
   }
 
@@ -1108,10 +1103,12 @@ class $RequestsTable extends Requests
           .read(DriftSqlType.string, data['${effectivePrefix}method'])!,
       params: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}params'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      expiresAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}expires_at']),
+      createdAt: $RequestsTable.$convertercreatedAt.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_at'])!),
+      expiresAt: $RequestsTable.$converterexpiresAtn.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}expires_at'])),
       relays: $RequestsTable.$converterrelays.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}relays'])!),
@@ -1123,6 +1120,12 @@ class $RequestsTable extends Requests
     return $RequestsTable(attachedDatabase, alias);
   }
 
+  static TypeConverter<DateTime, String> $convertercreatedAt =
+      const DateTimeConverter();
+  static TypeConverter<DateTime, String> $converterexpiresAt =
+      const DateTimeConverter();
+  static TypeConverter<DateTime?, String?> $converterexpiresAtn =
+      NullAwareTypeConverter.wrap($converterexpiresAt);
   static TypeConverter<List<String>, String> $converterrelays =
       StringListTypeConverter();
 }
@@ -1153,9 +1156,13 @@ class RequestTable extends DataClass implements Insertable<RequestTable> {
     map['wallet_service_pubkey'] = Variable<String>(walletServicePubkey);
     map['method'] = Variable<String>(method);
     map['params'] = Variable<String>(params);
-    map['created_at'] = Variable<DateTime>(createdAt);
+    {
+      map['created_at'] =
+          Variable<String>($RequestsTable.$convertercreatedAt.toSql(createdAt));
+    }
     if (!nullToAbsent || expiresAt != null) {
-      map['expires_at'] = Variable<DateTime>(expiresAt);
+      map['expires_at'] = Variable<String>(
+          $RequestsTable.$converterexpiresAtn.toSql(expiresAt));
     }
     {
       map['relays'] =
@@ -1321,8 +1328,8 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
     Expression<String>? walletServicePubkey,
     Expression<String>? method,
     Expression<String>? params,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? expiresAt,
+    Expression<String>? createdAt,
+    Expression<String>? expiresAt,
     Expression<String>? relays,
     Expression<int>? rowid,
   }) {
@@ -1383,10 +1390,12 @@ class RequestsCompanion extends UpdateCompanion<RequestTable> {
       map['params'] = Variable<String>(params.value);
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['created_at'] = Variable<String>(
+          $RequestsTable.$convertercreatedAt.toSql(createdAt.value));
     }
     if (expiresAt.present) {
-      map['expires_at'] = Variable<DateTime>(expiresAt.value);
+      map['expires_at'] = Variable<String>(
+          $RequestsTable.$converterexpiresAtn.toSql(expiresAt.value));
     }
     if (relays.present) {
       map['relays'] =
@@ -1464,12 +1473,11 @@ class $ResponsesTable extends Responses
   late final GeneratedColumn<String> multiId = GeneratedColumn<String>(
       'multi_id', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
   @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
+      GeneratedColumn<String>('created_at', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<DateTime>($ResponsesTable.$convertercreatedAt);
   @override
   late final GeneratedColumnWithTypeConverter<List<String>, String> relays =
       GeneratedColumn<String>('relays', aliasedName, false,
@@ -1534,12 +1542,6 @@ class $ResponsesTable extends Responses
       context.handle(_multiIdMeta,
           multiId.isAcceptableOrUnknown(data['multi_id']!, _multiIdMeta));
     }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
     return context;
   }
 
@@ -1563,8 +1565,9 @@ class $ResponsesTable extends Responses
           .read(DriftSqlType.string, data['${effectivePrefix}error_message']),
       multiId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}multi_id']),
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      createdAt: $ResponsesTable.$convertercreatedAt.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_at'])!),
       relays: $ResponsesTable.$converterrelays.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}relays'])!),
@@ -1576,6 +1579,8 @@ class $ResponsesTable extends Responses
     return $ResponsesTable(attachedDatabase, alias);
   }
 
+  static TypeConverter<DateTime, String> $convertercreatedAt =
+      const DateTimeConverter();
   static TypeConverter<List<String>, String> $converterrelays =
       StringListTypeConverter();
 }
@@ -1618,7 +1623,10 @@ class ResponseTable extends DataClass implements Insertable<ResponseTable> {
     if (!nullToAbsent || multiId != null) {
       map['multi_id'] = Variable<String>(multiId);
     }
-    map['created_at'] = Variable<DateTime>(createdAt);
+    {
+      map['created_at'] = Variable<String>(
+          $ResponsesTable.$convertercreatedAt.toSql(createdAt));
+    }
     {
       map['relays'] =
           Variable<String>($ResponsesTable.$converterrelays.toSql(relays));
@@ -1798,7 +1806,7 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
     Expression<String>? errorCode,
     Expression<String>? errorMessage,
     Expression<String>? multiId,
-    Expression<DateTime>? createdAt,
+    Expression<String>? createdAt,
     Expression<String>? relays,
     Expression<int>? rowid,
   }) {
@@ -1866,7 +1874,8 @@ class ResponsesCompanion extends UpdateCompanion<ResponseTable> {
       map['multi_id'] = Variable<String>(multiId.value);
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
+      map['created_at'] = Variable<String>(
+          $ResponsesTable.$convertercreatedAt.toSql(createdAt.value));
     }
     if (relays.present) {
       map['relays'] = Variable<String>(
@@ -2012,9 +2021,10 @@ class $$WalletConnectionsTableFilterComposer
   ColumnFilters<String> get budgetRenewal => $composableBuilder(
       column: $table.budgetRenewal, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get budgetRenewedAt => $composableBuilder(
-      column: $table.budgetRenewedAt,
-      builder: (column) => ColumnFilters(column));
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, String>
+      get budgetRenewedAt => $composableBuilder(
+          column: $table.budgetRenewedAt,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   ColumnFilters<int> get maxAmountSat => $composableBuilder(
       column: $table.maxAmountSat, builder: (column) => ColumnFilters(column));
@@ -2023,8 +2033,10 @@ class $$WalletConnectionsTableFilterComposer
       column: $table.remainingAmountSat,
       builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get expiresAt => $composableBuilder(
-      column: $table.expiresAt, builder: (column) => ColumnFilters(column));
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, String> get expiresAt =>
+      $composableBuilder(
+          column: $table.expiresAt,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   ColumnWithTypeConverterFilters<List<String>?, List<String>, String>
       get methods => $composableBuilder(
@@ -2057,8 +2069,10 @@ class $$WalletConnectionsTableFilterComposer
           column: $table.categories,
           builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get createdAt =>
+      $composableBuilder(
+          column: $table.createdAt,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   ColumnFilters<String> get lud16 => $composableBuilder(
       column: $table.lud16, builder: (column) => ColumnFilters(column));
@@ -2116,7 +2130,7 @@ class $$WalletConnectionsTableOrderingComposer
       column: $table.budgetRenewal,
       builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get budgetRenewedAt => $composableBuilder(
+  ColumnOrderings<String> get budgetRenewedAt => $composableBuilder(
       column: $table.budgetRenewedAt,
       builder: (column) => ColumnOrderings(column));
 
@@ -2128,7 +2142,7 @@ class $$WalletConnectionsTableOrderingComposer
       column: $table.remainingAmountSat,
       builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get expiresAt => $composableBuilder(
+  ColumnOrderings<String> get expiresAt => $composableBuilder(
       column: $table.expiresAt, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get methods => $composableBuilder(
@@ -2155,7 +2169,7 @@ class $$WalletConnectionsTableOrderingComposer
   ColumnOrderings<String> get categories => $composableBuilder(
       column: $table.categories, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+  ColumnOrderings<String> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get lud16 => $composableBuilder(
@@ -2190,8 +2204,9 @@ class $$WalletConnectionsTableAnnotationComposer
   GeneratedColumn<String> get budgetRenewal => $composableBuilder(
       column: $table.budgetRenewal, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get budgetRenewedAt => $composableBuilder(
-      column: $table.budgetRenewedAt, builder: (column) => column);
+  GeneratedColumnWithTypeConverter<DateTime?, String> get budgetRenewedAt =>
+      $composableBuilder(
+          column: $table.budgetRenewedAt, builder: (column) => column);
 
   GeneratedColumn<int> get maxAmountSat => $composableBuilder(
       column: $table.maxAmountSat, builder: (column) => column);
@@ -2199,7 +2214,7 @@ class $$WalletConnectionsTableAnnotationComposer
   GeneratedColumn<int> get remainingAmountSat => $composableBuilder(
       column: $table.remainingAmountSat, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get expiresAt =>
+  GeneratedColumnWithTypeConverter<DateTime?, String> get expiresAt =>
       $composableBuilder(column: $table.expiresAt, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<List<String>?, String> get methods =>
@@ -2227,7 +2242,7 @@ class $$WalletConnectionsTableAnnotationComposer
       $composableBuilder(
           column: $table.categories, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get createdAt =>
+  GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   GeneratedColumn<String> get lud16 =>
@@ -2493,11 +2508,15 @@ class $$RequestsTableFilterComposer
   ColumnFilters<String> get params => $composableBuilder(
       column: $table.params, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get createdAt =>
+      $composableBuilder(
+          column: $table.createdAt,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<DateTime> get expiresAt => $composableBuilder(
-      column: $table.expiresAt, builder: (column) => ColumnFilters(column));
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, String> get expiresAt =>
+      $composableBuilder(
+          column: $table.expiresAt,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   ColumnWithTypeConverterFilters<List<String>, List<String>, String>
       get relays => $composableBuilder(
@@ -2568,10 +2587,10 @@ class $$RequestsTableOrderingComposer
   ColumnOrderings<String> get params => $composableBuilder(
       column: $table.params, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+  ColumnOrderings<String> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get expiresAt => $composableBuilder(
+  ColumnOrderings<String> get expiresAt => $composableBuilder(
       column: $table.expiresAt, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get relays => $composableBuilder(
@@ -2619,10 +2638,10 @@ class $$RequestsTableAnnotationComposer
   GeneratedColumn<String> get params =>
       $composableBuilder(column: $table.params, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get createdAt =>
+  GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get expiresAt =>
+  GeneratedColumnWithTypeConverter<DateTime?, String> get expiresAt =>
       $composableBuilder(column: $table.expiresAt, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<List<String>, String> get relays =>
@@ -2879,8 +2898,10 @@ class $$ResponsesTableFilterComposer
   ColumnFilters<String> get multiId => $composableBuilder(
       column: $table.multiId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get createdAt =>
+      $composableBuilder(
+          column: $table.createdAt,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
   ColumnWithTypeConverterFilters<List<String>, List<String>, String>
       get relays => $composableBuilder(
@@ -2936,7 +2957,7 @@ class $$ResponsesTableOrderingComposer
   ColumnOrderings<String> get multiId => $composableBuilder(
       column: $table.multiId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+  ColumnOrderings<String> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get relays => $composableBuilder(
@@ -2990,7 +3011,7 @@ class $$ResponsesTableAnnotationComposer
   GeneratedColumn<String> get multiId =>
       $composableBuilder(column: $table.multiId, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get createdAt =>
+  GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<List<String>, String> get relays =>

@@ -6,6 +6,7 @@ import 'package:nip47/src/database/tables/wallet_connection_table.dart';
 import 'package:nip47/src/database/tables/request_table.dart';
 import 'package:nip47/src/database/tables/response_table.dart';
 import 'package:nip47/src/database/type_converters/string_list_type_converter.dart';
+import 'package:nip47/src/database/type_converters/date_time_converter.dart';
 
 part 'generated/database.g.dart';
 
