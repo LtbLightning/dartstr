@@ -1,5 +1,10 @@
 ## 0.5.1+1
 
+ - **FIX**: pin intl to 0.19.0.
+ - **FIX**: intl dependency to any.
+
+## 0.5.1+1
+
  - **FIX**: intl dependency to any.
 
 ## 0.5.1

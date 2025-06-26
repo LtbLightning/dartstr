@@ -21,6 +21,28 @@ Packages with other changes:
 
 #### `nip47` - `v0.5.1+1`
 
+ - **FIX**: pin intl to 0.19.0.
+ - **FIX**: intl dependency to any.
+
+
+## 2025-06-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`nip47` - `v0.5.1+1`](#nip47---v0511)
+
+---
+
+#### `nip47` - `v0.5.1+1`
+
  - **FIX**: intl dependency to any.
 
 
