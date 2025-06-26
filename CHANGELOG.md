@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip47` - `v0.5.1`](#nip47---v051)
+
+---
+
+#### `nip47` - `v0.5.1`
+
+ - **FEAT**: use sqlite date text format.
+
+
+## 2025-06-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip47` - `v0.5.0+2`](#nip47---v0502)
 
 ---

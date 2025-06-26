@@ -1,3 +1,7 @@
+## 0.5.1
+
+ - **FEAT**: use sqlite date text format.
+
 ## 0.5.0+2
 
  - **REFACTOR**: use iso timestamps for drift datetimes.
