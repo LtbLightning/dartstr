@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`nip47` - `v0.5.1+3`](#nip47---v0513)
+
+---
+
+#### `nip47` - `v0.5.1+3`
+
+ - intl dependency to any version to follow sdk fixed version
+
+
+## 2025-08-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`nip47` - `v0.5.1+2`](#nip47---v0512)
 
 ---

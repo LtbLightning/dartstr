@@ -1,3 +1,7 @@
+## 0.5.1+3
+
+ - intl dependency to any version to follow sdk fixed version
+
 ## 0.5.1+2
 
  - **FIX**: pin intl to 0.19.0.
