@@ -1,75 +1,75 @@
-## 0.5.1+3
-
- - intl dependency to any version to follow sdk fixed version
-
 ## 0.5.1+2
 
  - **FIX**: pin intl to 0.19.0.
 
+## 0.5.1+2
+
+- **FIX**: pin intl to ^0.20.2.
+
 ## 0.5.1+1
 
- - **FIX**: pin intl to 0.19.0.
- - **FIX**: intl dependency to any.
+- **FIX**: pin intl to 0.19.0.
+- **FIX**: intl dependency to any.
 
 ## 0.5.1+1
 
- - **FIX**: intl dependency to any.
+- **FIX**: intl dependency to any.
 
 ## 0.5.1
 
- - **FEAT**: use sqlite date text format.
+- **FEAT**: use sqlite date text format.
 
 ## 0.5.0+2
 
- - **REFACTOR**: use iso timestamps for drift datetimes.
+- **REFACTOR**: use iso timestamps for drift datetimes.
 
 ## 0.5.0+1
 
 ## 0.5.0
 
- - Clean(er) Architecture
+- Clean(er) Architecture
 
 ## 0.4.0+3
 
 ## 0.4.0+2
 
- - **FIX**: bugs.
+- **FIX**: bugs.
 
 ## 0.4.0+1
 
- - **FIX**: wrong kind for nip47 notification.
+- **FIX**: wrong kind for nip47 notification.
 
 ## 0.4.0
 
- - **FIX**: multiple relays should be possible.
+- **FIX**: multiple relays should be possible.
 
 ## 0.3.0+2
 
- - **FIX**: list transactions transactions mapping.
+- **FIX**: list transactions transactions mapping.
 
 ## 0.3.0+1
 
- - **FIX**: null type for bool in unpaid field of of list transactions request.
+- **FIX**: null type for bool in unpaid field of of list transactions request.
 
 ## 0.3.0
 
- - WalletService interface change for better reusability and cleaner architecture
+- WalletService interface change for better reusability and cleaner architecture
 
 ## 0.2.1+3
 
- - **FIX**: notifications were not set in connection instance when adding a connection.
+- **FIX**: notifications were not set in connection instance when adding a connection.
 
 ## 0.2.1+2
 
- - **FIX**: optional params in getInfoRequestHandled.
+- **FIX**: optional params in getInfoRequestHandled.
 
 ## 0.2.1+1
 
- - **REFACTOR**: improve parameter names.
+- **REFACTOR**: improve parameter names.
 
 ## 0.2.1
 
- - **FEAT**: export notification type enum.
+- **FEAT**: export notification type enum.
 
 ## 0.2.0+1
 
